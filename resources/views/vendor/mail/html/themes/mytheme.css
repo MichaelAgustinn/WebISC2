@@ -1,0 +1,256 @@
+/* ==========================================================
+   Custom Email Theme - "mytheme.css"
+   Warna: Navy (#263C8F), Putih (#FFFFFF), Emas (#F7C70F)
+   ========================================================== */
+
+/* Base */
+body,
+body *:not(html):not(style):not(br):not(tr):not(code) {
+    box-sizing: border-box;
+    font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    position: relative;
+}
+
+body {
+    -webkit-text-size-adjust: none;
+    background-color: #ffffff;
+    color: #2d2d2d;
+    height: 100%;
+    line-height: 1.5;
+    margin: 0;
+    padding: 0;
+    width: 100% !important;
+}
+
+p,
+ul,
+ol,
+blockquote {
+    line-height: 1.6;
+    text-align: left;
+}
+
+a {
+    color: #263c8f;
+    text-decoration: underline;
+}
+
+a:hover {
+    color: #f7c70f;
+}
+
+a img {
+    border: none;
+}
+
+/* Typography */
+h1 {
+    color: #263c8f;
+    font-size: 20px;
+    font-weight: 700;
+    margin-top: 0;
+    text-align: left;
+}
+
+h2 {
+    color: #263c8f;
+    font-size: 18px;
+    font-weight: 600;
+    margin-top: 0;
+    text-align: left;
+}
+
+h3 {
+    color: #263c8f;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 0;
+    text-align: left;
+}
+
+p {
+    font-size: 15px;
+    color: #2d2d2d;
+    margin-top: 0;
+}
+
+p.sub {
+    font-size: 13px;
+    color: #777;
+}
+
+img {
+    max-width: 100%;
+}
+
+/* Layout */
+.wrapper {
+    background-color: #f3f5ff;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.content {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+/* Header */
+.header {
+    background-color: #263c8f;
+    padding: 30px 0;
+    text-align: center;
+}
+
+.header a {
+    color: #ffffff;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+}
+
+/* Logo */
+.logo {
+    height: 80px;
+    max-height: 80px;
+    width: auto;
+}
+
+/* Body */
+.body {
+    background-color: #f3f5ff;
+    border-top: 4px solid #f7c70f;
+    border-bottom: 4px solid #263c8f;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.inner-body {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(38, 60, 143, 0.1);
+    margin: 30px auto;
+    padding: 0;
+    width: 570px;
+}
+
+/* Subcopy */
+.subcopy {
+    border-top: 1px solid #e0e0e0;
+    margin-top: 25px;
+    padding-top: 25px;
+}
+
+.subcopy p {
+    font-size: 14px;
+    color: #555;
+}
+
+/* Footer */
+.footer {
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+    width: 570px;
+    background-color: #263c8f;
+    border-top: 4px solid #f7c70f;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.footer p {
+    color: #ffffff;
+    font-size: 13px;
+    margin: 0;
+}
+
+.footer a {
+    color: #f7c70f;
+    text-decoration: underline;
+}
+
+/* Tables */
+.table table {
+    margin: 30px auto;
+    width: 100%;
+}
+
+.table th {
+    border-bottom: 2px solid #263c8f;
+    color: #263c8f;
+    font-weight: 600;
+    padding-bottom: 8px;
+}
+
+.table td {
+    color: #333;
+    font-size: 15px;
+    padding: 10px 0;
+}
+
+/* Content cell */
+.content-cell {
+    padding: 32px;
+}
+
+/* Buttons */
+.action {
+    margin: 30px auto;
+    text-align: center;
+    width: 100%;
+}
+
+.button {
+    border-radius: 6px;
+    color: #fff !important;
+    display: inline-block;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
+}
+
+.button-blue,
+.button-primary {
+    background-color: #263c8f;
+    border: 10px solid #263c8f;
+}
+
+.button-blue:hover,
+.button-primary:hover {
+    background-color: #1d2f6e;
+    border-color: #1d2f6e;
+}
+
+.button-success {
+    background-color: #48bb78;
+    border: 10px solid #48bb78;
+}
+
+.button-error {
+    background-color: #e53e3e;
+    border: 10px solid #e53e3e;
+}
+
+/* Panels */
+.panel {
+    border-left: 4px solid #f7c70f;
+    margin: 20px 0;
+    background-color: #f9faff;
+    border-radius: 4px;
+}
+
+.panel-content {
+    color: #333;
+    padding: 16px;
+}
+
+/* Utilities */
+.break-all {
+    word-break: break-all;
+}
