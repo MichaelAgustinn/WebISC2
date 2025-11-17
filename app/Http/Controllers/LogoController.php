@@ -26,7 +26,7 @@ class LogoController extends Controller
         $validated = $request->validate([
             'title' => 'required|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp',
-            'id' => 'nullable|exists:logos,id', // gunakan id untuk update
+            'id' => 'nullable|exists:logos,id',
             'old_image' => 'nullable|string',
         ]);
 
@@ -34,20 +34,29 @@ class LogoController extends Controller
         $compressedPath = null;
 
         if (!empty($validated['id'])) {
-            // Update logo yang sudah ada
+            // ========== UPDATE ==========
             $logo = Logo::find($validated['id']);
             $compressedPath = $logo->image;
 
             if ($request->hasFile('image')) {
-                $imagePath = $request->file('image')->getPathname();
+
+                /** 1) Ambil file */
+                $sourcePath = $request->file('image')->getPathname();
+
+                /** 2) Tentukan nama file */
                 $fileName = uniqid('logo_') . '.webp';
                 $savePath = storage_path('app/public/logo/' . $fileName);
 
-                ImageHelper::compressImage($imagePath, $savePath, 75, 1280);
+                /** 3) Kompres (tidak menyimpan file) */
+                $result = ImageHelper::compressImage($sourcePath, 75, 1280, 1280);
 
+                /** 4) Simpan file hasil kompres */
+                ImageHelper::saveImage($result['image'], $savePath, 'webp', $result['quality']);
+
+                /** 5) Simpan path untuk DB */
                 $compressedPath = 'storage/logo/' . $fileName;
 
-                // Hapus file lama
+                /** 6) Hapus file lama */
                 if ($logo->image && file_exists(public_path($logo->image))) {
                     unlink(public_path($logo->image));
                 }
@@ -55,18 +64,21 @@ class LogoController extends Controller
                 $compressedPath = $validated['old_image'];
             }
 
+            /** 7) Update DB */
             $logo->update([
                 'title' => $validated['title'],
                 'image' => $compressedPath,
             ]);
         } else {
-            // Buat logo baru
+            // ========== CREATE ==========
             if ($request->hasFile('image')) {
-                $imagePath = $request->file('image')->getPathname();
+                $sourcePath = $request->file('image')->getPathname();
                 $fileName = uniqid('logo_') . '.webp';
                 $savePath = storage_path('app/public/logo/' . $fileName);
 
-                ImageHelper::compressImage($imagePath, $savePath, 75, 1280);
+                $result = ImageHelper::compressImage($sourcePath, 75, 1280, 1280);
+
+                ImageHelper::saveImage($result['image'], $savePath, 'webp', $result['quality']);
 
                 $compressedPath = 'storage/logo/' . $fileName;
             }
@@ -79,6 +91,7 @@ class LogoController extends Controller
 
         return redirect()->route('logo.index')->with('success', 'Logo berhasil disimpan');
     }
+
 
     public function show($id)
     {
