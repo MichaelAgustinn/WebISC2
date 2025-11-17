@@ -41,15 +41,16 @@
                                             </div>
 
                                             <h2 class="title">
-                                                <a href="blog-details.html">{{ $blog->title }}</a>
+                                                <a href="{{ route('blog.landing', $blog->slug) }}">{{ $blog->title }}</a>
                                             </h2>
 
                                             <div class="meta-top">
                                                 <ul>
                                                     <li class="d-flex align-items-center"><i class="bi bi-person"></i> <a
-                                                            href="blog-details.html">{{ $blog->user->name }}</a></li>
+                                                            href="{{ route('blog.landing', $blog->slug) }}">{{ $blog->user->name }}</a>
+                                                    </li>
                                                     <li class="d-flex align-items-center"><i class="bi bi-clock"></i> <a
-                                                            href="blog-details.html"><time
+                                                            href="{{ route('blog.landing', $blog->slug) }}"><time
                                                                 datetime="2022-01-01">{{ $blog->created_at->format('M j, Y') }}</time></a>
                                                     </li>
                                                 </ul>
@@ -104,7 +105,8 @@
                                     @if ($blogs->onFirstPage())
                                         <li><a href="#"><i class="bi bi-chevron-left"></i></a></li>
                                     @else
-                                        <li><a href="{{ $blogs->previousPageUrl() }}"><i class="bi bi-chevron-left"></i></a>
+                                        <li><a href="{{ $blogs->previousPageUrl() }}"><i
+                                                    class="bi bi-chevron-left"></i></a>
                                         </li>
                                     @endif
 
