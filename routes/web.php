@@ -252,6 +252,7 @@ Route::middleware('auth')->group(function () {
         ];
         $randomQuote = $quotes[array_rand($quotes)];
         // ? qoute end
+        /** @var \App\Models\User $user */ //?ini biar tidak muncul error di error lens
         $user = Auth::user();
         $userCount = User::count();
         $userActiveCount = User::where('role', '!=', 'None')->count();
