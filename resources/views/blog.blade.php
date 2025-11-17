@@ -35,8 +35,9 @@
                                     <div class="col-12">
                                         <article>
 
-                                            <div class="post-img">
-                                                <img src="{{ asset($blog->first_image) }}" class="img-fluid" alt="">
+                                            <div class="post-img text-center">
+                                                <img src="{{ asset($blog->first_image) }}" class="img-fluid mx-auto d-block"
+                                                    alt="">
                                             </div>
 
                                             <h2 class="title">

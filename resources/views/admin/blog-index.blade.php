@@ -63,6 +63,10 @@
                                 </small>
 
                             </div>
+                            @if (isset($blog))
+                                <input type="hidden" name="id" value="{{ $blog->id }}">
+                                <input type="hidden" name="old_image" value="{{ $blog->image }}">
+                            @endif
 
                             <button type="submit" class="btn  btn-primary">Submit</button>
                         </div>
