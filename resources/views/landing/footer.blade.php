@@ -6,9 +6,31 @@
                     <span class="sitename">Informatics Study Club</span>
                 </a>
                 <div class="footer-contact pt-3">
-                    <p>Hubungi Kami:</p>
-                    <p class="mt-3"><strong>Phone:</strong> <span>{{ $footer->nomor_telepon }}</span></p>
-                    <p><strong>Email:</strong> <span>{{ $footer->email }}</span></p>
+                    @php
+                        $num = preg_replace('/\D/', '', $footer->nomor_telepon);
+
+                        if (str_starts_with($num, '0')) {
+                            $num = '62' . substr($num, 1);
+                        }
+                    @endphp
+
+                    <p class="mt-3">
+                        <strong>Phone:</strong>
+                        <a href="https://wa.me/{{ $num }}"
+                            style="all: unset; cursor: pointer; color: inherit; text-decoration: underline;"
+                            target="_blank">
+                            {{ $footer->nomor_telepon }}
+                        </a>
+                    </p>
+
+                    <p>
+                        <strong>Email:</strong>
+                        <a href="mailto:{{ $footer->email }}"
+                            style="all: unset; cursor: pointer; color: inherit; text-decoration: underline;">
+                            {{ $footer->email }}
+                        </a>
+                    </p>
+
                 </div>
             </div>
 
