@@ -10,30 +10,18 @@ class CheckVoucher
 {
     public function handle(Request $request, Closure $next)
     {
-        $voucherCode = $request->code ?? $request->voucher_code ?? null;
-
-        if (!$voucherCode) {
-            return redirect()->route('voting.input')
-                ->with('error', 'Harap masukkan kode voucher.');
-        }
+        $voucherCode = $request->code;
 
         $voucher = Voucher::where('code', $voucherCode)->first();
 
-        if (!$voucher) {
-            return redirect()->route('voting.input')
-                ->with('error', 'Kode voucher tidak ditemukan.');
-        }
+        if (!$voucher)
+            return redirect()->route('voucher.input')->with('error', 'Kode voucher tidak ditemukan.');
 
-        if (!$voucher->status) {
-            return redirect()->route('voting.input')
-                ->with('error', 'Voucher sudah digunakan.');
-        }
+        if (!$voucher->status)
+            return redirect()->route('voucher.input')->with('error', 'Voucher sudah digunakan.');
 
-        // Masukkan voucher ke request agar bisa dipakai controller
-        $request->merge([
-            'voucher_id' => $voucher->id,
-            'voucher_code' => $voucher->code,
-        ]);
+        // SIMPAN voucher ke session
+        session(['voucher' => $voucher]);
 
         return $next($request);
     }

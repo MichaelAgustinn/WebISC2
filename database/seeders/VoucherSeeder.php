@@ -10,7 +10,7 @@ class VoucherSeeder extends Seeder
 {
     public function run(): void
     {
-        for ($i = 0; $i < 100; $i++) {
+        for ($i = 0; $i < 200; $i++) {
             Voucher::create([
                 'code' => strtoupper(Str::random(8)),
                 'status' => true

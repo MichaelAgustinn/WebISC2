@@ -123,6 +123,15 @@ Route::get('/creation/divisi/{divisi}', [CreationController::class, 'byDivisi'])
 // ! dashboard routing
 Route::middleware('auth', 'role:Admin,Pengurus')->group(function () {
 
+    // ? voting
+    Route::get('/karya/admin/', [VotingController::class, 'karyaIndex'])->name('karya.index');
+    Route::get('/karya/admin/create', [VotingController::class, 'karyaCreate'])->name('karya.create');
+    Route::post('/karya/admin/store', [VotingController::class, 'karyaStore'])->name('karya.store');
+    Route::get('/karya/admin/edit/{id}', [VotingController::class, 'karyaEdit'])->name('karya.edit');
+    Route::post('/karya/admin/update/{id}', [VotingController::class, 'karyaUpdate'])->name('karya.update');
+    Route::delete('/karya/admin/delete/{id}', [VotingController::class, 'karyaDelete'])->name('karya.delete');
+    // ? voting end
+
     // ? surat
     Route::get('/form/letters', [LetterController::class, 'index'])->name('letters.index');
     Route::get('/form/letters/create', [LetterController::class, 'create'])->name('letters.create');
@@ -292,27 +301,11 @@ Route::middleware('auth')->group(function () {
 });
 
 // ! ini untuk voting
-// Route::get('/voting', function () {
-//     $footer = Footer::find(1);
-
-//     return view('voting.index', ['footer' => $footer]);
-// });
-
 Route::get('/voting-input', [VotingController::class, 'isiVoucher'])->name('voting.input');
 Route::get('/voting', [VotingController::class, 'index'])->middleware('voucher.check')->name('voting.index');
 Route::post('/voting/proses', [VotingController::class, 'vote'])->middleware('voucher.check')->name('voting.vote');
 Route::get('/voting/thanks', [VotingController::class, 'thanks'])->middleware('voucher.check')->name('voting.thanks');
 
-// Route::prefix('admin/karya')->group(function () {
-Route::get('/karya/tes', [VotingController::class, 'karyaIndex'])->name('karya.index');
-Route::get('/karya/create', [VotingController::class, 'karyaCreate'])->name('karya.create');
-Route::post('/karya/store', [VotingController::class, 'karyaStore'])->name('karya.store');
-Route::get('/karya/edit/{id}', [VotingController::class, 'karyaEdit'])->name('karya.edit');
-Route::post('/karya/update/{id}', [VotingController::class, 'karyaUpdate'])->name('karya.update');
-Route::delete('/karya/delete/{id}', [VotingController::class, 'karyaDelete'])->name('karya.delete');
-// });
-
-// Route::get('/voting/thanks', [VotingController::class, 'thanks'])->middleware('voucher.check')->name('voting.thanks');
 
 require __DIR__ . '/auth.php';
 

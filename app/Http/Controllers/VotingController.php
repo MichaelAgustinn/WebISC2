@@ -13,8 +13,11 @@ class VotingController extends Controller
     // Menampilkan halaman voting
     public function index()
     {
-        $footer = Footer::find(1);
-        return view('voting.index', ['footer' => $footer]);
+        $karya   = Karya::all();
+        $footer  = Footer::find(1);
+        $voucher = session('voucher'); // ← aman, pasti ada
+
+        return view('voting.index', compact('karya', 'footer', 'voucher'));
     }
 
     public function isiVoucher()
