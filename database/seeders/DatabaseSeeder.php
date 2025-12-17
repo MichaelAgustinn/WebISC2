@@ -64,6 +64,8 @@ class DatabaseSeeder extends Seeder
             MentorSeeder::class,
             InformationSeeder::class,
             PengurusSeeder::class,
+            VoucherSeeder::class,
+            KaryaSeeder::class,
         ]);
 
         DB::table('blog_tag')->insert([

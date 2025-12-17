@@ -12,6 +12,7 @@ use App\Http\Controllers\MentorController;
 use App\Http\Controllers\PengurusController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TestimonialController;
+use App\Http\Controllers\VotingController;
 use App\Models\Blog;
 use App\Models\Creation;
 use App\Models\Faq;
@@ -289,11 +290,33 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     // ? profile end
 });
+
+// ! ini untuk voting
+// Route::get('/voting', function () {
+//     $footer = Footer::find(1);
+
+//     return view('voting.index', ['footer' => $footer]);
+// });
+
+Route::get('/voting-input', [VotingController::class, 'isiVoucher'])->name('voting.input');
+Route::get('/voting', [VotingController::class, 'index'])->middleware('voucher.check')->name('voting.index');
+Route::post('/voting/proses', [VotingController::class, 'vote'])->middleware('voucher.check')->name('voting.vote');
+Route::get('/voting/thanks', [VotingController::class, 'thanks'])->middleware('voucher.check')->name('voting.thanks');
+
+// Route::prefix('admin/karya')->group(function () {
+Route::get('/karya/tes', [VotingController::class, 'karyaIndex'])->name('karya.index');
+Route::get('/karya/create', [VotingController::class, 'karyaCreate'])->name('karya.create');
+Route::post('/karya/store', [VotingController::class, 'karyaStore'])->name('karya.store');
+Route::get('/karya/edit/{id}', [VotingController::class, 'karyaEdit'])->name('karya.edit');
+Route::post('/karya/update/{id}', [VotingController::class, 'karyaUpdate'])->name('karya.update');
+Route::delete('/karya/delete/{id}', [VotingController::class, 'karyaDelete'])->name('karya.delete');
+// });
+
+// Route::get('/voting/thanks', [VotingController::class, 'thanks'])->middleware('voucher.check')->name('voting.thanks');
+
 require __DIR__ . '/auth.php';
 
 // ! hanya untuk test development
-
-
 Route::get('/testing', function () {
     $users = User::where('role', '!=', 'Admin')->get();
     // dd($user);

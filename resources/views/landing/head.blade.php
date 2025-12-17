@@ -30,7 +30,6 @@
 
     <!-- Main CSS File -->
     <link href="{{ asset('landing') }}/assets/css/main.css" rel="stylesheet">
-
     <!-- =======================================================
   * Template Name: FlexStart
   * Template URL: https://bootstrapmade.com/flexstart-bootstrap-startup-template/

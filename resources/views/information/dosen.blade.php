@@ -5,23 +5,6 @@
 @section('content')
     <main class="main">
         <div style="padding-top: 100px"></div>
-        {{-- @include('landing.hero') --}}
-
-        {{-- @include('landing.about') --}}
-
-        {{-- @include('landing.visi') --}}
-
-        {{-- @include('landing.stats') --}}
-
-        {{-- ! ini kerja terakhir --}}
-        {{-- @include('landing.event') --}}
-
-        {{-- @include('landing.faq') --}}
-
-        {{-- @include('landing.project') --}}
-
-        {{-- @include('landing.testimonial') --}}
-        <!-- Team Section -->
 
         <section class="team section">
             <!-- Section Title -->
@@ -57,13 +40,6 @@
             </div>
 
         </section><!-- /Team Section -->
-
-        {{-- @include('landing.logo') --}}
-
-        {{-- @include('landing.blog-recent') --}}
-
-        {{-- * sepertinya tidak diperlukan --}}
-        {{-- @include('landing.contact') --}}
 
     </main>
 @endsection

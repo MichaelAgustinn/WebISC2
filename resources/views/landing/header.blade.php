@@ -17,6 +17,10 @@
                 <li><a href="{{ route('blog.page') }}"
                         class="{{ Route::is('blog.page') || Route::is('blog.landing') ? 'active' : '' }}">Blog</a>
                 </li>
+                <li><a href="{{ route('voting.input') }}"
+                        class="{{ Route::is('voting.index') || Route::is('voting.input') || Route::is('voting.thanks') ? 'active' : '' }}">Voting
+                        Karya</a>
+                </li>
                 <li class="dropdown"><a href="#"><span>Information</span> <i
                             class="bi bi-chevron-down toggle-dropdown"></i></a>
                     <ul>
