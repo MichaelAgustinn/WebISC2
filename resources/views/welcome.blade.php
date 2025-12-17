@@ -14,9 +14,9 @@
         @include('landing.stats')
 
         {{-- ! ini kerja terakhir --}}
-        @if (Auth::user() ? Auth::user()->role != 'None' : '')
+        {{-- @if (Auth::user() ? Auth::user()->role != 'None' : '')
             @include('landing.event')
-        @endif
+        @endif --}}
 
         @include('landing.faq')
 

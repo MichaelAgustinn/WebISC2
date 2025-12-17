@@ -159,6 +159,7 @@ class ProfileController extends Controller
         return redirect()->back()->with('success', 'Anggota Diverifikasi');
     }
 
+    // ! nonaktifkan anggota
     public function unVerifyUser($id)
     {
         $user = User::find($id);

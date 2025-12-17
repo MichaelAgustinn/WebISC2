@@ -43,7 +43,6 @@ Route::get('/', function () {
     $logos = Logo::all();
     $footer = Footer::find(1);
     $blogs = Blog::with('user')->latest()->limit(5)->get();
-    // $mentors = Mentor::all();
     $penguruses = Pengurus::all();
     $creations = Creation::where('status', 'approve')->latest()->limit(6)->get();
 
