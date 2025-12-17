@@ -17,9 +17,9 @@ class FooterSeeder extends Seeder
             [
                 'nomor_telepon' => '+62 821 9329 5789',
                 'email' => 'isc@unsulbar.ac.id',
-                'link_facebook' => 'https://facebook',
-                'link_instagram' => 'https://instagram',
-                'link_tiktok' => 'https://tiktok.com',
+                'link_facebook' => 'https://youtube.com',
+                'link_instagram' => 'https://www.instagram.com/isc.unsulbar',
+                'link_tiktok' => 'https://discord.com/invite/wacMqKkNcZ',
             ]
         ]);
     }

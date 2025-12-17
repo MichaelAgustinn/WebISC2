@@ -83,17 +83,17 @@ class DatabaseSeeder extends Seeder
             ]
         ]);
 
-        Creation::factory(20)->create()->each(function ($creation) {
-            // Ambil 1–3 user secara acak dari id 1–5
-            $creatorId = collect([2, 3, 4, 5])->random();
-            $memberIds = collect([2, 3, 4, 5])
-                ->reject(fn($id) => $id === $creatorId)
-                ->random(rand(1, 2))
-                ->toArray();
+        // Creation::factory(20)->create()->each(function ($creation) {
+        //     // Ambil 1–3 user secara acak dari id 1–5
+        //     $creatorId = collect([2, 3, 4, 5])->random();
+        //     $memberIds = collect([2, 3, 4, 5])
+        //         ->reject(fn($id) => $id === $creatorId)
+        //         ->random(rand(1, 2))
+        //         ->toArray();
 
-            $creation->users()->attach([
-                $creatorId => ['is_creator' => true],
-            ] + collect($memberIds)->mapWithKeys(fn($id) => [$id => ['is_creator' => false]])->toArray());
-        });
+        //     $creation->users()->attach([
+        //         $creatorId => ['is_creator' => true],
+        //     ] + collect($memberIds)->mapWithKeys(fn($id) => [$id => ['is_creator' => false]])->toArray());
+        // });
     }
 }

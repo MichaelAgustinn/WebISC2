@@ -16,7 +16,7 @@ class LogoSeeder extends Seeder
         Logo::insert([
             [
                 'title' => 'isc',
-                'image' => 'storage/logo/logo_6905177b4d31a.webp',
+                'image' => 'storage/logo/logo_691a7dafea38e.webp',
             ],
             [
                 'title' => 'iot',
