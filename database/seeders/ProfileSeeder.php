@@ -20,13 +20,13 @@ class ProfileSeeder extends Seeder
                 'angkatan' => '2023',
                 'jabatan' => 'Admin',
                 'divisi' => 'Mobile',
-                'image' => 'storage/profile/profile_690752aa9f354.webp'
+                'image' => 'storage/profile/profile_690e552e3bf29.png'
             ],
             [
                 'user_id' => 2,
                 'nim' => 'D0223310',
                 'angkatan' => '2023',
-                'jabatan' => 'Admin Juga',
+                'jabatan' => 'Bukan Admin',
                 'divisi' => 'Mobile',
                 'image' => 'storage/profile/profile_690a1ee349acd.webp'
             ],

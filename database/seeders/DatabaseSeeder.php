@@ -22,15 +22,15 @@ class DatabaseSeeder extends Seeder
         User::insert([
             [
                 'name' => 'Admin',
-                'email' => 'admin@gmail.com',
-                'password' => bcrypt('admin123'),
+                'email' => 'isc@unsulbar.ac.id',
+                'password' => bcrypt('isc.unsulbar2025#'),
                 'role' => 'Admin',
             ],
             [
                 'name' => 'Miky',
-                'email' => 'miky@gmail.com',
-                'password' => bcrypt('12345678'),
-                'role' => 'Anggota',
+                'email' => 'michaelagustinn@gmail.com',
+                'password' => bcrypt('miky@310505'),
+                'role' => 'Pengurus',
             ],
             [
                 'name' => 'Mawan',
