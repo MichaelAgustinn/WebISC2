@@ -61,9 +61,8 @@
                             <!-- Input Voucher -->
                             <div class="mb-3">
                                 <label for="voucher" class="form-label">Kode Voucher</label>
-                                <input type="text" class="form-control @error('code') is-invalid @enderror"
-                                    id="voucher" name="code" placeholder="Masukkan kode voucher..." required
-                                    autofocus autocomplete="off" />
+                                <input type="text" class="form-control" id="voucher" name="code"
+                                    placeholder="Masukkan kode voucher..." required autofocus autocomplete="off" />
 
                                 @error('code')
                                     <div class="invalid-feedback">{{ $message }}</div>

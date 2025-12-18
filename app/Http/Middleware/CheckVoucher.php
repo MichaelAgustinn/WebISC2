@@ -8,20 +8,30 @@ use App\Models\Voucher;
 
 class CheckVoucher
 {
-    public function handle(Request $request, Closure $next)
+    public function handle($request, Closure $next)
     {
-        $voucherCode = $request->code;
+        // Ambil dari request JIKA ADA
+        $voucherCode = $request->code ?? session('voucher_code');
+
+        if (!$voucherCode) {
+            return redirect()->route('voting.input')
+                ->with('error', 'Kode voucher wajib diisi.');
+        }
 
         $voucher = Voucher::where('code', $voucherCode)->first();
 
-        if (!$voucher)
-            return redirect()->route('voucher.input')->with('error', 'Kode voucher tidak ditemukan.');
+        if (!$voucher) {
+            return redirect()->route('voting.input')
+                ->with('error', 'Kode voucher tidak ditemukan.');
+        }
 
-        if (!$voucher->status)
-            return redirect()->route('voucher.input')->with('error', 'Voucher sudah digunakan.');
+        if (!$voucher->status) {
+            return redirect()->route('voting.input')
+                ->with('error', 'Voucher sudah digunakan.');
+        }
 
-        // SIMPAN voucher ke session
-        session(['voucher' => $voucher]);
+        // Simpan ke session (string saja)
+        session(['voucher_code' => $voucher->code]);
 
         return $next($request);
     }

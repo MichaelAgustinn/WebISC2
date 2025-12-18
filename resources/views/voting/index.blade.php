@@ -45,7 +45,8 @@
                                         @csrf
 
                                         <input type="hidden" name="karya_id" value="{{ $item->id }}">
-                                        <input type="hidden" name="voucher_id" value="{{ $voucher->id }}">
+                                        <input type="hidden" name="code" value="{{ $voucherCode }}">
+
 
                                         <button type="submit" class="btn mt-3"
                                             style="background-color:#263C8F; color:white; border-radius:6px; width:100%;">

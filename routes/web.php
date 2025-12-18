@@ -304,7 +304,8 @@ Route::middleware('auth')->group(function () {
 Route::get('/voting-input', [VotingController::class, 'isiVoucher'])->name('voting.input');
 Route::get('/voting', [VotingController::class, 'index'])->middleware('voucher.check')->name('voting.index');
 Route::post('/voting/proses', [VotingController::class, 'vote'])->middleware('voucher.check')->name('voting.vote');
-Route::get('/voting/thanks', [VotingController::class, 'thanks'])->middleware('voucher.check')->name('voting.thanks');
+Route::get('/thanks', [VotingController::class, 'thanks'])->name('voting.thanks');
+// Route::get('/voting/thanks', [VotingController::class, 'thanks'])->middleware('voucher.check')->name('voting.thanks');
 
 
 require __DIR__ . '/auth.php';
