@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Document;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File; // Ubah Storage menjadi File
 
 class DocumentController extends Controller
 {
@@ -29,14 +29,19 @@ class DocumentController extends Controller
             'file' => 'required|file|mimes:pdf,jpg,jpeg,png,doc,docx,xls,xlsx|max:5120', // Max 5MB
         ]);
 
-        // Upload File
-        $path = $request->file('file')->store('documents', 'public');
+        // 1. Buat nama file yang unik
+        $file = $request->file('file');
+        $fileName = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
 
+        // 2. Pindahkan file langsung ke folder public/uploads/document
+        $file->move(public_path('uploads/document'), $fileName);
+
+        // 3. Simpan data ke database (kita hanya simpan nama filenya saja)
         Document::create([
             'user_id' => Auth::id(),
             'name' => $request->name,
             'type' => $request->type,
-            'file_path' => $path,
+            'file_path' => $fileName,
         ]);
 
         return redirect()->route('documents.index')->with('success', 'Dokumen berhasil diupload.');
@@ -45,25 +50,40 @@ class DocumentController extends Controller
     // Fitur Download Aman
     public function download(Document $document)
     {
-        // Pastikan hanya pemilik atau admin yang bisa download
+        // Pastikan hanya pemilik atau admin/pengurus yang bisa download
         if (Auth::id() !== $document->user_id && Auth::user()->role !== 'admin' && Auth::user()->role !== 'pengurus') {
-            abort(403);
+            abort(403, 'Akses ditolak: Anda tidak diizinkan mengunduh dokumen ini.');
         }
 
-        return Storage::download('public/' . $document->file_path, $document->name);
+        // Tentukan lokasi asli file di folder public
+        $filePath = public_path('uploads/document/' . $document->file_path);
+
+        // Cek apakah file fisiknya benar-benar ada di server agar tidak error 500
+        if (!File::exists($filePath)) {
+            abort(404, 'Maaf, file fisik tidak ditemukan di server.');
+        }
+
+        // Return response download bawaan Laravel
+        // Parameter kedua adalah nama file saat di-download oleh user (agar namanya rapi)
+        return response()->download($filePath, $document->name . '.' . File::extension($filePath));
     }
 
     public function destroy(Document $document)
     {
+        // Pastikan hanya pemilik yang bisa menghapus
         if (Auth::id() !== $document->user_id) {
-            abort(403);
+            abort(403, 'Akses ditolak: Anda bukan pemilik dokumen ini.');
         }
 
-        // Hapus file fisik
-        if (Storage::exists('public/' . $document->file_path)) {
-            Storage::delete('public/' . $document->file_path);
+        // Tentukan lokasi asli file
+        $filePath = public_path('uploads/document/' . $document->file_path);
+
+        // Hapus file fisik jika ada di folder public
+        if (File::exists($filePath)) {
+            File::delete($filePath);
         }
 
+        // Hapus data dari database
         $document->delete();
 
         return back()->with('success', 'Dokumen berhasil dihapus.');
