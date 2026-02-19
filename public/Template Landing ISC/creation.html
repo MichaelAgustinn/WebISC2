@@ -1,0 +1,1792 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karya - Informatics Study Club</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Poppins:wght@500;700;900&display=swap"
+        rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
+    <style>
+        /* =========================================
+       1. RESET, VARIABEL & GLOBAL
+       ========================================= */
+        :root {
+            /* Warna Utama */
+            --primary: #0f204b;
+            --primary-light: #1e3a8a;
+            --accent: #d4af37;
+            /* Emas */
+            --accent-light: #f3e5ab;
+
+            /* Tipografi & Latar */
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --white: #ffffff;
+            --bg-light: #f8fafc;
+
+            /* Efek */
+            --shadow: 0 10px 30px -10px rgba(15, 32, 75, 0.2);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 100px;
+            /* Mencegah judul tertutup navbar */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-dark);
+            background-color: var(--white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Poppins', sans-serif;
+            color: var(--primary);
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: var(--transition);
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        img {
+            width: 100%;
+            display: block;
+        }
+
+        /* =========================================
+       2. NAVBAR & NAVIGATION
+       ========================================= */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: transparent;
+            /* Default transparan di Home */
+            transition: var(--transition);
+        }
+
+        /* Navbar saat discroll (Solid) */
+        .navbar.scrolled {
+            background: rgba(15, 32, 75, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+            padding: 1rem 5%;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.9);
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--accent);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .menu-toggle {
+            display: none;
+            color: var(--accent);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Tombol Login Khusus */
+        .nav-links .login-btn {
+            background-color: var(--accent);
+            color: var(--primary) !important;
+            padding: 0.6rem 1.8rem;
+            border-radius: 50px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+            margin-left: 10px;
+        }
+
+        .nav-links .login-btn::after {
+            display: none;
+        }
+
+        .nav-links .login-btn:hover {
+            background-color: var(--white);
+            color: var(--primary) !important;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Dropdown Menu (Desktop) */
+        .dropdown-item {
+            position: relative;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .dropdown-item>a {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: var(--white);
+            min-width: 220px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            border-radius: 10px;
+            padding: 10px 0;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            border-top: 3px solid var(--accent);
+            display: block !important;
+        }
+
+        .dropdown-item:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-menu li {
+            display: block;
+            margin: 0;
+        }
+
+        .dropdown-menu li a {
+            color: var(--text-dark);
+            padding: 10px 20px;
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .dropdown-menu li a::after {
+            display: none;
+        }
+
+        .dropdown-menu li a:hover {
+            background-color: var(--bg-light);
+            color: var(--primary);
+            padding-left: 25px;
+        }
+
+        .dropdown-item>a i {
+            transition: transform 0.3s ease;
+            transform: rotate(0deg);
+        }
+
+        /* =========================================
+       3. SHARED SECTION STYLES
+       ========================================= */
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .section-header .line {
+            width: 80px;
+            height: 4px;
+            background: var(--accent);
+            margin: 0 auto;
+            border-radius: 2px;
+        }
+
+        .section-divider {
+            position: relative;
+            height: 120px;
+            background-color: var(--primary);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-image:
+                linear-gradient(rgba(212, 175, 55, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(212, 175, 55, 0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        .section-divider::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            opacity: 0.7;
+            box-shadow: 0 0 10px var(--accent);
+        }
+
+        .divider-icon {
+            color: var(--accent);
+            font-size: 1.8rem;
+            background: var(--primary);
+            padding: 0 20px;
+            z-index: 2;
+            position: relative;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 4px;
+        }
+
+        /* =========================================
+       4. HOME PAGE SECTIONS
+       ========================================= */
+
+        /* Hero Section */
+        #home {
+            position: relative;
+            height: 100vh;
+            width: 100%;
+            background: radial-gradient(circle at center, #1a3a6e, var(--primary));
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            cursor: none;
+        }
+
+        #smokeCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .hero-watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Poppins', sans-serif;
+            font-weight: 900;
+            font-size: 15vw;
+            color: rgba(255, 255, 255, 0.03);
+            white-space: nowrap;
+            z-index: 0;
+            user-select: none;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 4;
+            color: var(--white);
+            max-width: 800px;
+            padding: 0 20px;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 1s forwards 0.5s;
+            color: var(--white);
+            text-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-title span {
+            color: var(--accent);
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 1s forwards 0.8s;
+            color: rgba(255, 255, 255, 0.9);
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* About Section */
+        #about {
+            padding: 5rem 10%;
+            background: var(--white);
+            position: relative;
+            z-index: 5;
+        }
+
+        .about-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-img-wrapper {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 2px solid var(--accent);
+        }
+
+        .about-img-wrapper img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+        }
+
+        .about-text h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        .about-text p {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* Visi Misi Section */
+        #visi-misi {
+            padding: 5rem 10%;
+            background: linear-gradient(135deg, var(--primary) 0%, #081226 100%);
+            color: var(--white);
+        }
+
+        .vm-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .vm-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            padding: 2.5rem;
+            border-radius: 15px;
+            transition: var(--transition);
+        }
+
+        .vm-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-5px);
+            border-color: var(--accent);
+        }
+
+        .vm-icon {
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .vm-card h3 {
+            color: var(--accent);
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .vm-card ul li {
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .vm-card ul li i {
+            color: var(--accent);
+            margin-top: 5px;
+        }
+
+        /* Creation Section */
+        #creation {
+            padding: 5rem 5%;
+            background: var(--bg-light);
+        }
+
+        .filter-menu {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .filter-btn {
+            border: none;
+            background: transparent;
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid #ddd;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--primary);
+            color: var(--accent);
+            border-color: var(--primary);
+            box-shadow: 0 5px 15px rgba(15, 32, 75, 0.3);
+        }
+
+        .creation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .creation-card {
+            background: var(--white);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+            border-bottom: 3px solid transparent;
+        }
+
+        .creation-card.hide {
+            display: none;
+        }
+
+        .creation-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow);
+            border-bottom-color: var(--accent);
+        }
+
+        .card-img {
+            height: 220px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .creation-card:hover .card-img img {
+            transform: scale(1.1);
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        .card-tag {
+            font-size: 0.8rem;
+            color: var(--accent);
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        /* Team Section */
+        #team {
+            padding: 5rem 5%;
+            background: var(--white);
+        }
+
+        .team-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .team-card {
+            flex: 0 1 250px;
+            min-width: 250px;
+            background: var(--white);
+            border-radius: 15px;
+            padding: 2rem 1rem;
+            text-align: center;
+            border: 1px solid #eee;
+            transition: var(--transition);
+        }
+
+        .team-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+        }
+
+        .team-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            object-fit: cover;
+            border: 3px solid var(--accent);
+            padding: 3px;
+            background: white;
+        }
+
+        .team-name {
+            font-size: 1.1rem;
+            color: var(--primary);
+            margin-bottom: 0.2rem;
+        }
+
+        .team-role {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        /* FAQ Section */
+        #faq {
+            padding: 5rem 5%;
+            background: var(--white);
+        }
+
+        .faq-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            align-items: start;
+        }
+
+        .faq-item {
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #fff;
+            transition: var(--transition);
+        }
+
+        .faq-item:hover {
+            border-color: var(--accent);
+        }
+
+        .faq-question {
+            background: #fff;
+            padding: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: var(--primary);
+            transition: var(--transition);
+        }
+
+        .faq-question:hover {
+            background: var(--bg-light);
+        }
+
+        .faq-question i {
+            color: var(--accent);
+            transition: transform 0.3s ease;
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            padding: 0 1.5rem;
+            background: #f8fafc;
+            color: var(--text-light);
+            transition: all 0.3s ease;
+            opacity: 0;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 300px;
+            padding: 1rem 1.5rem 1.5rem;
+            opacity: 1;
+        }
+
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        /* =========================================
+       5. BLOG SYSTEM (GRID & PAGE)
+       ========================================= */
+
+        /* Blog Preview (Home Section) */
+        #blog {
+            padding: 5rem 5%;
+            background: var(--bg-light);
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .blog-card {
+            background: var(--white);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            border-bottom: 3px solid transparent;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+            border-bottom-color: var(--accent);
+        }
+
+        .blog-date {
+            padding: 1rem 1.5rem 0;
+            font-size: 0.85rem;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .blog-content {
+            padding: 1rem 1.5rem 2rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .blog-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .read-more {
+            color: var(--primary);
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: auto;
+        }
+
+        .read-more:hover {
+            color: var(--accent);
+        }
+
+        /* Button View All (Home) */
+        .btn-view-all-wrapper {
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .btn-view-all {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px 35px;
+            border: 2px solid var(--primary);
+            border-radius: 50px;
+            color: var(--primary);
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+            background: transparent;
+        }
+
+        .btn-view-all i {
+            transition: transform 0.3s ease;
+        }
+
+        .btn-view-all:hover {
+            background-color: var(--primary);
+            color: var(--accent);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(15, 32, 75, 0.2);
+            border-color: var(--primary);
+        }
+
+        .btn-view-all:hover i {
+            transform: translateX(5px);
+        }
+
+        /* --- SPECIFIC FULL BLOG PAGE STYLES --- */
+
+        .blog-header {
+            padding: 140px 5% 60px;
+            background: linear-gradient(135deg, var(--primary) 0%, #081226 100%);
+            text-align: center;
+            color: var(--white);
+        }
+
+        .blog-header h1 {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .blog-header p {
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 600px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+        }
+
+        .blog-container {
+            width: 95%;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 4rem 0;
+        }
+
+        .blog-wrapper {
+            display: grid;
+            grid-template-columns: 3.5fr 1fr;
+            gap: 2.5rem;
+            align-items: start;
+        }
+
+        .blog-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        /* Blog Meta & Categories */
+        .category-tag {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--accent);
+            color: var(--primary);
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .blog-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-bottom: 0.8rem;
+        }
+
+        .blog-meta i {
+            color: var(--accent);
+            margin-right: 5px;
+        }
+
+        .blog-desc {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+
+        /* Sidebar & Widgets */
+        .sidebar {
+            position: sticky;
+            top: 100px;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            min-width: 300px;
+        }
+
+        .sidebar-widget {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid #eee;
+        }
+
+        .widget-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1.2rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 2px solid var(--accent);
+            display: inline-block;
+            color: var(--primary);
+        }
+
+        /* Widget Search */
+        .search-form {
+            display: flex;
+            position: relative;
+        }
+
+        .search-form input {
+            width: 100%;
+            padding: 12px 15px;
+            padding-right: 45px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .search-form input:focus {
+            border-color: var(--primary);
+        }
+
+        .search-form button {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            width: 35px;
+            height: 35px;
+            background: var(--primary);
+            color: var(--accent);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .search-form button:hover {
+            background: var(--accent);
+            color: var(--primary);
+        }
+
+        /* Widget Recent Post */
+        .recent-post-item {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 1.2rem;
+            align-items: center;
+        }
+
+        .recent-post-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .rp-thumb {
+            width: 70px;
+            height: 70px;
+            border-radius: 10px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .rp-info h5 {
+            font-size: 0.95rem;
+            margin-bottom: 5px;
+            line-height: 1.3;
+        }
+
+        .rp-info h5 a {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .rp-info h5 a:hover {
+            color: var(--accent);
+        }
+
+        .rp-date {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .rp-date i {
+            color: var(--accent);
+        }
+
+        /* Widget Category */
+        .category-list li {
+            border-bottom: 1px solid #eee;
+        }
+
+        .category-list li:last-child {
+            border-bottom: none;
+        }
+
+        .category-list a {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 5px;
+            font-weight: 500;
+            color: var(--text-dark);
+            transition: var(--transition);
+        }
+
+        .category-list a:hover {
+            color: var(--primary);
+            padding-left: 10px;
+        }
+
+        .cat-count {
+            background: var(--bg-light);
+            color: var(--primary);
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .category-list a:hover .cat-count {
+            background: var(--accent);
+            color: var(--primary);
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 4rem;
+            grid-column: 1 / -1;
+        }
+
+        .page-link {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 1px solid #e2e8f0;
+            background: var(--white);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .page-link:hover,
+        .page-link.active {
+            background: var(--primary);
+            color: var(--accent);
+            border-color: var(--primary);
+        }
+
+        /* =========================================
+       6. FOOTER
+       ========================================= */
+        footer {
+            background: var(--primary);
+            color: var(--white);
+            padding-top: 4rem;
+            font-size: 0.95rem;
+            border-top: 4px solid var(--accent);
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer-container {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr 1fr;
+            gap: 3rem;
+            padding: 0 5% 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-col h3 {
+            color: var(--accent);
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .contact-info li {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #cbd5e1;
+        }
+
+        .contact-info i {
+            color: var(--accent);
+            font-size: 1.2rem;
+        }
+
+        .footer-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .footer-nav a {
+            color: #cbd5e1;
+            transition: 0.3s;
+        }
+
+        .footer-nav a:hover {
+            color: var(--accent);
+            padding-left: 5px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: var(--accent);
+            font-size: 1.2rem;
+            transition: var(--transition);
+            border: 1px solid transparent;
+        }
+
+        .social-links a:hover {
+            background: var(--accent);
+            color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            background: #081226;
+            text-align: center;
+            padding: 1.5rem;
+            color: #94a3b8;
+            font-size: 0.85rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* =========================================
+       7. RESPONSIVE MEDIA QUERIES
+       ========================================= */
+
+        /* Tablet & Small Desktop (Max 1024px) */
+        @media (max-width: 1024px) {
+            .blog-wrapper {
+                grid-template-columns: 1fr;
+                /* Blog layout jadi 1 kolom (stack) */
+            }
+
+            .sidebar {
+                min-width: auto;
+                position: static;
+                margin-top: 2rem;
+            }
+
+            .blog-container {
+                width: 90%;
+            }
+        }
+
+        /* Mobile (Max 768px) */
+        @media (max-width: 768px) {
+
+            /* Navbar Mobile */
+            .navbar.scrolled,
+            .navbar {
+                background: var(--primary);
+                padding: 1rem 5%;
+            }
+
+            .nav-links {
+                position: absolute;
+                top: 70px;
+                right: 0;
+                width: 100%;
+                background: var(--primary);
+                flex-direction: column;
+                align-items: center;
+                padding: 2rem 0;
+                transform: translateY(-150%);
+                transition: transform 0.3s ease-in-out;
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            }
+
+            .nav-links.active {
+                transform: translateY(0);
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            /* Login Button Fix */
+            .nav-links .login-btn {
+                display: inline-block;
+                width: auto;
+                min-width: 200px;
+                margin: 1.5rem auto 0 auto;
+                padding: 15px 30px;
+                text-align: center;
+                background-color: var(--accent);
+                color: var(--primary) !important;
+                white-space: nowrap;
+            }
+
+            .nav-links li {
+                width: 100%;
+                text-align: center;
+            }
+
+            /* Dropdown Mobile Fix */
+            .dropdown-item {
+                display: block;
+                width: 100%;
+                margin-bottom: 1rem;
+            }
+
+            .dropdown-item>a {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                gap: 5px;
+            }
+
+            .dropdown-menu {
+                position: static;
+                box-shadow: none;
+                background: rgba(255, 255, 255, 0.05);
+                width: 100%;
+                opacity: 1;
+                visibility: visible;
+                transform: none;
+                border-top: none;
+                padding: 0;
+                margin-top: 10px;
+                display: none !important;
+                /* JS Toggle required to show */
+                text-align: center;
+            }
+
+            .dropdown-item.active .dropdown-menu {
+                display: block !important;
+                animation: fadeIn 0.3s ease;
+            }
+
+            .dropdown-item.active>a i {
+                transform: rotate(180deg);
+            }
+
+            .dropdown-menu li {
+                width: 100%;
+            }
+
+            .dropdown-menu li a {
+                color: rgba(255, 255, 255, 0.7);
+                padding: 10px 0;
+                display: block;
+                text-align: center;
+            }
+
+            .dropdown-menu li a:hover {
+                color: var(--accent);
+                background: transparent;
+                padding-left: 0;
+            }
+
+            /* Content Adjustments */
+            .about-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 2rem;
+            }
+
+            .about-container p {
+                text-align: justify;
+                hyphens: auto;
+            }
+
+            .about-img-wrapper img {
+                height: 250px;
+            }
+
+            .vm-container,
+            .footer-container,
+            .faq-container {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-title,
+            .blog-header h1 {
+                font-size: 2.5rem;
+            }
+
+            section,
+            .blog-container {
+                padding: 3rem 5% !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <a href="#" class="logo">ORGANISASI</a>
+        <div class="menu-toggle"><i class="ri-menu-3-line"></i></div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#creation">Creation</a></li>
+            <li><a href="#team">Team</a></li>
+            <li><a href="#blog">Blog</a></li>
+
+            <li class="dropdown-item">
+                <a href="#">Information <i class="ri-arrow-down-s-line"></i></a>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Dosen Pembimbing</a></li>
+                    <li><a href="#">Anggota ISC</a></li>
+                    <li><a href="#">Dokumen</a></li>
+                </ul>
+            </li>
+
+            <li><a href="login.html" class="login-btn">Login</a></li>
+        </ul>
+    </nav>
+
+
+    <header class="blog-header">
+        <h1>Karya & Inovasi</h1>
+        <p>Galeri hasil karya anggota Informatics Study Club dalam mengembangkan solusi teknologi tepat guna.</p>
+    </header>
+
+    <section class="blog-container">
+        <div class="blog-wrapper">
+
+            <div class="blog-main">
+                <div class="blog-list">
+
+                    <article class="blog-card">
+                        <div class="card-img">
+                            <span class="category-tag">IoT</span>
+                            <img src="https://images.unsplash.com/photo-1558346490-a72e53ae2d4f?auto=format&fit=crop&w=500&q=80"
+                                alt="Project 1">
+                        </div>
+                        <div class="blog-content">
+                            <div class="blog-meta">
+                                <span><i class="ri-calendar-line"></i> Jan 2024</span>
+                                <span><i class="ri-group-line"></i> Team IoT</span>
+                            </div>
+                            <h3 class="blog-title">Smart Hydroponic System v2</h3>
+                            <p class="blog-desc">Sistem monitoring nutrisi dan penyiraman otomatis berbasis ESP32 dan
+                                MQTT...</p>
+                            <a href="#" class="read-more">Lihat Detail <i class="ri-arrow-right-line"></i></a>
+                        </div>
+                    </article>
+
+                    <article class="blog-card">
+                        <div class="card-img">
+                            <span class="category-tag">Mobile</span>
+                            <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=500&q=80"
+                                alt="Project 2">
+                        </div>
+                        <div class="blog-content">
+                            <div class="blog-meta">
+                                <span><i class="ri-calendar-line"></i> Feb 2024</span>
+                                <span><i class="ri-group-line"></i> Budi & Team</span>
+                            </div>
+                            <h3 class="blog-title">EduLearn: Aplikasi Belajar Online</h3>
+                            <p class="blog-desc">Aplikasi mobile berbasis Flutter untuk siswa mengakses materi dan kuis
+                                interaktif...</p>
+                            <a href="#" class="read-more">Lihat Detail <i class="ri-arrow-right-line"></i></a>
+                        </div>
+                    </article>
+
+                    <article class="blog-card">
+                        <div class="card-img">
+                            <span class="category-tag">Website</span>
+                            <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?auto=format&fit=crop&w=500&q=80"
+                                alt="Project 3">
+                        </div>
+                        <div class="blog-content">
+                            <div class="blog-meta">
+                                <span><i class="ri-calendar-line"></i> Des 2023</span>
+                                <span><i class="ri-group-line"></i> Rina W.</span>
+                            </div>
+                            <h3 class="blog-title">E-Commerce UMKM Lokal</h3>
+                            <p class="blog-desc">Platform marketplace responsif menggunakan React.js untuk membantu UMKM
+                                lokal...</p>
+                            <a href="#" class="read-more">Lihat Detail <i class="ri-arrow-right-line"></i></a>
+                        </div>
+                    </article>
+
+                    <article class="blog-card">
+                        <div class="card-img">
+                            <span class="category-tag">Sistem Cerdas</span>
+                            <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=500&q=80"
+                                alt="Project 4">
+                        </div>
+                        <div class="blog-content">
+                            <div class="blog-meta">
+                                <span><i class="ri-calendar-line"></i> Nov 2023</span>
+                                <span><i class="ri-group-line"></i> Divisi AI</span>
+                            </div>
+                            <h3 class="blog-title">Face Mask Detection</h3>
+                            <p class="blog-desc">Implementasi Computer Vision dengan OpenCV untuk deteksi masker
+                                real-time...</p>
+                            <a href="#" class="read-more">Lihat Detail <i class="ri-arrow-right-line"></i></a>
+                        </div>
+                    </article>
+
+                    <article class="blog-card">
+                        <div class="card-img">
+                            <span class="category-tag">UI/UX</span>
+                            <img src="https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?auto=format&fit=crop&w=500&q=80"
+                                alt="Project 5">
+                        </div>
+                        <div class="blog-content">
+                            <div class="blog-meta">
+                                <span><i class="ri-calendar-line"></i> Okt 2023</span>
+                                <span><i class="ri-group-line"></i> Sarah J.</span>
+                            </div>
+                            <h3 class="blog-title">Finance App Redesign</h3>
+                            <p class="blog-desc">Studi kasus perancangan ulang antarmuka aplikasi keuangan untuk user
+                                experience lebih baik...</p>
+                            <a href="#" class="read-more">Lihat Detail <i class="ri-arrow-right-line"></i></a>
+                        </div>
+                    </article>
+
+                    <article class="blog-card">
+                        <div class="card-img">
+                            <span class="category-tag">Mobile</span>
+                            <img src="https://images.unsplash.com/photo-1555774698-0b77e0d5fac6?auto=format&fit=crop&w=500&q=80"
+                                alt="Project 6">
+                        </div>
+                        <div class="blog-content">
+                            <div class="blog-meta">
+                                <span><i class="ri-calendar-line"></i> Sep 2023</span>
+                                <span><i class="ri-group-line"></i> Mobile Div</span>
+                            </div>
+                            <h3 class="blog-title">HealthTracker App</h3>
+                            <p class="blog-desc">Aplikasi pencatat kalori dan aktivitas harian yang terintegrasi dengan
+                                Google Fit...</p>
+                            <a href="#" class="read-more">Lihat Detail <i class="ri-arrow-right-line"></i></a>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="pagination">
+                    <a href="#" class="page-link"><i class="ri-arrow-left-s-line"></i></a>
+                    <a href="#" class="page-link active">1</a>
+                    <a href="#" class="page-link">2</a>
+                    <a href="#" class="page-link"><i class="ri-arrow-right-s-line"></i></a>
+                </div>
+            </div>
+
+            <aside class="sidebar">
+
+                <div class="sidebar-widget">
+                    <h4 class="widget-title">Cari Karya</h4>
+                    <form class="search-form" action="#">
+                        <input type="text" placeholder="Nama project...">
+                        <button type="submit"><i class="ri-search-2-line"></i></button>
+                    </form>
+                </div>
+
+                <div class="sidebar-widget">
+                    <h4 class="widget-title">Karya Terbaru</h4>
+
+                    <div class="recent-post-item">
+                        <img src="https://images.unsplash.com/photo-1558346490-a72e53ae2d4f?auto=format&fit=crop&w=150&q=60"
+                            alt="Thumb" class="rp-thumb">
+                        <div class="rp-info">
+                            <h5><a href="#">Smart Hydroponic System</a></h5>
+                            <span class="rp-divisi"><i class="ri-price-tag-3-line"></i> IoT</span>
+                        </div>
+                    </div>
+
+                    <div class="recent-post-item">
+                        <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=150&q=60"
+                            alt="Thumb" class="rp-thumb">
+                        <div class="rp-info">
+                            <h5><a href="#">EduLearn App</a></h5>
+                            <span class="rp-divisi"><i class="ri-smartphone-line"></i> Mobile</span>
+                        </div>
+                    </div>
+
+                    <div class="recent-post-item">
+                        <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?auto=format&fit=crop&w=150&q=60"
+                            alt="Thumb" class="rp-thumb">
+                        <div class="rp-info">
+                            <h5><a href="#">E-Commerce UMKM</a></h5>
+                            <span class="rp-divisi"><i class="ri-global-line"></i> Website</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-widget">
+                    <h4 class="widget-title">Divisi</h4>
+                    <ul class="category-list">
+                        <li><a href="#">Mobile Apps <span class="cat-count">8</span></a></li>
+                        <li><a href="#">Website <span class="cat-count">12</span></a></li>
+                        <li><a href="#">UI/UX Design <span class="cat-count">5</span></a></li>
+                        <li><a href="#">Internet of Things <span class="cat-count">7</span></a></li>
+                        <li><a href="#">Sistem Cerdas <span class="cat-count">4</span></a></li>
+                    </ul>
+                </div>
+
+            </aside>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-col">
+                <h3>Hubungi Kami</h3>
+                <ul class="contact-info">
+                    <li><i class="ri-map-pin-line"></i> Jl. Teknologi No. 123, Kampus Digital, Jakarta</li>
+                    <li><i class="ri-mail-line"></i> halo@organisasi.id</li>
+                    <li><i class="ri-phone-line"></i> +62 812 3456 7890</li>
+                    <li><i class="ri-time-line"></i> Senin - Jumat: 09.00 - 17.00</li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h3>Navigasi</h3>
+                <div class="footer-nav">
+                    <a href="#home">Home</a>
+                    <a href="#about">Tentang Kami</a>
+                    <a href="#team">Pengurus</a>
+                    <a href="#creation">Karya Mobile</a>
+                    <a href="#creation">Karya Website</a>
+                    <a href="#creation">Karya IoT</a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h3>Ikuti Kami</h3>
+                <p style="color: #cbd5e1; margin-bottom: 1rem;">Dapatkan update terbaru kegiatan kami di sosial media.
+                </p>
+                <div class="social-links">
+                    <a href="#"><i class="ri-instagram-line"></i></a>
+                    <a href="#"><i class="ri-linkedin-fill"></i></a>
+                    <a href="#"><i class="ri-youtube-fill"></i></a>
+                    <a href="#"><i class="ri-github-fill"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Informatics Study Club. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // =========================================
+            // 1. VARIABLES & SELECTORS (GLOBAL)
+            // =========================================
+            const navbar = document.querySelector('.navbar');
+            const menuToggle = document.querySelector('.menu-toggle');
+            const mobileMenu = document.querySelector('.nav-links');
+            const navLinksList = document.querySelectorAll('.nav-links a, .logo, .footer-nav a');
+
+            // =========================================
+            // 2. NAVBAR SCROLL EFFECT (STICKY)
+            // =========================================
+            window.addEventListener('scroll', function () {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+
+            // =========================================
+            // 3. MOBILE MENU TOGGLE
+            // =========================================
+            if (menuToggle) {
+                menuToggle.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('active');
+                });
+            }
+
+            // =========================================
+            // 4. DROPDOWN LOGIC (MOBILE)
+            // =========================================
+            const dropdownToggle = document.querySelector('.dropdown-item > a');
+            const dropdownItem = document.querySelector('.dropdown-item');
+
+            if (dropdownToggle && dropdownItem) {
+                // Toggle saat diklik (hanya di mobile)
+                dropdownToggle.addEventListener('click', function (e) {
+                    if (window.innerWidth <= 768) {
+                        e.preventDefault(); // Mencegah link pindah halaman
+                        dropdownItem.classList.toggle('active');
+                    }
+                });
+
+                // Tutup dropdown jika klik di luar area
+                document.addEventListener('click', function (e) {
+                    if (!dropdownItem.contains(e.target) && window.innerWidth <= 768) {
+                        dropdownItem.classList.remove('active');
+                    }
+                });
+            }
+
+            // =========================================
+            // 5. SMOOTH SCROLL NAVIGATION
+            // =========================================
+            navLinksList.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    const targetId = this.getAttribute('href');
+
+                    // Cek apakah link adalah anchor (#...) atau link halaman lain
+                    if (targetId.startsWith('#') && targetId.length > 1) {
+                        e.preventDefault();
+                        const targetSection = document.querySelector(targetId);
+                        if (targetSection) {
+                            // Tutup menu mobile jika sedang terbuka
+                            if (mobileMenu) mobileMenu.classList.remove('active');
+                            targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                    }
+                });
+            });
+
+            // =========================================
+            // 6. SEARCH FILTER (KHUSUS HALAMAN BLOG)
+            // =========================================
+            const searchInput = document.getElementById('searchInput');
+            const docCards = document.querySelectorAll('.blog-card, .doc-card'); // Support class lama & baru
+
+            if (searchInput && docCards.length > 0) {
+                searchInput.addEventListener('keyup', function (e) {
+                    const term = e.target.value.toLowerCase();
+
+                    docCards.forEach(card => {
+                        // Mencari elemen judul & kategori di dalam kartu
+                        const titleEl = card.querySelector('.blog-title, .doc-title');
+                        const catEl = card.querySelector('.category-tag, .doc-category');
+
+                        const title = titleEl ? titleEl.textContent.toLowerCase() : '';
+                        const category = catEl ? catEl.textContent.toLowerCase() : '';
+
+                        if (title.includes(term) || category.includes(term)) {
+                            card.style.display = "flex"; // Sesuaikan dengan layout flex
+                        } else {
+                            card.style.display = "none";
+                        }
+                    });
+                });
+            }
+
+            // =========================================
+            // 7. CREATION FILTER (KHUSUS HALAMAN HOME)
+            // =========================================
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            const creationCards = document.querySelectorAll('.creation-card');
+
+            if (filterBtns.length > 0) {
+                filterBtns.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        // Hapus class active dari semua tombol
+                        filterBtns.forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+
+                        const filterValue = btn.getAttribute('data-filter');
+
+                        creationCards.forEach(card => {
+                            if (filterValue === 'all' || card.getAttribute('data-category') === filterValue) {
+                                card.classList.remove('hide');
+                                card.style.display = 'block'; // Pastikan tampil
+                                // Animasi fade in
+                                card.style.opacity = '0';
+                                setTimeout(() => card.style.opacity = '1', 50);
+                            } else {
+                                card.classList.add('hide');
+                                setTimeout(() => card.style.display = 'none', 300); // Tunggu transisi
+                            }
+                        });
+                    });
+                });
+            }
+
+            // =========================================
+            // 8. FAQ ACCORDION
+            // =========================================
+            const faqItems = document.querySelectorAll('.faq-item');
+            if (faqItems.length > 0) {
+                faqItems.forEach(item => {
+                    const question = item.querySelector('.faq-question');
+                    question.addEventListener('click', () => {
+                        faqItems.forEach(otherItem => {
+                            if (otherItem !== item) otherItem.classList.remove('active');
+                        });
+                        item.classList.toggle('active');
+                    });
+                });
+            }
+
+            // =========================================
+            // 9. CANVAS SMOKE EFFECT (STRONG GOLD)
+            // =========================================
+            const canvas = document.getElementById('smokeCanvas');
+            if (canvas) {
+                const ctx = canvas.getContext('2d');
+                let width, height, particles = [];
+
+                // Mouse listener khusus area Home
+                const heroSection = document.getElementById('home');
+                const mouse = { x: 0, y: 0, active: false };
+
+                function resize() {
+                    width = canvas.width = window.innerWidth;
+                    height = canvas.height = window.innerHeight;
+                }
+                window.addEventListener('resize', resize);
+                resize();
+
+                if (heroSection) {
+                    heroSection.addEventListener('mousemove', (e) => {
+                        const rect = heroSection.getBoundingClientRect();
+                        mouse.x = e.clientX - rect.left;
+                        mouse.y = e.clientY - rect.top;
+                        mouse.active = true;
+                        // Tambah partikel saat mouse bergerak
+                        for (let i = 0; i < 3; i++) particles.push(new Particle(mouse.x, mouse.y));
+                    });
+                }
+
+                class Particle {
+                    constructor(x, y) {
+                        this.x = x;
+                        this.y = y;
+                        this.vx = (Math.random() - 0.5) * 2;
+                        this.vy = (Math.random() - 0.5) * 2;
+                        this.size = Math.random() * 20 + 10;
+                        this.life = 100;
+
+                        // Warna Emas Pekat
+                        const hue = 40 + Math.random() * 10;
+                        this.color = `hsla(${hue}, 100%, 50%,`;
+                    }
+
+                    update() {
+                        this.x += this.vx;
+                        this.y += this.vy;
+                        this.life -= 1.5;
+                        this.size += 0.2;
+                    }
+
+                    draw() {
+                        ctx.beginPath();
+                        let gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size);
+                        gradient.addColorStop(0, this.color + (this.life / 100 * 0.5) + ')');
+                        gradient.addColorStop(1, this.color + '0)');
+
+                        ctx.fillStyle = gradient;
+                        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                }
+
+                function animate() {
+                    ctx.clearRect(0, 0, width, height);
+                    for (let i = 0; i < particles.length; i++) {
+                        particles[i].update();
+                        particles[i].draw();
+                        if (particles[i].life <= 0) {
+                            particles.splice(i, 1);
+                            i--;
+                        }
+                    }
+                    requestAnimationFrame(animate);
+                }
+                animate();
+            }
+
+        });
+    </script>
+</body>
+
+</html>
