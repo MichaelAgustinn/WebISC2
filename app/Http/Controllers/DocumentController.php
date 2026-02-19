@@ -12,7 +12,7 @@ class DocumentController extends Controller
     // Menampilkan daftar dokumen milik user yang login
     public function index()
     {
-        $documents = Document::where('user_id', Auth::id())->latest()->paginate(10);
+        $documents = Document::latest()->paginate(10);
         return view('user.documents.index', compact('documents'));
     }
 
@@ -50,7 +50,7 @@ class DocumentController extends Controller
     // Fitur Download Aman
     public function download(Document $document)
     {
-                // Tentukan lokasi asli file di folder public
+        // Tentukan lokasi asli file di folder public
         $filePath = public_path('uploads/document/' . $document->file_path);
 
         // Cek apakah file fisiknya benar-benar ada di server agar tidak error 500
