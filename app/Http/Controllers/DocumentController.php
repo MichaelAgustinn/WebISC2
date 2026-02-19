@@ -50,12 +50,7 @@ class DocumentController extends Controller
     // Fitur Download Aman
     public function download(Document $document)
     {
-        // Pastikan hanya pemilik atau admin/pengurus yang bisa download
-        if (Auth::id() !== $document->user_id && Auth::user()->role !== 'admin' && Auth::user()->role !== 'pengurus') {
-            abort(403, 'Akses ditolak: Anda tidak diizinkan mengunduh dokumen ini.');
-        }
-
-        // Tentukan lokasi asli file di folder public
+                // Tentukan lokasi asli file di folder public
         $filePath = public_path('uploads/document/' . $document->file_path);
 
         // Cek apakah file fisiknya benar-benar ada di server agar tidak error 500
