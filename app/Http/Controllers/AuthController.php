@@ -62,7 +62,7 @@ class AuthController extends Controller
         // Kita simpan nomor HP di tabel profile sesuai struktur database sebelumnya
         Profile::create([
             'user_id' => $user->id,
-            'nim' => '-', // Default
+            'nim' => null, // Default
             'phone_number' => $request->phone_number,
             'angkatan' => date('Y'), // Default tahun ini
         ]);
