@@ -3,15 +3,21 @@
 @section('content')
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-6">
 
-        {{-- Anggota Aktif --}}
-        <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-            <p class="text-gray-500 text-sm font-medium">Akun Terdaftar</p>
-            <h3 class="text-2xl font-bold text-green-600">{{ $totalAkun ?? '0' }}</h3>
-        </div>
+        @if (Auth::user()->role == 'admin' || Auth::user()->role == 'pengurus')
+            {{-- Anggota Aktif --}}
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+                <p class="text-gray-500 text-sm font-medium">Akun Terdaftar</p>
+                <h3 class="text-2xl font-bold text-green-600">{{ $totalAkun ?? '0' }}</h3>
+            </div>
+        @endif
 
         {{-- Anggota Tidak Aktif --}}
         <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-            <p class="text-gray-500 text-sm font-medium">Anggota Aktif</p>
+            @if (Auth::user()->role == 'admin' || Auth::user()->role == 'pengurus')
+                <p class="text-gray-500 text-sm font-medium">Anggota Aktif</p>
+            @else
+                <p class="text-gray-500 text-sm font-medium">Semua anggota</p>
+            @endif
             <h3 class="text-2xl font-bold text-red-600">{{ $totalAnggota ?? '0' }}</h3>
         </div>
 
@@ -21,70 +27,77 @@
             <h3 class="text-2xl font-bold text-indigo-600">{{ $totalPengurus ?? '0' }}</h3>
         </div>
 
-        {{-- Karya Aktif --}}
-        <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-            <p class="text-gray-500 text-sm font-medium">Semua Karya</p>
-            <h3 class="text-2xl font-bold text-blue-600">{{ $totalProject ?? '0' }}</h3>
-        </div>
+        @if (Auth::user()->role == 'admin' || Auth::user()->role == 'pengurus')
+            {{-- Karya Aktif --}}
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+                <p class="text-gray-500 text-sm font-medium">Semua Karya</p>
+                <h3 class="text-2xl font-bold text-blue-600">{{ $totalProject ?? '0' }}</h3>
+            </div>
+        @endif
 
         {{-- Karya Tidak Aktif --}}
         <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
             <p class="text-gray-500 text-sm font-medium">Karya Tervalidasi</p>
             <h3 class="text-2xl font-bold text-yellow-600">{{ $projectAktif ?? '0' }}</h3>
         </div>
-        <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-            <p class="text-gray-500 text-sm font-medium">Total Artikel</p>
-            <h3 class="text-2xl font-bold text-blue-600">{{ $totalBlog ?? '0' }}</h3>
-        </div>
-        <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-            <p class="text-gray-500 text-sm font-medium">Total Dokumen</p>
-            <h3 class="text-2xl font-bold text-yellow-600">{{ $totalBlog ?? '0' }}</h3>
-        </div>
-        <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-            <p class="text-gray-500 text-sm font-medium">Total Surat</p>
-            <h3 class="text-2xl font-bold text-green-600">{{ $totalBlog ?? '0' }}</h3>
-        </div>
+
+        @if (Auth::user()->role == 'admin' || Auth::user()->role == 'pengurus')
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+                <p class="text-gray-500 text-sm font-medium">Total Artikel</p>
+                <h3 class="text-2xl font-bold text-blue-600">{{ $totalBlog ?? '0' }}</h3>
+            </div>
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+                <p class="text-gray-500 text-sm font-medium">Total Dokumen</p>
+                <h3 class="text-2xl font-bold text-yellow-600">{{ $totalBlog ?? '0' }}</h3>
+            </div>
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+                <p class="text-gray-500 text-sm font-medium">Total Surat</p>
+                <h3 class="text-2xl font-bold text-green-600">{{ $totalBlog ?? '0' }}</h3>
+            </div>
+        @endif
 
     </div>
 
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-        <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden h-fit">
-            <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
-                <h3 class="font-semibold text-gray-800">Karya Terbaru</h3>
-                <a href="{{ route('projects.index') }}" class="text-indigo-600 text-sm font-medium hover:underline">Lihat
-                    Semua</a>
-            </div>
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-sm text-gray-600">
-                    <thead class="bg-gray-50 text-xs uppercase text-gray-500">
-                        <tr>
-                            <th class="px-6 py-3 font-medium">Judul Karya</th>
-                            <th class="px-6 py-3 font-medium">Divisi</th>
-                            <th class="px-6 py-3 font-medium">Creator</th>
-                            <th class="px-6 py-3 font-medium">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-100">
-                        {{-- @dd($recentProjects->owner) --}}
-                        @foreach ($recentProjects as $recentProject)
+        @if (Auth::user()->role == 'admin' || Auth::user()->role == 'pengurus')
+            <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden h-fit">
+                <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+                    <h3 class="font-semibold text-gray-800">Karya Terbaru</h3>
+                    <a href="{{ route('projects.index') }}"
+                        class="text-indigo-600 text-sm font-medium hover:underline">Lihat
+                        Semua</a>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-gray-600">
+                        <thead class="bg-gray-50 text-xs uppercase text-gray-500">
                             <tr>
-                                {{-- @dd($recentProject) --}}
-                                <td class="px-6 py-4 font-medium text-gray-900">{{ $recentProject->title ?? '' }}</td>
-                                <td class="px-6 py-4"><span
-                                        class="px-2 py-1 bg-purple-50 text-purple-600 rounded text-xs font-semibold">{{ $recentProject->division ?? '' }}</span>
-                                </td>
-                                <td class="px-6 py-4">{{ $recentProject->owner->name ?? '' }}</td>
-                                <td class="px-6 py-4"><span
-                                        class="{{ $recentProject->status == true ? 'text-green-600' : 'text-grey-600' }} text-sm font-bold">{{ $recentProject->status == true ? 'verify' : 'unverify' }}</span>
-                                </td>
+                                <th class="px-6 py-3 font-medium">Judul Karya</th>
+                                <th class="px-6 py-3 font-medium">Divisi</th>
+                                <th class="px-6 py-3 font-medium">Creator</th>
+                                <th class="px-6 py-3 font-medium">Status</th>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            {{-- @dd($recentProjects->owner) --}}
+                            @foreach ($recentProjects as $recentProject)
+                                <tr>
+                                    {{-- @dd($recentProject) --}}
+                                    <td class="px-6 py-4 font-medium text-gray-900">{{ $recentProject->title ?? '' }}</td>
+                                    <td class="px-6 py-4"><span
+                                            class="px-2 py-1 bg-purple-50 text-purple-600 rounded text-xs font-semibold">{{ $recentProject->division ?? '' }}</span>
+                                    </td>
+                                    <td class="px-6 py-4">{{ $recentProject->owner->name ?? '' }}</td>
+                                    <td class="px-6 py-4"><span
+                                            class="{{ $recentProject->status == true ? 'text-green-600' : 'text-grey-600' }} text-sm font-bold">{{ $recentProject->status == true ? 'verify' : 'unverify' }}</span>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
+        @endif
 
         <div class="lg:col-span-1">
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
@@ -161,11 +174,21 @@
                     @endforelse
                 </div>
 
-                <div class="bg-gray-50 px-6 py-3 border-t border-gray-100 text-center">
-                    <a href="#" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition">
-                        Lihat Seluruh Peringkat &rarr;
-                    </a>
-                </div>
+                @if (Auth::user()->role == 'admin' || Auth::user()->role == 'pengurus')
+                    <div class="bg-gray-50 px-6 py-3 border-t border-gray-100 text-center">
+                        <a href="{{ route('typing.index') }}"
+                            class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition">
+                            Lihat Seluruh Peringkat &rarr;
+                        </a>
+                    </div>
+                @else
+                    <div class="bg-gray-50 px-6 py-3 border-t border-gray-100 text-center">
+                        <a href="{{ route('typing.index') }}"
+                            class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition">
+                            Mulai Test Mengetik &rarr;
+                        </a>
+                    </div>
+                @endif
             </div>
         </div>
 
