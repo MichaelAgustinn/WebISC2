@@ -166,6 +166,10 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'role:admin,pengurus,anggota'])->group(function () {
+    // ? project area
+    Route::get('/project-saya', [ProjectController::class, 'index'])->name('myproject.index');
+    //? project area end
+
     Route::resource('projects', ProjectController::class);
 
     // Update Komentar
@@ -181,8 +185,8 @@ Route::middleware(['auth', 'role:admin,pengurus,anggota'])->group(function () {
 // ! route untuk admin dan pengurus
 Route::middleware(['auth', 'role:admin,pengurus'])->group(function () {
     // ? project verifikasi area
-    Route::get('/projects', [ProjectVerificationController::class, 'index'])
-        ->name('projects.index');
+    Route::get('/project-verify', [ProjectVerificationController::class, 'index'])
+        ->name('admin.projects.index');
 
     Route::put('/projects/{project}/verify', [ProjectVerificationController::class, 'verify'])
         ->name('admin.projects.verify');

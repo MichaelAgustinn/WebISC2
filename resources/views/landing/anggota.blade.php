@@ -242,11 +242,12 @@
                                 alt="{{ $member->name }}">
                         @endif
 
-                        <div class="member-social">
+                        {{-- ? untuk nanti jika ingin menambah table soscial untuk setiap anggota --}}
+                        {{-- <div class="member-social">
                             <a href="#"><i class="ri-github-line"></i></a>
                             <a href="#"><i class="ri-linkedin-fill"></i></a>
                             <a href="#"><i class="ri-instagram-line"></i></a>
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="member-info">
                         <h3 class="member-name">{{ $member->name }}</h3>
@@ -258,8 +259,6 @@
                         <span class="member-year">
                             Angkatan {{ $member->profile->angkatan ?? '-' }}
                         </span>
-
-                        <button class="btn-follow">Detail</button>
 
                         <a href="{{ route('anggota.show', $member->id) }}" class="btn-follow"
                             style="text-decoration:none; display:inline-block;">Detail Profil</a>

@@ -124,9 +124,9 @@
                     <p class="px-3 text-xs font-semibold uppercase text-gray-400 mt-6 mb-2 tracking-wider">Anggota &
                         Karya
                     </p>
-                    <a href="{{ route('projects.index') }}"
-                        class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs('projects.*') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600' }} transition-colors">
-                        <svg class="mr-3 h-5 w-5 {{ request()->routeIs('projects.*') ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-500' }}"
+                    <a href="{{ route('admin.projects.index') }}"
+                        class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs('admin.projects.*') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600' }} transition-colors">
+                        <svg class="mr-3 h-5 w-5 {{ request()->routeIs('admin.projects.*') ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-500' }}"
                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -157,16 +157,28 @@
                         </svg>
                         Arsip Dokumen Saya
                     </a>
+                    <a href="{{ route('posts.manage') }}"
+                        class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs('posts.*') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600' }} transition-colors">
+                        <svg class="mr-3 h-5 w-5 {{ request()->routeIs('posts.*') ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-500' }}"
+                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                        </svg>
+                        Artikel Saya
+                    </a>
                 @endif
-                <a href="{{ route('posts.manage') }}"
-                    class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs('posts.*') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600' }} transition-colors">
-                    <svg class="mr-3 h-5 w-5 {{ request()->routeIs('posts.*') ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-500' }}"
-                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
-                    </svg>
-                    Artikel Saya
-                </a>
+
+                @if (Auth::user()->role != 'none')
+                    <a href="{{ route('myproject.index') }}"
+                        class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs('myproject.*') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600' }} transition-colors">
+                        <svg class="mr-3 h-5 w-5 {{ request()->routeIs('myproject.*') ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-500' }}"
+                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        Karya Saya(Projects)
+                    </a>
+                @endif
 
                 <a href="{{ route('profile.edit') }}"
                     class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs('profile.*') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600' }} transition-colors">

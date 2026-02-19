@@ -340,7 +340,7 @@
             </div>
 
             <div class="user-box">
-                <input type="password" name="password" id="passwordInput" required>
+                <input type="password" name="password" id="passwordInput" autocomplete="off" required>
                 <label>Password</label>
                 <i class="ri-eye-off-line password-toggle" id="togglePassword"></i>
                 @error('password')

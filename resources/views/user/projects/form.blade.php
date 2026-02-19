@@ -42,7 +42,7 @@
                             <span x-show="!isCompressing">Simpan Karya</span>
                             <span x-show="isCompressing">Mengompres Gambar...</span>
                         </button>
-                        <a href="{{ route('projects.index') }}"
+                        <a href="{{ route('myproject.index') }}"
                             class="block text-center text-gray-500 text-sm mt-3 hover:underline">Batal</a>
                     </div>
 

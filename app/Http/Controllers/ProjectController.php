@@ -15,7 +15,7 @@ class ProjectController extends Controller
     public function index()
     {
         // Tampilkan project dimana user tersebut terlibat
-        $projects = Auth::user()->projects()->latest()->paginate(9);
+        $projects = Auth::user()->ownedProjects()->latest()->paginate(9);
         return view('user.projects.index', compact('projects'));
     }
 
@@ -62,8 +62,8 @@ class ProjectController extends Controller
     public function edit(Project $project)
     {
         // Pastikan user adalah anggota project ini
-        if (!$project->users->contains(Auth::id())) {
-            abort(403);
+        if ($project->user_id !== Auth::id()) {
+            abort(403, 'Akses ditolak: Anda bukan pemilik karya ini.');
         }
 
         $users = User::where('id', '!=', Auth::id())->where('role', '!=', 'admin')->get();
@@ -75,8 +75,8 @@ class ProjectController extends Controller
 
     public function update(Request $request, Project $project)
     {
-        if (!$project->users->contains(Auth::id())) {
-            abort(403);
+        if ($project->user_id !== Auth::id()) {
+            abort(403, 'Akses ditolak: Anda bukan pemilik karya ini.');
         }
 
         $request->validate([
@@ -118,8 +118,8 @@ class ProjectController extends Controller
 
     public function destroy(Project $project)
     {
-        if (!$project->users->contains(Auth::id())) {
-            abort(403);
+        if ($project->user_id !== Auth::id()) {
+            abort(403, 'Akses ditolak: Anda bukan pemilik karya ini.');
         }
 
         if (File::exists(public_path('uploads/projects/' . $project->image))) {
@@ -150,6 +150,4 @@ class ProjectController extends Controller
             return response()->json(['status' => 'liked']);
         }
     }
-
-
 }
