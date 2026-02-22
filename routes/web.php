@@ -119,7 +119,6 @@ Route::get('/typing-test', [TypingController::class, 'index'])->name('typing.ind
 // ? blog
 Route::get('/blog', [PostController::class, 'index'])->name('blog.index');
 Route::get('/blog/{slug}', [PostController::class, 'show'])->name('blog.show');
-// ! guest area end
 
 // ! Guest belum Login
 Route::middleware('guest')->group(function () {
@@ -129,8 +128,9 @@ Route::middleware('guest')->group(function () {
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
     Route::post('/register', [AuthController::class, 'processRegister'])->name('register.post');
 });
+// ! guest area end
 
-// ! Auth sudah login
+// ! route untuk sudah login
 Route::middleware('auth')->group(function () {
     Route::post('/typing-test/save', [TypingController::class, 'store'])->name('typing.store');
 
@@ -165,6 +165,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/projects/{project}/like', [ProjectController::class, 'toggleLike'])->name('projects.like');
 });
 
+// ! route untuk anggota pengurus dan admin
 Route::middleware(['auth', 'role:admin,pengurus,anggota'])->group(function () {
     // ? project area
     Route::get('/project-saya', [ProjectController::class, 'index'])->name('myproject.index');
