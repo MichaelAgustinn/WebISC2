@@ -3,8 +3,8 @@
 @push('styles')
     <style>
         /* =========================================
-                           PROJECT DETAIL STYLES
-                           ========================================= */
+                                               PROJECT DETAIL STYLES
+                                               ========================================= */
         .project-header {
             padding: 160px 5% 80px;
             background: linear-gradient(135deg, var(--primary) 0%, #081226 100%);
@@ -353,7 +353,8 @@
                                     @endif
                                     <div style="display: flex; flex-direction: column;">
                                         <span style="font-weight: 700; font-size: 0.95rem; color: var(--primary);">
-                                            {{ $project->owner->name }}
+                                            <a href="{{ route('anggota.show', $project->owner->slug) }}">
+                                                {{ $project->owner->name }}</a>
                                         </span>
                                         <span
                                             style="font-size: 0.7rem; color: var(--accent); font-weight: 600; text-transform: uppercase;">
@@ -376,7 +377,7 @@
                                                 style="width: 30px; height: 30px; border-radius: 50%;">
                                         @endif
                                         <span style="font-weight: 500; font-size: 0.9rem; color: var(--text-dark);">
-                                            {{ $member->name }}
+                                            <a href="{{ route('anggota.show', $member->slug) }}"> {{ $member->name }}</a>
                                         </span>
                                     </div>
                                 @endif

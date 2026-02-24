@@ -78,7 +78,11 @@ Route::get('/anggota', function () {
 
 Route::get('/anggota/{slug}', function ($slug) {
     // Cari user berdasarkan slug, pastikan bukan admin utama
-    $member = User::with('profile')
+    $member = User::with(['profile', 'projects' => function ($query) {
+        // Tambahkan KONDISI STATUS di sini
+        $query->where('status', true)
+            ->latest(); // Urutkan dari yang terbaru
+    }])
         ->where('email', '!=', 'isc@unsulbar.ac.id')
         ->where('slug', $slug)
         ->firstOrFail();
