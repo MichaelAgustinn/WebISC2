@@ -12,6 +12,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\PublicController;
+use App\Http\Controllers\PublicFormController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TypingController;
 use App\Models\Advisor;
@@ -133,6 +134,12 @@ Route::middleware('guest')->group(function () {
 
 // ! route untuk sudah login
 Route::middleware('auth')->group(function () {
+    // ? form untuk user
+    Route::get('/formulir', [PublicFormController::class, 'index'])->name('landing.forms.index');
+    Route::get('/formulir/{slug}', [PublicFormController::class, 'show'])->name('landing.forms.show');
+    Route::post('/formulir/{slug}/submit', [PublicFormController::class, 'submit'])->name('landing.forms.submit');
+    // ? form untuk user end
+
     Route::post('/typing-test/save', [TypingController::class, 'store'])->name('typing.store');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -198,6 +205,7 @@ Route::middleware(['auth', 'role:admin,pengurus'])->group(function () {
     // ? project verifikasi area end
 
     // ? buat form 
+    Route::get('/forms/{form}/responses', [FormController::class, 'responses'])->name('forms.responses');
     Route::resource('forms', FormController::class);
     // ? buat form end
 
