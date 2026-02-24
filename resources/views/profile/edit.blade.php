@@ -145,8 +145,12 @@
                                     <span class="text-xs text-red-500 mt-1">{{ $message }}</span>
                                 @enderror
                             </div>
+                            <div style="margin: 0 10px 0 0; text-align: right; color: rgb(24, 95, 189); font-size: small;">
 
-                            <div x-data="{ show: false }">
+                                <a href="{{ route('password.request') }}" style="">lupa password?</a>
+                            </div>
+
+                            <div x-data="{ show: false }" style="margin-top: 0">
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Password Baru</label>
                                 <div class="relative">
                                     <input :type="show ? 'text' : 'password'" name="password" required
