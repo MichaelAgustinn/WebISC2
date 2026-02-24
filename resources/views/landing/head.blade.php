@@ -93,11 +93,9 @@
             align-items: center;
             z-index: 1000;
             background: transparent;
-            /* Default transparan di Home */
             transition: var(--transition);
         }
 
-        /* Navbar saat discroll (Solid) */
         .navbar.scrolled {
             background: rgba(15, 32, 75, 0.95);
             backdrop-filter: blur(10px);
@@ -187,21 +185,13 @@
             gap: 5px;
         }
 
-        /* Cari bagian ini di CSS Anda dan GANTI dengan yang baru ini */
         .dropdown-menu {
             position: absolute;
             top: 100%;
 
-            /* PERUBAHAN 1: MENGGESER KE KIRI */
-            /* Menggunakan left: auto dan right: 0 agar dropdown rata kanan dengan teks menu */
-            /* Ini akan membuat kotaknya "tumbuh" ke arah kiri, menjauhi tombol login */
             left: auto;
             right: 0;
 
-            /* Opsional: Jika masih kurang ke kiri, bisa pakai margin-right */
-            /* margin-right: 20px; */
-
-            /* PERUBAHAN 2: MEMBAWA KE DEPAN (LAYER ATAS) */
             z-index: 9999;
 
             background-color: var(--white);
@@ -212,7 +202,6 @@
             opacity: 0;
             visibility: hidden;
 
-            /* Animasi Awal (Tersembunyi) */
             transform: translateY(20px);
             transition: all 0.3s ease;
             border-top: 3px solid var(--accent);
@@ -1165,7 +1154,6 @@
         @media (max-width: 1024px) {
             .blog-wrapper {
                 grid-template-columns: 1fr;
-                /* Blog layout jadi 1 kolom (stack) */
             }
 
             .sidebar {
@@ -1198,10 +1186,8 @@
 
             .vm-card p {
                 text-align: left;
-                /* jangan pakai justify */
                 line-height: 1.8;
                 max-width: 65ch;
-                /* batasi panjang baris biar enak dibaca */
                 margin: 0 auto;
             }
 
@@ -1358,8 +1344,6 @@
             transform: translateY(0);
         }
 
-        /* KHUSUS CREATION CARD:
-           Agar animasi filter lebih mulus, kita timpa transisi scroll */
         .creation-card {
             transition: all 0.4s ease-in-out !important;
         }
@@ -1384,9 +1368,7 @@
             text-decoration: none;
             font-size: 1.5rem;
             z-index: 999;
-            /* Pastikan di atas elemen lain */
             opacity: 0;
-            /* Tersembunyi saat awal */
             visibility: hidden;
             transform: translateY(20px);
             transition: all 0.4s ease;

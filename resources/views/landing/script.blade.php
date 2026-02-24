@@ -170,7 +170,6 @@
                     const rect = heroSection.getBoundingClientRect();
                     mouse.x = e.clientX - rect.left;
                     mouse.y = e.clientY - rect.top;
-                    // Menggunakan 3 partikel (seperti di script login)
                     for (let i = 0; i < 3; i++) particles.push(new Particle(mouse.x, mouse.y));
                 });
             }
@@ -180,12 +179,10 @@
                 constructor(x, y) {
                     this.x = x;
                     this.y = y;
-                    // REVISI KECEPATAN: Sangat lambat agar tidak menyebar cepat (0.5)
                     this.vx = (Math.random() - 0.5) * 0.5;
                     this.vy = (Math.random() - 0.5) * 0.5;
-                    this.size = Math.random() * 20 + 15; // Ukuran awal sedikit lebih besar
+                    this.size = Math.random() * 20 + 15;
                     this.life = 100;
-                    // Warna Emas Pekat
                     const hue = 40 + Math.random() * 10;
                     this.color = `hsla(${hue}, 100%, 50%,`;
                 }
@@ -193,15 +190,12 @@
                 update() {
                     this.x += this.vx;
                     this.y += this.vy;
-                    // Decay lambat (tahan lama)
                     this.life -= 0.5;
-                    // Pertumbuhan ukuran sangat lambat
                     this.size += 0.05;
                 }
 
                 draw() {
                     ctx.beginPath();
-                    // Menggunakan Radial Gradient (Asap Halus)
                     let gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size);
                     gradient.addColorStop(0, this.color + (this.life / 100 * 0.5) + ')');
                     gradient.addColorStop(1, this.color + '0)');
@@ -216,7 +210,6 @@
                 for (let i = 0; i < particles.length; i++) {
                     particles[i].update();
                     particles[i].draw();
-                    // Cek life <= 0 (Sesuai script login)
                     if (particles[i].life <= 0) {
                         particles.splice(i, 1);
                         i--;
