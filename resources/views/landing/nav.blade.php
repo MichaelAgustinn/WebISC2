@@ -1,5 +1,5 @@
 <nav class="navbar">
-    <a href="#" class="logo"><img src="{{ asset('Assets/logo-isc.png') }}" alt="" style="height: 50px"></a>
+    <a href="/" class="logo"><img src="{{ asset('Assets/logo-isc.png') }}" alt="" style="height: 50px"></a>
     <div class="menu-toggle"><i class="ri-menu-3-line"></i></div>
     <ul class="nav-links">
         @if (request()->routeIs('home'))
