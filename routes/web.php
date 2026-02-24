@@ -6,6 +6,7 @@ use App\Http\Controllers\AdvisorController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\FaqController;
+use App\Http\Controllers\FormController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
@@ -195,6 +196,10 @@ Route::middleware(['auth', 'role:admin,pengurus'])->group(function () {
     Route::put('/projects/{project}/unverify', [ProjectVerificationController::class, 'unverify'])
         ->name('admin.projects.unverify');
     // ? project verifikasi area end
+
+    // ? buat form 
+    Route::resource('forms', FormController::class);
+    // ? buat form end
 
     // ? post area
     Route::get('/dashboard/posts', [PostController::class, 'manage'])->name('posts.manage');
