@@ -1189,6 +1189,27 @@
                 padding: 1rem 5%;
             }
 
+            .vm-card {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                /* icon & judul center */
+            }
+
+            .vm-card p {
+                text-align: left;
+                /* jangan pakai justify */
+                line-height: 1.8;
+                max-width: 65ch;
+                /* batasi panjang baris biar enak dibaca */
+                margin: 0 auto;
+            }
+
+            .vm-icon {
+                font-size: 40px;
+                margin-bottom: 15px;
+            }
+
             .nav-links {
                 position: absolute;
                 top: 70px;

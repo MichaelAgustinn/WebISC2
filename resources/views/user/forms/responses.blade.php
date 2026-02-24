@@ -22,19 +22,18 @@
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
 
             @if ($form->responses->count() > 0)
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse whitespace-nowrap">
+                <div class="overflow-x-auto pb-4 custom-scrollbar">
+                    <table class="w-full text-left border-collapse whitespace-nowrap min-w-max">
                         <thead>
                             <tr class="bg-gray-50 border-b border-gray-200 text-sm">
                                 <th
-                                    class="px-6 py-4 font-semibold text-gray-700 border-r border-gray-200 bg-gray-100 sticky left-0 z-10">
+                                    class="px-6 py-4 font-semibold text-gray-700 border-r border-gray-200 bg-gray-100 md:sticky md:left-0 z-10">
                                     No</th>
-                                <th
-                                    class="px-6 py-4 font-semibold text-gray-700 border-r border-gray-200 bg-gray-100 sticky left-[60px] z-10">
-                                    Waktu Submit</th>
-                                <th
-                                    class="px-6 py-4 font-semibold text-gray-700 border-r border-gray-200 bg-gray-100 sticky left-[220px] z-10">
-                                    Nama Pengisi</th>
+
+                                <th class="px-6 py-4 font-semibold text-gray-700 border-r border-gray-200 bg-gray-100">Waktu
+                                    Submit</th>
+                                <th class="px-6 py-4 font-semibold text-gray-700 border-r border-gray-200 bg-gray-100">Nama
+                                    Pengisi</th>
 
                                 @foreach ($form->fields as $field)
                                     <th class="px-6 py-4 font-semibold text-gray-700 border-r border-gray-100 max-w-xs truncate"
@@ -47,22 +46,22 @@
                         <tbody class="divide-y divide-gray-100 text-sm">
                             @foreach ($form->responses as $index => $response)
                                 <tr class="hover:bg-indigo-50/30 transition">
+
                                     <td
-                                        class="px-6 py-4 border-r border-gray-100 font-medium text-gray-500 bg-white sticky left-0 z-10">
+                                        class="px-6 py-4 border-r border-gray-100 font-medium text-gray-500 bg-white md:sticky md:left-0 z-10 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.05)]">
                                         {{ $index + 1 }}
                                     </td>
-                                    <td
-                                        class="px-6 py-4 border-r border-gray-100 text-gray-600 bg-white sticky left-[60px] z-10">
+
+                                    <td class="px-6 py-4 border-r border-gray-100 text-gray-600 bg-white">
                                         {{ $response->created_at->format('d M Y, H:i') }}
                                     </td>
-                                    <td
-                                        class="px-6 py-4 border-r border-gray-200 font-bold text-indigo-700 bg-white sticky left-[220px] z-10">
+
+                                    <td class="px-6 py-4 border-r border-gray-200 font-bold text-indigo-700 bg-white">
                                         {{ $response->user ? $response->user->name : 'Anonim / Tamu' }}
                                     </td>
 
                                     @foreach ($form->fields as $field)
                                         @php
-                                            // Cari jawaban yang cocok dengan ID Field ini
                                             $answer = $response->answers->where('form_field_id', $field->id)->first();
                                         @endphp
 
