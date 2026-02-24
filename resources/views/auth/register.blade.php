@@ -10,13 +10,13 @@
         rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
     <style>
-        /* (Style Sama seperti Login, Copy paste style dari file login di atas agar konsisten) */
         :root {
             --primary: #0f204b;
             --primary-dark: #050914;
             --accent: #d4af37;
             --text-grey: #94a3b8;
             --white: #ffffff;
+            --error: #ef4444;
         }
 
         * {
@@ -46,25 +46,29 @@
             z-index: 1;
         }
 
+        /* --- KOTAK LUAR (Khusus Animasi) --- */
         .login-box {
             position: relative;
             z-index: 10;
             width: 400px;
-            padding: 60px 40px 40px;
             background: rgba(15, 32, 75, 0.4);
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
             border-radius: 16px;
             backdrop-filter: blur(10px);
             overflow: hidden;
             cursor: default;
-            transition: transform 0.3s ease;
-            max-height: 95vh;
+        }
+
+        /* --- KOTAK DALAM (Khusus Form & Scroll) --- */
+        .login-content {
+            padding: 50px 40px 40px;
+            max-height: 90vh;
             overflow-y: auto;
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
 
-        .login-box::-webkit-scrollbar {
+        .login-content::-webkit-scrollbar {
             display: none;
         }
 
@@ -86,13 +90,15 @@
             color: var(--accent);
         }
 
-        .login-box span {
+        /* --- ANIMASI GARIS (Sekarang menggunakan "> span" agar spesifik ke garis saja, bukan ke error text) --- */
+        .login-box>span {
             position: absolute;
             display: block;
             z-index: 1;
+            pointer-events: none;
         }
 
-        .login-box span:nth-child(1) {
+        .login-box>span:nth-child(1) {
             top: 0;
             left: -100%;
             width: 100%;
@@ -101,7 +107,7 @@
             animation: btn-anim1 6s linear infinite;
         }
 
-        .login-box span:nth-child(2) {
+        .login-box>span:nth-child(2) {
             top: -100%;
             right: 0;
             width: 2px;
@@ -111,7 +117,7 @@
             animation-delay: 1.5s;
         }
 
-        .login-box span:nth-child(3) {
+        .login-box>span:nth-child(3) {
             bottom: 0;
             right: -100%;
             width: 100%;
@@ -121,7 +127,7 @@
             animation-delay: 3s;
         }
 
-        .login-box span:nth-child(4) {
+        .login-box>span:nth-child(4) {
             bottom: -100%;
             left: 0;
             width: 2px;
@@ -180,15 +186,15 @@
             height: 70px;
             background: rgba(212, 175, 55, 0.1);
             border-radius: 100px;
-            margin: 0 auto 25px;
+            margin: 0 auto 20px;
             display: flex;
             align-items: center;
             justify-content: center;
             box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
         }
 
-        .login-box h2 {
-            margin: 0 0 30px;
+        .login-content h2 {
+            margin: 0 0 25px;
             color: var(--accent);
             text-align: center;
             font-family: 'Poppins', sans-serif;
@@ -200,7 +206,8 @@
 
         .user-box {
             position: relative;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
+            /* Jarak antar input normal */
         }
 
         .user-box input {
@@ -255,37 +262,25 @@
             color: var(--accent);
         }
 
-        .forgot-pass {
+        /* --- TEKS ERROR STATIS NORMAL (TIDAK ADA ANIMASI) --- */
+        .error-text {
             display: block;
-            text-align: right;
-            margin-top: -20px;
-            margin-bottom: 25px;
-            font-size: 0.8rem;
-            color: var(--text-grey);
-            text-decoration: none;
-            transition: 0.3s;
+            color: var(--error);
+            font-size: 12px;
+            margin-top: 8px;
+            /* Tepat di bawah input */
+            text-align: left;
+            line-height: 1.4;
         }
 
-        .forgot-pass:hover {
-            color: var(--accent);
+        /* Merahkan garis jika error */
+        .user-box.has-error input {
+            border-bottom-color: var(--error);
         }
 
-        .register-link {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 0.85rem;
-            color: var(--text-grey);
-        }
-
-        .register-link a {
-            color: var(--accent);
-            text-decoration: none;
-            font-weight: 600;
-            margin-left: 5px;
-        }
-
-        .register-link a:hover {
-            text-decoration: underline;
+        .user-box.has-error input:focus~label,
+        .user-box.has-error input:valid~label {
+            color: var(--error);
         }
 
         .btn-submit {
@@ -304,6 +299,7 @@
             font-family: 'Poppins', sans-serif;
             transition: 0.3s;
             box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+            margin-top: 5px;
         }
 
         .btn-submit:hover {
@@ -313,11 +309,22 @@
             transform: translateY(-2px);
         }
 
-        .error-text {
-            color: #ef4444;
-            font-size: 0.75rem;
-            margin-top: 5px;
-            display: block;
+        .register-link {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 0.85rem;
+            color: var(--text-grey);
+        }
+
+        .register-link a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            margin-left: 5px;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -326,79 +333,77 @@
     <canvas id="smokeCanvas"></canvas>
 
     <div class="login-box" id="loginCard">
-        <a href="/" class="back-arrow" title="Kembali ke Beranda">
-            <i class="ri-arrow-left-line"></i>
-        </a>
         <span></span><span></span><span></span><span></span>
 
-        <div class="login-logo">
-            <img src="{{ asset('Assets/all-logo.png') }}" alt="" style="height: 130px">
+        <div class="login-content">
+            <a href="/" class="back-arrow" title="Kembali ke Beranda">
+                <i class="ri-arrow-left-line"></i>
+            </a>
+
+            <div class="login-logo">
+                <img src="{{ asset('Assets/all-logo.png') }}" alt="" style="height: 130px">
+            </div>
+
+            <h2>REGISTER</h2>
+
+            <form action="{{ route('register.post') }}" method="POST">
+                @csrf
+
+                <div class="user-box @error('name') has-error @enderror">
+                    <input type="text" name="name" value="{{ old('name') }}" required>
+                    <label>Nama Lengkap</label>
+                    @error('name')
+                        <div class="error-text">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="user-box @error('email') has-error @enderror">
+                    <input type="email" name="email" value="{{ old('email') }}" required>
+                    <label>Email</label>
+                    @error('email')
+                        <div class="error-text">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="user-box @error('phone_number') has-error @enderror">
+                    <input type="text" name="phone_number" value="{{ old('phone_number') }}" inputmode="numeric"
+                        required>
+                    <label>Nomor HP / WA</label>
+                    @error('phone_number')
+                        <div class="error-text">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="user-box @error('password') has-error @enderror">
+                    <input type="password" name="password" id="passwordInput" required>
+                    <label>Password</label>
+                    <i class="ri-eye-off-line password-toggle" id="togglePassword"></i>
+                    @error('password')
+                        <div class="error-text">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="user-box">
+                    <input type="password" name="password_confirmation" id="verifyPasswordInput" required>
+                    <label>Ulangi Password</label>
+                    <i class="ri-eye-off-line password-toggle" id="toggleVerifyPassword"></i>
+                </div>
+
+                <button type="submit" class="btn-submit">Daftar Sekarang</button>
+
+                <div class="register-link">
+                    Sudah punya akun? <a href="{{ route('login') }}">Masuk</a>
+                </div>
+            </form>
         </div>
-
-        <h2 style="padding-top: 30px;">REGISTER</h2>
-
-        <form action="{{ route('register.post') }}" method="POST">
-            @csrf
-
-            <div class="user-box">
-                <input type="text" name="name" value="{{ old('name') }}" required>
-                <label>Name</label>
-                @error('name')
-                    <span class="error-text">{{ $message }}</span>
-                @enderror
-            </div>
-
-            <div class="user-box">
-                <input type="email" name="email" value="{{ old('email') }}" required>
-                <label>Email</label>
-                @error('email')
-                    <span class="error-text">{{ $message }}</span>
-                @enderror
-            </div>
-
-            <div class="user-box">
-                <input type="text" name="phone_number" value="{{ old('phone_number') }}" inputmode="numeric"
-                    required>
-                <label>Nomor HP</label>
-                @error('phone_number')
-                    <span class="error-text">{{ $message }}</span>
-                @enderror
-            </div>
-
-            <div class="user-box">
-                <input type="password" name="password" id="passwordInput" required>
-                <label>Password</label>
-                <i class="ri-eye-off-line password-toggle" id="togglePassword"></i>
-                @error('password')
-                    <span class="error-text">{{ $message }}</span>
-                @enderror
-            </div>
-
-            <div class="user-box">
-                <input type="password" name="password_confirmation" id="verifyPasswordInput" required>
-                <label>Repeat Password</label>
-                <i class="ri-eye-off-line password-toggle" id="toggleVerifyPassword"></i>
-            </div>
-
-            <button type="submit" class="btn-submit">Daftar Sekarang</button>
-
-            <div class="register-link">
-                Sudah punya akun? <a href="{{ route('login') }}">Masuk</a>
-            </div>
-        </form>
     </div>
 
     <script>
-        const canvas = document.getElementById('smokeCanvas');
-        const ctx = canvas.getContext('2d');
-        const loginCard = document.getElementById('loginCard');
+        // TOGGLE PASSWORD LOGIC
         const togglePassword = document.getElementById('togglePassword');
         const passwordInput = document.getElementById('passwordInput');
         const toggleVerifyPassword = document.getElementById('toggleVerifyPassword');
         const verifyPasswordInput = document.getElementById('verifyPasswordInput');
-        let width, height;
-        let particles = [],
-            orbs = [];
 
         function setupToggle(button, input) {
             button.addEventListener('click', function() {
@@ -410,6 +415,15 @@
         }
         setupToggle(togglePassword, passwordInput);
         setupToggle(toggleVerifyPassword, verifyPasswordInput);
+
+        // CANVAS SMOKE LOGIC
+        const canvas = document.getElementById('smokeCanvas');
+        const ctx = canvas.getContext('2d');
+        const loginCard = document.getElementById('loginCard');
+
+        let width, height;
+        let particles = [],
+            orbs = [];
 
         function resize() {
             width = canvas.width = window.innerWidth;
