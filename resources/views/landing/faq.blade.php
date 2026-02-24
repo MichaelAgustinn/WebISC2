@@ -5,7 +5,7 @@
     </div>
     <div class="faq-container">
 
-        @foreach ($faqs as $faq)
+        @forelse ($faqs as $faq)
             <div class="faq-item">
                 <div class="faq-question">
                     {{ $faq->question }}
@@ -15,7 +15,11 @@
                     {{ $faq->answer }}
                 </div>
             </div>
-        @endforeach
+        @empty
+            <div style="text-align: center">
+                <p>Belum Ada FAQ</p>
+            </div>
+        @endforelse
 
     </div>
 </section>

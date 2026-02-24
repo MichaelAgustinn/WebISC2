@@ -5,7 +5,7 @@
     </div>
 
     <div class="blog-grid">
-        @foreach ($posts as $post)
+        @forelse ($posts as $post)
             <article class="blog-card">
                 <div class="card-img">
                     @if ($post->thumbnail)
@@ -24,7 +24,11 @@
                             class="ri-arrow-right-line"></i></a>
                 </div>
             </article>
-        @endforeach
+        @empty
+            <div style="text-align: center">
+                <p>Belum Ada Artikel</p>
+            </div>
+        @endforelse
     </div>
     <div class="btn-view-all-wrapper">
         <a href="{{ route('blog.index') }}" class="btn-view-all">
