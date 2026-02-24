@@ -12,6 +12,7 @@ class User extends Authenticatable
 
     protected $fillable = [
         'name',
+        'slug',
         'email',
         'password',
         'role', // admin, pengurus, anggota, none

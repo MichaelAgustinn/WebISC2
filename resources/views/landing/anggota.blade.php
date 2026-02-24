@@ -260,7 +260,7 @@
                             Angkatan {{ $member->profile->angkatan ?? '-' }}
                         </span>
 
-                        <a href="{{ route('anggota.show', $member->id) }}" class="btn-follow"
+                        <a href="{{ route('anggota.show', $member->slug) }}" class="btn-follow"
                             style="text-decoration:none; display:inline-block;">Detail Profil</a>
                     </div>
                 </div>

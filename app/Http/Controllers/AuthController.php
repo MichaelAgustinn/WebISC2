@@ -7,6 +7,7 @@ use App\Models\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -56,6 +57,7 @@ class AuthController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => 'none', // Default role 'none' (Guest/Belum diverifikasi)
+            'slug' => Str::slug($request->name) . '-' . Str::random(4),
         ]);
 
         // 2. Buat Profile (Tabel Profiles)
