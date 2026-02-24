@@ -329,7 +329,12 @@
         </div>
 
         <h2 style="padding-top: 40px; padding-bottom: 20px;">LOGIN</h2>
-
+        @if (session('status'))
+            <div
+                style="background: rgba(34, 197, 94, 0.1); border: 1px solid #22c55e; color: #4ade80; padding: 10px; border-radius: 8px; font-size: 12px; margin-bottom: 20px; text-align: center;">
+                {{ session('status') }}
+            </div>
+        @endif
         <form action="{{ route('login.post') }}" method="POST">
             @csrf <div class="user-box">
                 <input type="text" name="email" value="{{ old('email') }}" required>
@@ -348,7 +353,7 @@
                 @enderror
             </div>
 
-            <a href="#" class="forgot-pass">Lupa sandi?</a>
+            <a href="{{ route('password.request') }}" class="forgot-pass">Lupa sandi?</a>
 
             <button type="submit" class="btn-submit">Masuk Sekarang</button>
 
