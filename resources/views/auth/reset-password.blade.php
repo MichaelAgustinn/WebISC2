@@ -148,7 +148,7 @@
             </div>
 
             <div class="user-box @error('password') has-error @enderror">
-                <input type="password" name="password" required>
+                <input type="password" name="password" autocomplete="off" required>
                 <label>Password Baru</label>
                 @error('password')
                     <span class="error-text">{{ $message }}</span>
