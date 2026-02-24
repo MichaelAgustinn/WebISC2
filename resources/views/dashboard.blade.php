@@ -18,7 +18,7 @@
             @else
                 <p class="text-gray-500 text-sm font-medium">Semua anggota</p>
             @endif
-            <h3 class="text-2xl font-bold text-red-600">{{ $totalAnggota ?? '0' }}</h3>
+            <h3 class="text-2xl font-bold text-red-600">{{ $totalAnggota + $totalPengurus ?? '0' }}</h3>
         </div>
 
         {{-- Pengurus --}}
