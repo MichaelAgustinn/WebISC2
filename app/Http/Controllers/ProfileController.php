@@ -5,10 +5,35 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File; // Untuk hapus file lama
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 class ProfileController extends Controller
 {
+    public function updatePassword(Request $request)
+    {
+        // 1. Validasi Input
+        $request->validate([
+            'current_password' => ['required', 'string'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'], // 'confirmed' otomatis mengecek 'password_confirmation'
+        ]);
+
+        // 2. Cek apakah password lama yang diketik COCOK dengan yang ada di database
+        if (!Hash::check($request->current_password, auth()->user()->password)) {
+            throw ValidationException::withMessages([
+                'current_password' => 'Password saat ini salah.',
+            ]);
+        }
+
+        // 3. Update dengan password baru (Otomatis di-Hash)
+        auth()->user()->update([
+            'password' => Hash::make($request->password),
+        ]);
+
+        // 4. Kembali dengan pesan sukses
+        return back()->with('success', 'Password berhasil diperbarui!');
+    }
     public function edit()
     {
         $user = Auth::user()->load('profile');

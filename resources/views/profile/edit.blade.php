@@ -10,7 +10,6 @@
             width: 100%;
             height: 400px !important;
             background-color: #000;
-            /* Background hitam agar fokus */
             overflow: hidden;
             display: flex;
             justify-content: center;
@@ -46,18 +45,27 @@
 
         <div class="mb-6">
             <h1 class="text-2xl font-bold text-gray-800">Pengaturan Akun</h1>
-            <p class="text-gray-500 text-sm">Kelola informasi profil dan bio Anda untuk ditampilkan kepada anggota lain.</p>
+            <p class="text-gray-500 text-sm">Kelola informasi profil, foto, dan keamanan akun Anda.</p>
         </div>
 
-        <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
+        @if (session('success') || session('status') === 'password-updated')
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg relative mb-6 font-medium">
+                <i class="ri-checkbox-circle-fill mr-1"></i> Perubahan berhasil disimpan!
+            </div>
+        @endif
+
+        <form id="profileUpdateForm" action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data"
+            class="hidden">
             @csrf
             @method('PUT')
+        </form>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-                <div class="md:col-span-1">
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 text-center sticky top-6">
+            <div class="md:col-span-1">
+                <div class="sticky top-6 space-y-6">
 
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 text-center">
                         <div class="relative mx-auto w-32 h-32 mb-4 group cursor-pointer" @click="$refs.fileInput.click()">
                             <div
                                 class="w-32 h-32 rounded-full overflow-hidden border-4 border-indigo-50 shadow-inner bg-gray-100">
@@ -87,134 +95,242 @@
                         <div class="mt-6 border-t border-gray-100 pt-4 text-left">
                             <label class="block text-xs font-semibold text-gray-500 uppercase mb-2">Upload Foto Baru</label>
 
-                            <input type="file" name="photo" x-ref="fileInput" @change="fileChosen"
-                                accept="image/png, image/jpeg, image/jpg"
+                            <input type="file" name="photo" form="profileUpdateForm" x-ref="fileInput"
+                                @change="fileChosen" accept="image/png, image/jpeg, image/jpg"
                                 class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition cursor-pointer">
                             <p class="text-[10px] text-gray-400 mt-1">*Maksimal 2MB (JPG/PNG)</p>
                         </div>
                     </div>
-                </div>
 
-                <div class="md:col-span-2">
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                            <svg class="w-5 h-5 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <form action="{{ route('password.update') }}" method="POST"
+                        class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                        @csrf
+                        @method('PUT')
+
+                        <h3 class="text-md font-bold text-gray-800 mb-4 flex items-center gap-2">
+                            <svg class="w-5 h-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                             </svg>
-                            Informasi Pribadi
+                            Ubah Password
+                        </h3>
+
+                        <div class="space-y-4">
+                            <div x-data="{ show: false }">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Password Saat Ini</label>
+                                <div class="relative">
+                                    <input :type="show ? 'text' : 'password'" name="current_password" required
+                                        placeholder="Masukkan password lama"
+                                        class="w-full rounded-lg border-gray-300 border px-3 py-2 pr-10 text-sm focus:ring-indigo-500 focus:border-indigo-500 @error('current_password') border-red-500 @enderror">
+
+                                    <button type="button" @click="show = !show"
+                                        class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-indigo-600 transition">
+                                        <svg x-show="!show" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                            stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                        </svg>
+                                        <svg x-show="show" style="display: none;" class="h-5 w-5" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a10.05 10.05 0 015.458-5.904M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M3 3l18 18" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                @error('current_password')
+                                    <span class="text-xs text-red-500 mt-1">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            <div x-data="{ show: false }">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Password Baru</label>
+                                <div class="relative">
+                                    <input :type="show ? 'text' : 'password'" name="password" required
+                                        placeholder="Minimal 8 karakter"
+                                        class="w-full rounded-lg border-gray-300 border px-3 py-2 pr-10 text-sm focus:ring-indigo-500 focus:border-indigo-500 @error('password') border-red-500 @enderror">
+
+                                    <button type="button" @click="show = !show"
+                                        class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-indigo-600 transition">
+                                        <svg x-show="!show" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                            stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                        </svg>
+                                        <svg x-show="show" style="display: none;" class="h-5 w-5" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a10.05 10.05 0 015.458-5.904M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M3 3l18 18" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                @error('password')
+                                    <span class="text-xs text-red-500 mt-1">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            <div x-data="{ show: false }">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Konfirmasi Password
+                                    Baru</label>
+                                <div class="relative">
+                                    <input :type="show ? 'text' : 'password'" name="password_confirmation" required
+                                        placeholder="Ulangi password baru"
+                                        class="w-full rounded-lg border-gray-300 border px-3 py-2 pr-10 text-sm focus:ring-indigo-500 focus:border-indigo-500">
+
+                                    <button type="button" @click="show = !show"
+                                        class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-indigo-600 transition">
+                                        <svg x-show="!show" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                            stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                        </svg>
+                                        <svg x-show="show" style="display: none;" class="h-5 w-5" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a10.05 10.05 0 015.458-5.904M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M3 3l18 18" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-5 text-right">
+                            <button type="submit"
+                                class="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-900 transition font-medium text-sm shadow-sm">
+                                Update Password
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+
+            <div class="md:col-span-2">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                        Informasi Pribadi
+                    </h3>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap</label>
+                            <input type="text" name="name" form="profileUpdateForm"
+                                value="{{ old('name', $user->name) }}" required
+                                class="w-full rounded-lg border-gray-300 border px-3 py-2 text-sm focus:ring-indigo-500 focus:border-indigo-500">
+                        </div>
+
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Alamat Email</label>
+                            <input type="email" name="email" form="profileUpdateForm"
+                                value="{{ old('email', $user->email) }}" required
+                                class="w-full rounded-lg border-gray-300 border px-3 py-2 text-sm focus:ring-indigo-500 focus:border-indigo-500 bg-gray-50">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">NIM</label>
+                            <input type="text" name="nim" form="profileUpdateForm"
+                                value="{{ old('nim', $user->profile->nim ?? '') }}" placeholder="D02..."
+                                class="w-full rounded-lg border-gray-300 border px-3 py-2 text-sm focus:ring-indigo-500 focus:border-indigo-500">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Nomor WhatsApp</label>
+                            <input type="text" name="phone_number" form="profileUpdateForm"
+                                value="{{ old('phone_number', $user->profile->phone_number ?? '') }}" placeholder="08..."
+                                class="w-full rounded-lg border-gray-300 border px-3 py-2 text-sm focus:ring-indigo-500 focus:border-indigo-500">
+                        </div>
+
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Bio / Tentang Saya</label>
+                            <textarea name="bio" form="profileUpdateForm" rows="4"
+                                placeholder="Ceritakan sedikit tentang diri Anda, minat, atau keahlian..."
+                                class="w-full rounded-lg border-gray-300 border px-3 py-2 text-sm focus:ring-indigo-500 focus:border-indigo-500">{{ old('bio', $user->profile->bio ?? '') }}</textarea>
+                            <p class="text-xs text-gray-400 mt-1">Bio ini akan ditampilkan di halaman detail anggota.</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 border-t border-gray-100 pt-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                            <svg class="w-5 h-5 text-indigo-500" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                            </svg>
+                            Data Keanggotaan
                         </h3>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                            <div class="md:col-span-2">
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap</label>
-                                <input type="text" name="name" value="{{ old('name', $user->name) }}"
-                                    class="w-full rounded-lg border-gray-300 border px-3 py-2 text-sm focus:ring-indigo-500 focus:border-indigo-500"
-                                    required>
-                            </div>
-
-                            <div class="md:col-span-2">
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Alamat Email</label>
-                                <input type="email" name="email" value="{{ old('email', $user->email) }}"
-                                    class="w-full rounded-lg border-gray-300 border px-3 py-2 text-sm focus:ring-indigo-500 focus:border-indigo-500 bg-gray-50"
-                                    required>
-                            </div>
-
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">NIM</label>
-                                <input type="text" name="nim" value="{{ old('nim', $user->profile->nim ?? '') }}"
-                                    placeholder="D02..."
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Angkatan</label>
+                                <input type="number" name="angkatan" form="profileUpdateForm"
+                                    value="{{ old('angkatan', $user->profile->angkatan ?? '') }}" placeholder="202X"
                                     class="w-full rounded-lg border-gray-300 border px-3 py-2 text-sm focus:ring-indigo-500 focus:border-indigo-500">
                             </div>
 
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Nomor WhatsApp</label>
-                                <input type="text" name="phone_number"
-                                    value="{{ old('phone_number', $user->profile->phone_number ?? '') }}"
-                                    placeholder="08..."
-                                    class="w-full rounded-lg border-gray-300 border px-3 py-2 text-sm focus:ring-indigo-500 focus:border-indigo-500">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Divisi Peminatan</label>
+                                <select name="division" form="profileUpdateForm"
+                                    class="w-full rounded-lg border-gray-300 border px-3 py-2 text-sm focus:ring-indigo-500 focus:border-indigo-500 bg-white">
+                                    <option value="">-- Pilih Divisi --</option>
+                                    @foreach (['mobile' => 'Mobile Development', 'website' => 'Website Development', 'uiux' => 'UI/UX Design', 'iot' => 'Internet of Things', 'sistem_cerdas' => 'Sistem Cerdas'] as $key => $label)
+                                        <option value="{{ $key }}"
+                                            {{ old('division', $user->profile->division ?? '') == $key ? 'selected' : '' }}>
+                                            {{ $label }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
 
                             <div class="md:col-span-2">
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Bio / Tentang Saya</label>
-                                <textarea name="bio" rows="4"
-                                    class="w-full rounded-lg border-gray-300 border px-3 py-2 text-sm focus:ring-indigo-500 focus:border-indigo-500"
-                                    placeholder="Ceritakan sedikit tentang diri Anda, minat, atau keahlian...">{{ old('bio', $user->profile->bio ?? '') }}</textarea>
-                                <p class="text-xs text-gray-400 mt-1">Bio ini akan ditampilkan di halaman detail anggota.
-                                </p>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Tim Khusus (Opsional)</label>
+                                <select name="special_team" form="profileUpdateForm"
+                                    class="w-full rounded-lg border-gray-300 border px-3 py-2 text-sm focus:ring-indigo-500 focus:border-indigo-500 bg-white">
+                                    <option value="">Tidak ada</option>
+                                    <option value="Tim Marketing"
+                                        {{ old('special_team', $user->profile->special_team ?? '') == 'Tim Marketing' ? 'selected' : '' }}>
+                                        Tim Marketing</option>
+                                    <option value="Tim Kreatif"
+                                        {{ old('special_team', $user->profile->special_team ?? '') == 'Tim Kreatif' ? 'selected' : '' }}>
+                                        Tim Kreatif</option>
+                                </select>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="mt-8 border-t border-gray-100 pt-6">
-                            <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                                <svg class="w-5 h-5 text-indigo-500" fill="none" viewBox="0 0 24 24"
-                                    stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                                </svg>
-                                Data Keanggotaan
-                            </h3>
-
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Angkatan</label>
-                                    <input type="number" name="angkatan"
-                                        value="{{ old('angkatan', $user->profile->angkatan ?? '') }}" placeholder="202X"
-                                        class="w-full rounded-lg border-gray-300 border px-3 py-2 text-sm focus:ring-indigo-500 focus:border-indigo-500">
-                                </div>
-
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Divisi Peminatan</label>
-                                    <select name="division"
-                                        class="w-full rounded-lg border-gray-300 border px-3 py-2 text-sm focus:ring-indigo-500 focus:border-indigo-500 bg-white">
-                                        <option value="">-- Pilih Divisi --</option>
-                                        @foreach (['mobile' => 'Mobile Development', 'website' => 'Website Development', 'uiux' => 'UI/UX Design', 'iot' => 'Internet of Things', 'sistem_cerdas' => 'Sistem Cerdas'] as $key => $label)
-                                            <option value="{{ $key }}"
-                                                {{ old('division', $user->profile->division ?? '') == $key ? 'selected' : '' }}>
-                                                {{ $label }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-
-                                <div class="md:col-span-2">
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Tim Khusus
-                                        (Opsional)</label>
-                                    <select name="special_team"
-                                        class="w-full rounded-lg border-gray-300 border px-3 py-2 text-sm focus:ring-indigo-500 focus:border-indigo-500 bg-white">
-                                        <option value="">Tidak ada</option>
-                                        <option value="Tim Marketing"
-                                            {{ old('special_team', $user->profile->special_team ?? '') == 'Tim Marketing' ? 'selected' : '' }}>
-                                            Tim Marketing</option>
-                                        <option value="Tim Kreatif"
-                                            {{ old('special_team', $user->profile->special_team ?? '') == 'Tim Kreatif' ? 'selected' : '' }}>
-                                            Tim Kreatif</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mt-8 pt-6 flex justify-end">
-                            <button type="submit"
-                                class="bg-indigo-600 text-white px-6 py-2.5 rounded-lg hover:bg-indigo-700 transition shadow-lg shadow-indigo-200 font-medium text-sm flex items-center gap-2">
-                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M5 13l4 4L19 7" />
-                                </svg>
-                                Simpan Perubahan
-                            </button>
-                        </div>
+                    <div class="mt-8 pt-6 flex justify-end">
+                        <button type="submit" form="profileUpdateForm"
+                            class="bg-indigo-600 text-white px-6 py-2.5 rounded-lg hover:bg-indigo-700 transition shadow-lg shadow-indigo-200 font-medium text-sm flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
+                            Simpan Perubahan Profil
+                        </button>
                     </div>
                 </div>
             </div>
-        </form>
+
+        </div>
 
         <div x-show="showModal" style="display: none;" class="fixed inset-0 z-50 overflow-y-auto"
             aria-labelledby="modal-title" role="dialog" aria-modal="true">
-
             <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
                 <div class="fixed inset-0 bg-gray-900 bg-opacity-90 transition-opacity" aria-hidden="true"></div>
-
                 <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
 
                 <div
@@ -263,14 +379,12 @@
 
                     const reader = new FileReader();
                     reader.onload = (e) => {
-                        // Reset Gambar & Opacity
                         const img = this.$refs.imageToCrop;
                         img.src = e.target.result;
                         img.style.opacity = '1';
 
                         this.showModal = true;
 
-                        // PENTING: Tunggu Modal Render baru jalan
                         this.$nextTick(() => {
                             this.initCropper();
                         });
@@ -286,29 +400,21 @@
                     const image = this.$refs.imageToCrop;
 
                     this.cropper = new Cropper(image, {
-                        aspectRatio: 1, // Output Wajib Kotak (1:1)
-                        viewMode: 1, // Mode 1: Box tidak boleh keluar dari gambar
-
-                        // --- KUNCI MATI GAMBAR (Statis) ---
+                        aspectRatio: 1,
+                        viewMode: 1,
                         dragMode: 'none',
                         toggleDragModeOnDblclick: false,
                         movable: false,
                         zoomable: false,
                         scalable: false,
                         rotatable: false,
-
-                        // --- FITUR KOTAK CROP (Dinamis) ---
                         cropBoxMovable: true,
                         cropBoxResizable: true,
-                        autoCropArea: 0.8, // 80%
-
-                        // --- VISUAL ---
+                        autoCropArea: 0.8,
                         guides: true,
                         center: true,
-                        background: false, // Hilangkan checkerboard
+                        background: false,
                         modal: true,
-
-                        // --- FIX RENDER ---
                         ready() {
                             this.cropper.clear();
                             this.cropper.crop();
@@ -348,7 +454,6 @@
                             this.cropper.destroy();
                             this.cropper = null;
                         }
-                        // Jika user batal tapi belum ada preview (belum jadi crop), reset input
                         if (!this.previewUrl) {
                             this.$refs.fileInput.value = '';
                         }
