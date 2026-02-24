@@ -325,42 +325,20 @@
             <h2 class="section-title">Hasil Karya & Portofolio</h2>
 
             <div class="project-grid">
-
-                <div class="project-card">
-                    <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?auto=format&fit=crop&w=500&q=80"
-                        class="project-thumb">
-                    <div class="project-content">
-                        <span class="project-cat">Mobile App</span>
-                        <h4 class="project-title">Aplikasi E-Library</h4>
-                        <p class="project-desc">Aplikasi perpustakaan digital berbasis Android yang memudahkan mahasiswa
-                            meminjam buku secara online.</p>
-                        <a href="#" class="project-link">Lihat Detail <i class="ri-arrow-right-line"></i></a>
+                @forelse($member->projects as $project)
+                    <div class="project-card">
+                        <img src="{{ asset('uploads/projects/' . $project->image) ?? '' }}" class="project-thumb">
+                        <div class="project-content">
+                            <span class="project-cat">{{ $project->division }}</span>
+                            <h4 class="project-title">{{ $project->title }}</h4>
+                            <p class="project-desc">{{ Str::limit($project->description, 100, '...') }}</p>
+                            <a href="{{ route('landing.creation.detail', $project->slug) }}" class="project-link">Lihat
+                                Detail <i class="ri-arrow-right-line"></i></a>
+                        </div>
                     </div>
-                </div>
-
-                <div class="project-card">
-                    <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=500&q=80"
-                        class="project-thumb">
-                    <div class="project-content">
-                        <span class="project-cat">Web Development</span>
-                        <h4 class="project-title">Sistem Informasi UMKM</h4>
-                        <p class="project-desc">Platform website untuk membantu UMKM lokal memasarkan produk mereka ke pasar
-                            yang lebih luas.</p>
-                        <a href="#" class="project-link">Lihat Detail <i class="ri-arrow-right-line"></i></a>
-                    </div>
-                </div>
-
-                <div class="project-card">
-                    <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=500&q=80"
-                        class="project-thumb">
-                    <div class="project-content">
-                        <span class="project-cat">IoT Project</span>
-                        <h4 class="project-title">Smart Home System</h4>
-                        <p class="project-desc">Prototipe sistem kendali lampu dan kipas angin otomatis menggunakan sensor
-                            suara dan Arduino.</p>
-                        <a href="#" class="project-link">Lihat Detail <i class="ri-arrow-right-line"></i></a>
-                    </div>
-                </div>
+                @empty
+                    <p style="color: #666; text-align: center;">Anggota ini belum mengunggah karya.</p>
+                @endforelse
 
             </div>
         </div>
