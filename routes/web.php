@@ -76,9 +76,12 @@ Route::get('/anggota', function () {
     ]);
 })->name('anggota');
 
-Route::get('/anggota/{id}', function ($id) {
-    // Cari user berdasarkan ID, pastikan bukan admin
-    $member = User::with('profile')->where('email', '!=', 'isc@unsulbar.ac.id')->findOrFail($id);
+Route::get('/anggota/{slug}', function ($slug) {
+    // Cari user berdasarkan slug, pastikan bukan admin utama
+    $member = User::with('profile')
+        ->where('email', '!=', 'isc@unsulbar.ac.id')
+        ->where('slug', $slug)
+        ->firstOrFail();
 
     $landingData = App\Models\LandingPage::pluck('value', 'key')->toArray();
 
