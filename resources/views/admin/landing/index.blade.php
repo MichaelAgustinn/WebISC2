@@ -112,7 +112,7 @@
                                 class="w-full rounded-lg border-gray-300 border px-3 py-2">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Facebook</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Discord</label>
                             <input type="text" name="social_facebook" value="{{ $contents['social_facebook'] ?? '' }}"
                                 class="w-full rounded-lg border-gray-300 border px-3 py-2">
                         </div>

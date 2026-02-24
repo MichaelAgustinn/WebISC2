@@ -51,7 +51,7 @@
                 @endif
 
                 @if (!empty($data['social_facebook']))
-                    <a href="{{ $data['social_facebook'] }}" target="_blank"><i class="ri-facebook-fill"></i></a>
+                    <a href="{{ $data['social_facebook'] }}" target="_blank"><i class="ri-discord-fill"></i></a>
                 @endif
 
                 @if (!empty($data['social_youtube']))
