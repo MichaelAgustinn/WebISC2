@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Form;
 use App\Models\FormResponse;
 use App\Models\FormAnswer;
+use App\Models\LandingPage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -22,8 +23,9 @@ class PublicFormController extends Controller
         $forms = $query->paginate(6);
         $recentForms = Form::latest()->take(4)->get();
         $totalForms = Form::count();
+        $data = LandingPage::pluck('value', 'key')->toArray();
 
-        return view('landing.forms.index', compact('forms', 'recentForms', 'totalForms'));
+        return view('landing.forms.index', compact('forms', 'recentForms', 'totalForms', 'data'));
     }
 
     public function show($slug)
