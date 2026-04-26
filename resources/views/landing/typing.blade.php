@@ -112,7 +112,7 @@
             position: relative;
             border-radius: 4px;
             padding: 2px 0;
-            color: #94a3b8;
+            color: #0d0640;
             display: flex;
         }
 
@@ -360,10 +360,10 @@
                             <h4>Mistakes</h4>
                             <span id="mistakes">0</span>
                         </div>
-                        <div class="stat-item">
-                            <h4>WPM</h4>
-                            <span id="wpm">0</span>
-                        </div>
+                        {{-- <div class="stat-item"> --}}
+                        {{-- <h4>WPM</h4> --}}
+                        <span hidden id="wpm">0</span>
+                        {{-- </div> --}}
                         <div class="stat-item">
                             <h4>Akurasi</h4>
                             <span id="accuracy">100%</span>
@@ -486,6 +486,7 @@
     {{-- =========================================
        2. JAVASCRIPT LOGIC
     ========================================= --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         function openTab(evt, tabName) {
             if (evt) evt.preventDefault();
@@ -708,8 +709,17 @@
                 const finalAccText = accuracyTag.innerText.replace('%', '');
                 const finalAcc = parseInt(finalAccText) || 0;
 
-                alert(`Waktu Habis!\nSkor Anda: ${finalWpm} WPM\nAkurasi: ${finalAcc}%`);
+                // Menjalankan fungsi simpan skor di latar belakang
                 saveScore(finalWpm, finalAcc);
+
+                // Mengganti alert() bawaan dengan SweetAlert2
+                Swal.fire({
+                    title: 'Waktu Habis! ⏱️',
+                    html: `Skor kecepatanmu: <b>${finalWpm} WPM</b><br>Akurasi ketikan: <b>${finalAcc}%</b>`,
+                    icon: finalWpm > 40 ? 'success' : 'info', // Otomatis ganti ikon kalau WPM di atas 40
+                    confirmButtonText: 'Tutup',
+                    allowOutsideClick: false // Mencegah tertutup kalau tidak sengaja klik di luar kotak
+                });
             }
 
             function saveScore(wpm, accuracy) {
