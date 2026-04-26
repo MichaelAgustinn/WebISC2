@@ -138,6 +138,8 @@ Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLinkE
 Route::get('/reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
 Route::post('/reset-password', [PasswordResetController::class, 'reset'])->name('password.update');
 
+ Route::get('documents/{document}/download', [DocumentController::class, 'download'])->name('documents.download');
+
 // ! Guest belum Login
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -262,7 +264,7 @@ Route::middleware(['auth', 'role:admin,pengurus'])->group(function () {
 
     // ? document area
     Route::resource('documents', DocumentController::class)->except(['show', 'edit', 'update']);
-    Route::get('documents/{document}/download', [DocumentController::class, 'download'])->name('documents.download');
+   
 });
 
 

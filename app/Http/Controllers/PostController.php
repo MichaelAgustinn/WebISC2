@@ -116,7 +116,7 @@ class PostController extends Controller
 
     public function edit(Post $post)
     {
-        if ($post->user_id !== Auth::id()) abort(403);
+        if ($post->user_id != Auth::id()) abort(403);
         // Load relasi categories agar muncul di form edit
         $post->load('categories');
         return view('user.posts.edit', compact('post'));
@@ -124,7 +124,7 @@ class PostController extends Controller
 
     public function update(Request $request, Post $post)
     {
-        if ($post->user_id !== Auth::id()) abort(403);
+        if ($post->user_id != Auth::id()) abort(403);
 
         $request->validate([
             'title' => 'required|max:255',
