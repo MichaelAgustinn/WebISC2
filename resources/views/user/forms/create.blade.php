@@ -75,7 +75,42 @@
                                     <option value="number">Hanya Angka</option>
                                     <option value="date">Tanggal</option>
                                     <option value="file">Responden Upload File</option>
+                                    <option value="dropdown">Dropdown (Pilih Satu)</option>
+                                    <option value="checkbox">Checklist (Pilihan Ganda)</option>
                                 </select>
+                            </div>
+                        </div>
+
+                        <div x-show="field.type === 'dropdown' || field.type === 'checkbox'"
+                            class="mt-4 pl-2 space-y-2 border-l-2 border-indigo-200">
+                            <template x-for="(option, optIndex) in field.options" :key="optIndex">
+                                <div class="flex items-center gap-3">
+                                    <i x-show="field.type === 'checkbox'"
+                                        class="ri-checkbox-blank-line text-gray-400 text-lg"></i>
+                                    <i x-show="field.type === 'dropdown'"
+                                        class="ri-arrow-down-s-line text-gray-400 text-lg"></i>
+
+                                    <input type="text" x-model="field.options[optIndex]"
+                                        :name="'fields[' + index + '][options][]'" required
+                                        class="w-full sm:w-2/3 bg-white border-0 border-b border-gray-200 px-2 py-1 focus:ring-0 focus:border-indigo-500 text-sm"
+                                        placeholder="Ketik opsi pilihan...">
+
+                                    <button type="button" @click="removeOption(index, optIndex)"
+                                        class="text-gray-400 hover:text-red-500 transition">
+                                        <i class="ri-close-line text-lg"></i>
+                                    </button>
+                                </div>
+                            </template>
+
+                            <div class="flex items-center gap-3 pt-2">
+                                <i x-show="field.type === 'checkbox'"
+                                    class="ri-checkbox-blank-line text-gray-300 text-lg"></i>
+                                <i x-show="field.type === 'dropdown'"
+                                    class="ri-arrow-down-s-line text-gray-300 text-lg"></i>
+                                <button type="button" @click="addOption(index)"
+                                    class="text-sm text-indigo-600 hover:text-indigo-800 font-bold flex items-center gap-1">
+                                    Tambah Opsi
+                                </button>
                             </div>
                         </div>
 
@@ -139,7 +174,8 @@
                     id: Date.now(),
                     label: '',
                     type: 'text',
-                    is_required: false
+                    is_required: false,
+                    options: ['Opsi 1'] // Ditambahkan array options bawaan
                 }],
 
                 addField() {
@@ -147,7 +183,8 @@
                         id: Date.now(),
                         label: '',
                         type: 'text',
-                        is_required: false
+                        is_required: false,
+                        options: ['Opsi 1'] // Ditambahkan array options bawaan
                     });
                 },
 
@@ -156,6 +193,21 @@
                         this.fields.splice(index, 1);
                     } else {
                         alert('Form harus memiliki minimal 1 pertanyaan!');
+                    }
+                },
+
+                // Fungsi baru untuk menambah opsi pilihan
+                addOption(fieldIndex) {
+                    const currentOptionsLength = this.fields[fieldIndex].options.length;
+                    this.fields[fieldIndex].options.push('Opsi ' + (currentOptionsLength + 1));
+                },
+
+                // Fungsi baru untuk menghapus opsi pilihan
+                removeOption(fieldIndex, optIndex) {
+                    if (this.fields[fieldIndex].options.length > 1) {
+                        this.fields[fieldIndex].options.splice(optIndex, 1);
+                    } else {
+                        alert('Dropdown/Checklist harus memiliki minimal 1 opsi!');
                     }
                 }
             }

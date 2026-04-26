@@ -180,6 +180,47 @@
                         @elseif($field->type == 'file')
                             <input type="file" name="answers[{{ $field->id }}]" class="f-file"
                                 {{ $field->is_required ? 'required' : '' }}>
+
+                            {{-- ✅ TAMBAHAN: DROPDOWN --}}
+                        @elseif($field->type == 'dropdown')
+                            <select name="answers[{{ $field->id }}]" class="f-input"
+                                {{ $field->is_required ? 'required' : '' }}>
+                                <option value="">-- Pilih Jawaban --</option>
+                                @php
+                                    $options = is_string($field->options)
+                                        ? json_decode($field->options, true)
+                                        : $field->options;
+                                @endphp
+                                @if (!empty($options))
+                                    @foreach ($options as $option)
+                                        <option value="{{ $option }}"
+                                            {{ old('answers.' . $field->id) == $option ? 'selected' : '' }}>
+                                            {{ $option }}
+                                        </option>
+                                    @endforeach
+                                @endif
+                            </select>
+
+                            {{-- ✅ TAMBAHAN: CHECKBOX --}}
+                        @elseif($field->type == 'checkbox')
+                            <div style="display: flex; flex-direction: column; gap: 10px;">
+                                @php
+                                    $options = is_string($field->options)
+                                        ? json_decode($field->options, true)
+                                        : $field->options;
+                                    $oldAnswers = old('answers.' . $field->id, []);
+                                @endphp
+                                @if (!empty($options))
+                                    @foreach ($options as $option)
+                                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                            <input type="checkbox" name="answers[{{ $field->id }}][]"
+                                                value="{{ $option }}" style="width: 18px; height: 18px;"
+                                                {{ in_array($option, (array) $oldAnswers) ? 'checked' : '' }}>
+                                            <span style="color: #334155;">{{ $option }}</span>
+                                        </label>
+                                    @endforeach
+                                @endif
+                            </div>
                         @endif
 
                         @error('answers.' . $field->id)

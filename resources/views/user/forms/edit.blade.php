@@ -66,7 +66,6 @@
                         </button>
 
                         <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
-
                             <div class="md:col-span-8 space-y-3">
                                 <input type="text" x-model="field.label" :name="'fields[' + index + '][label]'" required
                                     class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 font-medium"
@@ -94,8 +93,35 @@
                                     <option value="number">Hanya Angka</option>
                                     <option value="date">Tanggal</option>
                                     <option value="file">Responden Upload File</option>
+                                    <option value="dropdown">Dropdown (Pilih Satu)</option>
+                                    <option value="checkbox">Checklist (Pilihan Ganda)</option>
                                 </select>
                             </div>
+                        </div>
+
+                        <div x-show="field.type === 'dropdown' || field.type === 'checkbox'"
+                            class="mt-4 pl-2 space-y-2 border-l-2 border-indigo-200">
+                            <template x-for="(option, optIndex) in field.options" :key="optIndex">
+                                <div class="flex items-center gap-3">
+                                    <i x-show="field.type === 'checkbox'" class="ri-checkbox-blank-line text-gray-400"></i>
+                                    <i x-show="field.type === 'dropdown'" class="ri-arrow-down-s-line text-gray-400"></i>
+
+                                    <input type="text" x-model="field.options[optIndex]"
+                                        :name="'fields[' + index + '][options][]'" required
+                                        class="w-full sm:w-2/3 bg-white border-0 border-b border-gray-200 px-2 py-1 focus:ring-0 focus:border-indigo-500 text-sm"
+                                        placeholder="Ketik opsi pilihan...">
+
+                                    <button type="button" @click="removeOption(index, optIndex)"
+                                        class="text-gray-400 hover:text-red-500 transition">
+                                        <i class="ri-close-line text-lg"></i>
+                                    </button>
+                                </div>
+                            </template>
+
+                            <button type="button" @click="addOption(index)"
+                                class="mt-2 text-sm text-indigo-600 hover:text-indigo-800 font-bold flex items-center gap-1">
+                                <i class="ri-add-line"></i> Tambah Opsi
+                            </button>
                         </div>
 
                         <div class="mt-5 mb-2">
@@ -107,10 +133,12 @@
                                 jawaban panjang</div>
                             <div x-show="field.type === 'file'"
                                 class="mt-2 text-gray-500 bg-gray-50 p-3 rounded border border-dashed flex items-center gap-2 w-max text-sm">
-                                <i class="ri-upload-cloud-2-line"></i> Tombol Upload File</div>
+                                <i class="ri-upload-cloud-2-line"></i> Tombol Upload File
+                            </div>
                             <div x-show="field.type === 'date'"
                                 class="mt-2 text-gray-500 bg-gray-50 px-3 py-1.5 rounded border w-max flex items-center gap-2 text-sm">
-                                <i class="ri-calendar-line"></i> dd/mm/yyyy</div>
+                                <i class="ri-calendar-line"></i> dd/mm/yyyy
+                            </div>
                         </div>
 
                         <div class="flex justify-end pt-3 mt-3 border-t border-gray-100">
@@ -118,8 +146,8 @@
                                 class="flex items-center gap-2 cursor-pointer text-sm text-gray-700 font-bold bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-200 hover:bg-gray-100 transition">
                                 <span x-text="field.is_required ? 'Wajib Diisi' : 'Opsional'"></span>
                                 <input type="hidden" :name="'fields[' + index + '][is_required]'" value="0">
-                                <input type="checkbox" x-model="field.is_required" :name="'fields[' + index + '][is_required]'"
-                                    value="1"
+                                <input type="checkbox" x-model="field.is_required"
+                                    :name="'fields[' + index + '][is_required]'" :value="1"
                                     class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500 cursor-pointer">
                             </label>
                         </div>
@@ -151,13 +179,22 @@
 
     <script>
         function formBuilder(initialFields) {
+            // Mapping initialFields untuk memastikan field baru/lama punya array options
+            const mappedFields = (initialFields || []).map(field => ({
+                ...field,
+                // Pastikan options adalah array, jika dari DB biasanya berupa array karena sudah di-cast di Model
+                options: field.options && Array.isArray(field.options) ? field.options : ['Opsi 1'],
+                is_required: field.is_required == 1 // pastikan boolean
+            }));
+
             return {
-                fields: initialFields && initialFields.length > 0 ? initialFields : [{
+                fields: mappedFields.length > 0 ? mappedFields : [{
                     id: Date.now(),
                     label: '',
                     type: 'text',
                     is_required: false,
-                    image: null
+                    image: null,
+                    options: ['Opsi 1']
                 }],
 
                 addField() {
@@ -166,7 +203,8 @@
                         label: '',
                         type: 'text',
                         is_required: false,
-                        image: null
+                        image: null,
+                        options: ['Opsi 1']
                     });
                 },
 
@@ -175,6 +213,21 @@
                         this.fields.splice(index, 1);
                     } else {
                         alert('Form harus memiliki minimal 1 pertanyaan!');
+                    }
+                },
+
+                addOption(fieldIndex) {
+                    if (!this.fields[fieldIndex].options) {
+                        this.fields[fieldIndex].options = [];
+                    }
+                    this.fields[fieldIndex].options.push('Opsi ' + (this.fields[fieldIndex].options.length + 1));
+                },
+
+                removeOption(fieldIndex, optIndex) {
+                    if (this.fields[fieldIndex].options.length > 1) {
+                        this.fields[fieldIndex].options.splice(optIndex, 1);
+                    } else {
+                        alert('Minimal harus ada 1 opsi!');
                     }
                 }
             }

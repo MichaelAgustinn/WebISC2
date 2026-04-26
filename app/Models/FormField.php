@@ -6,5 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class FormField extends Model
 {
-    protected $fillable = ['form_id', 'label', 'image', 'type', 'is_required', 'order_index'];
+    protected $fillable = ['form_id', 'label', 'image', 'type', 'is_required', 'order_index', 'options'];
+    protected $casts = [
+        'options' => 'array',
+    ];
 }

@@ -28,11 +28,12 @@ class FormController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validasi Thumbnail
+            'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'fields' => 'required|array|min:1',
             'fields.*.label' => 'required|string',
             'fields.*.type' => 'required|string',
-            'fields.*.image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validasi gambar soal
+            'fields.*.image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'fields.*.options' => 'nullable|array',
         ]);
 
         // 1. Upload Thumbnail (cover_image)
@@ -71,6 +72,7 @@ class FormController extends Controller
                 'type' => $field['type'],
                 'is_required' => isset($field['is_required']) ? (bool) $field['is_required'] : false,
                 'order_index' => $index,
+                'options' => isset($field['options']) ? $field['options'] : null,
             ]);
         }
 
