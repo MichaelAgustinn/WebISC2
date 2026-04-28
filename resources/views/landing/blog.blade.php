@@ -19,7 +19,7 @@
                 <div class="blog-content">
                     <h3 class="blog-title">{{ $post->title ?? '' }}</h3>
                     <p style="font-size: 0.9rem; color: #666; margin-bottom: 1rem;">
-                        {{ \Illuminate\Support\Str::words($post->description, 10, '...') }}</p>
+                        {!! \Illuminate\Support\Str::words($post->description, 10, '...') !!}</p>
                     <a href="{{ route('blog.show', $post->slug) }}" class="read-more">Baca Selengkapnya <i
                             class="ri-arrow-right-line"></i></a>
                 </div>

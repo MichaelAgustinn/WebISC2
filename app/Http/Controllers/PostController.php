@@ -41,7 +41,6 @@ class PostController extends Controller
 
         $data = LandingPage::pluck('value', 'key')->toArray();
 
-
         return view('blog.blog', compact('posts', 'recentPosts', 'popularCategories', 'data'));
     }
 
@@ -85,7 +84,7 @@ class PostController extends Controller
         // 1. Validasi
         $request->validate([
             'title' => 'required|max:255',
-            'categories_input' => 'required|string', // Pastikan nama inputnya sama dengan di View
+            'categories_input' => 'required|string',
             'description' => 'required',
             'thumbnail' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
         ]);
@@ -117,7 +116,6 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         if ($post->user_id != Auth::id()) abort(403);
-        // Load relasi categories agar muncul di form edit
         $post->load('categories');
         return view('user.posts.edit', compact('post'));
     }
@@ -128,7 +126,7 @@ class PostController extends Controller
 
         $request->validate([
             'title' => 'required|max:255',
-            'categories_input' => 'required|string', // Nama input disesuaikan (bukan category_name)
+            'categories_input' => 'required|string',
             'description' => 'required',
             'thumbnail' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
         ]);
@@ -180,7 +178,6 @@ class PostController extends Controller
             return;
         }
 
-        // Pecah string "Laravel,PHP" -> Array
         $tags = explode(',', $tagsString);
         $categoryIds = [];
 
@@ -188,7 +185,6 @@ class PostController extends Controller
             $name = trim($tagName);
             if (empty($name)) continue;
 
-            // Cari atau Buat Kategori Baru
             $cat = Category::firstOrCreate(
                 ['name' => $name],
                 ['slug' => Str::slug($name)]
@@ -196,47 +192,37 @@ class PostController extends Controller
             $categoryIds[] = $cat->id;
         }
 
-        // Sync ke Pivot Table
         $post->categories()->sync($categoryIds);
     }
 
     // --- KOMENTAR ---
     public function storeComment(Request $request, Post $post)
     {
-        // 1. Validasi Input
         $request->validate([
-            'body' => 'required|string|max:1000', // Maksimal 1000 karakter agar tidak spam
+            'body' => 'required|string|max:1000',
         ]);
 
-        // 2. Simpan ke Database
         Comment::create([
             'post_id' => $post->id,
-            'user_id' => Auth::id(), // Ambil ID user yang sedang login
+            'user_id' => Auth::id(),
             'body' => $request->body,
         ]);
 
-        // 3. Redirect Kembali dengan Pesan Sukses
-        // Menggunakan anchor #comments agar halaman scroll langsung ke bagian komentar
         return back()->with('success', 'Komentar berhasil dikirim!')->withFragment('comments');
     }
 
-    // HAPUS KOMENTAR
     public function destroyComment(Comment $comment)
     {
-        // Cek apakah yang menghapus adalah pemilik komentar
         if (Auth::id() !== $comment->user_id) {
             abort(403, 'Anda tidak berhak menghapus komentar ini.');
         }
 
         $comment->delete();
-        // withFragment('comments') agar setelah reload langsung scroll ke bagian komentar
         return back()->with('success', 'Komentar berhasil dihapus.')->withFragment('comments');
     }
 
-    // UPDATE KOMENTAR
     public function updateComment(Request $request, Comment $comment)
     {
-        // Cek pemilik
         if (Auth::id() !== $comment->user_id) {
             abort(403, 'Anda tidak berhak mengedit komentar ini.');
         }

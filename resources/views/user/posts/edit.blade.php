@@ -2,6 +2,32 @@
 
 @section('title', 'Edit Artikel')
 
+@push('styles')
+    <style>
+        /* Menyesuaikan style CKEditor dengan desain form kamu tanpa merusak UI asli */
+        .ck-editor__editable_inline {
+            min-height: 60vh;
+            font-size: 1.125rem;
+            color: #4b5563;
+            border: none !important;
+            box-shadow: none !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+        }
+
+        .ck-toolbar {
+            border: none !important;
+            border-bottom: 2px solid #f3f4f6 !important;
+            background: #ffffff !important;
+            padding: 10px 0 !important;
+        }
+
+        .ck.ck-editor__main>.ck-editor__editable:not(.ck-focused) {
+            border-color: transparent !important;
+        }
+    </style>
+@endpush
+
 @section('content')
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
@@ -58,10 +84,10 @@
                                 untuk menghapus tag.</p>
                         </div>
 
-                        <div class="w-full">
+                        <div class="w-full mt-4">
                             <textarea name="description" id="editor"
                                 class="w-full w-full border-0 focus:ring-0 text-lg text-gray-600 leading-relaxed placeholder-gray-300 px-0 resize-none min-h-[60vh]"
-                                placeholder="Mulailah menulis cerita Anda di sini..." required>{{ old('description', $post->description) }}</textarea>
+                                placeholder="Mulailah menulis cerita Anda di sini...">{{ old('description', $post->description) }}</textarea>
                         </div>
 
                     </div>
@@ -142,13 +168,25 @@
     </div>
 
     {{-- SCRIPTS --}}
+    <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+
     <script>
+        // Init CKEditor
+        ClassicEditor
+            .create(document.querySelector('#editor'), {
+                toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote',
+                    'undo', 'redo'
+                ]
+            })
+            .catch(error => {
+                console.error(error);
+            });
+
         // --- 1. LOGIKA MULTI-TAGS ---
         const tagContainer = document.getElementById('tagContainer');
         const tagInput = document.getElementById('tagInput');
         const hiddenInput = document.getElementById('hiddenCategories');
 
-        // Init: Load tags from hidden input
         let tags = hiddenInput.value ? hiddenInput.value.split(',').filter(t => t.trim() !== '') : [];
         renderTags();
 
@@ -196,11 +234,15 @@
         const textarea = document.getElementById('editor');
 
         function resizeTextarea() {
-            textarea.style.height = 'auto';
-            textarea.style.height = (textarea.scrollHeight) + 'px';
+            if (textarea) {
+                textarea.style.height = 'auto';
+                textarea.style.height = (textarea.scrollHeight) + 'px';
+            }
         }
         window.addEventListener('load', resizeTextarea);
-        textarea.addEventListener('input', resizeTextarea);
+        if (textarea) {
+            textarea.addEventListener('input', resizeTextarea);
+        }
 
         // --- 3. IMAGE PREVIEW ---
         function previewImage(event) {
