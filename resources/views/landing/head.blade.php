@@ -274,8 +274,8 @@
             align-items: center;
             justify-content: center;
             background-image:
-                linear-gradient(rgba(212, 175, 55, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(212, 175, 55, 0.05) 1px, transparent 1px);
+                linear-gradient(rgba(212, 175, 55, 0.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(212, 175, 55, 0.06) 1px, transparent 1px);
             background-size: 30px 30px;
         }
 
@@ -285,7 +285,7 @@
             width: 100%;
             height: 1px;
             background: linear-gradient(90deg, transparent, var(--accent), transparent);
-            opacity: 0.7;
+            opacity: 0.75;
             box-shadow: 0 0 10px var(--accent);
         }
 
