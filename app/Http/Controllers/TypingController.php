@@ -22,21 +22,23 @@ class TypingController extends Controller
                 ->take(10); // Ambil top 10
         };
 
-        // 1. Data Mingguan (Start of Week)
-        $weekly = $getLeaderboard(
-            TypingScore::where('created_at', '>=', Carbon::now()->startOfWeek())
-        );
+        // Daftar value bahasa sesuai dengan yang ada di <select> HTML kamu
+        $languages = ['indonesia', 'java', 'php', 'flutter'];
+        $leaderboards = [];
 
-        // 2. Data Bulanan (Start of Month)
-        $monthly = $getLeaderboard(
-            TypingScore::where('created_at', '>=', Carbon::now()->startOfMonth())
-        );
+        // Looping untuk mengambil data per kategori dan per bahasa
+        foreach ($languages as $lang) {
+            $leaderboards[$lang] = [
+                'weekly'  => $getLeaderboard(TypingScore::where('language', $lang)->where('created_at', '>=', Carbon::now()->startOfWeek())),
+                'monthly' => $getLeaderboard(TypingScore::where('language', $lang)->where('created_at', '>=', Carbon::now()->startOfMonth())),
+                'alltime' => $getLeaderboard(TypingScore::where('language', $lang)),
+            ];
+        }
 
-        // 3. All Time
-        $alltime = $getLeaderboard(TypingScore::query());
         $data = LandingPage::pluck('value', 'key')->toArray();
 
-        return view('landing.typing', compact('weekly', 'monthly', 'alltime', 'data'));
+        // Passing variabel $leaderboards (isinya array bahasa) ke view
+        return view('landing.typing', compact('leaderboards', 'data'));
     }
 
     public function store(Request $request)
@@ -48,14 +50,16 @@ class TypingController extends Controller
 
         $request->validate([
             'wpm' => 'required|integer',
-            'accuracy' => 'required|integer'
+            'accuracy' => 'required|integer',
+            'language' => 'require'
         ]);
 
         // Simpan Skor
         TypingScore::create([
             'user_id' => Auth::id(),
             'wpm' => $request->wpm,
-            'accuracy' => $request->accuracy
+            'accuracy' => $request->accuracy,
+            'language' => $request->language,
         ]);
 
         return response()->json(['status' => 'success', 'message' => 'Skor berhasil disimpan!']);

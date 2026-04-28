@@ -333,9 +333,96 @@
             display: block;
         }
 
+        .language-selector {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 1.5rem;
+
+            position: relative;
+            z-index: 1001;
+        }
+
+        .language-selector select {
+            padding: 10px 16px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            background: var(--white);
+            color: var(--primary);
+            font-weight: 600;
+            outline: none;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .language-selector select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(8, 18, 38, 0.08);
+        }
+
+        /* =========================================
+                                       RESPONSIVE DESIGN (TABLET & MOBILE)
+                                    ========================================= */
         @media (max-width: 1024px) {
             .typing-wrapper {
                 grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+
+            /* 1. Header lebih ringkas */
+            .typing-header {
+                padding: 100px 5% 40px;
+            }
+
+            .typing-header h1 {
+                font-size: 1.8rem;
+            }
+
+            /* 2. Kurangi jarak ruang kosong (padding) di dalam card */
+            .typing-card {
+                padding: 1.2rem;
+            }
+
+            /* 3. Dropdown bahasa jadi full-width agar mudah di-tap */
+            .language-selector {
+                justify-content: center;
+                width: 100%;
+            }
+
+            .language-selector select {
+                width: 100%;
+                text-align: center;
+            }
+
+            /* 4. Stats bar (Waktu, Mistakes, Akurasi) dibuat turun ke bawah (Wrap) biar nggak dempet */
+            .stats-bar {
+                flex-wrap: wrap;
+                gap: 15px;
+                padding: 1rem;
+                justify-content: space-around;
+            }
+
+            .stat-item {
+                flex: 1 1 40%;
+                /* Dibagi jadi 2 kolom atas-bawah */
+            }
+
+            .stat-item h4 {
+                font-size: 0.75rem;
+            }
+
+            .stat-item span {
+                font-size: 1.3rem;
+            }
+
+            /* 5. Area Ketik: Font dan line-height dikecilkan supaya teks tidak terpotong ke bawah */
+            .typing-box {
+                padding: 1.2rem 1rem;
+                font-size: 1.2rem;
+                line-height: 1.8;
+                min-height: 180px;
+                max-height: 250px;
             }
         }
     </style>
@@ -350,6 +437,15 @@
             <div class="typing-area">
                 <div class="typing-card">
                     <input type="text" class="input-field" autocomplete="off">
+
+                    <div class="language-selector">
+                        <select id="languageSelect">
+                            <option value="indonesia">Bahasa Indonesia</option>
+                            <option value="java">Java</option>
+                            <option value="php">PHP</option>
+                            <option value="flutter">Dart / Flutter</option>
+                        </select>
+                    </div>
 
                     <div class="stats-bar">
                         <div class="stat-item">
@@ -400,83 +496,61 @@
 
                     {{-- TAB WEEKLY --}}
                     <div id="weekly" class="tab-content active">
-                        <ul class="leaderboard-list">
-                            @forelse($weekly as $index => $score)
-                                <li class="rank-item">
-                                    <span class="rank-number">{{ $index + 1 }}</span>
-                                    <div class="rank-user">
-                                        @if ($score->user->profile && $score->user->profile->photo)
-                                            <img src="{{ asset('uploads/profiles/' . $score->user->profile->photo) }}"
-                                                class="rank-avatar">
-                                        @else
-                                            <img src="https://ui-avatars.com/api/?name={{ urlencode($score->user->name) }}&background=0f204b&color=fff"
-                                                class="rank-avatar">
-                                        @endif
-                                        <div class="rank-info">
-                                            <h5>{{ Str::limit($score->user->name, 15) }}</h5>
-                                            <span>{{ ucfirst($score->user->role) }}</span>
+                        @foreach (['indonesia', 'java', 'php', 'flutter'] as $lang)
+                            <ul class="leaderboard-list lang-list lang-{{ $lang }}"
+                                style="display: {{ $lang == 'indonesia' ? 'block' : 'none' }}">
+                                @forelse($leaderboards[$lang]['weekly'] as $index => $score)
+                                    <li class="rank-item">
+                                        <span class="rank-number">{{ $index + 1 }}</span>
+                                        <div class="rank-user">
+                                            @if ($score->user->profile && $score->user->profile->photo)
+                                                <img src="{{ asset('uploads/profiles/' . $score->user->profile->photo) }}"
+                                                    class="rank-avatar">
+                                            @else
+                                                <img src="https://ui-avatars.com/api/?name={{ urlencode($score->user->name) }}&background=0f204b&color=fff"
+                                                    class="rank-avatar">
+                                            @endif
+                                            <div class="rank-info">
+                                                <h5>{{ Str::limit($score->user->name, 15) }}</h5>
+                                                <span>{{ ucfirst($score->user->role) }}</span>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <span class="rank-score">{{ $score->wpm }} WPM</span>
-                                </li>
-                            @empty
-                                <li style="padding: 20px; text-align: center; color: #aaa;">Belum ada data.</li>
-                            @endforelse
-                        </ul>
+                                        <span class="rank-score">{{ $score->wpm }} WPM</span>
+                                    </li>
+                                @empty
+                                    <li style="padding: 20px; text-align: center; color: #aaa;">Belum ada data untuk bahasa
+                                        ini.</li>
+                                @endforelse
+                            </ul>
+                        @endforeach
                     </div>
 
                     {{-- TAB MONTHLY --}}
                     <div id="monthly" class="tab-content">
-                        <ul class="leaderboard-list">
-                            @forelse($monthly as $index => $score)
-                                <li class="rank-item">
-                                    <span class="rank-number">{{ $index + 1 }}</span>
-                                    <div class="rank-user">
-                                        @if ($score->user->profile && $score->user->profile->photo)
-                                            <img src="{{ asset('uploads/profiles/' . $score->user->profile->photo) }}"
-                                                class="rank-avatar">
-                                        @else
-                                            <img src="https://ui-avatars.com/api/?name={{ urlencode($score->user->name) }}&background=0f204b&color=fff"
-                                                class="rank-avatar">
-                                        @endif
-                                        <div class="rank-info">
-                                            <h5>{{ Str::limit($score->user->name, 15) }}</h5>
-                                            <span>{{ ucfirst($score->user->role) }}</span>
-                                        </div>
-                                    </div>
-                                    <span class="rank-score">{{ $score->wpm }} WPM</span>
-                                </li>
-                            @empty
-                                <li style="padding: 20px; text-align: center; color: #aaa;">Belum ada data.</li>
-                            @endforelse
-                        </ul>
+                        @foreach (['indonesia', 'java', 'php', 'flutter'] as $lang)
+                            <ul class="leaderboard-list lang-list lang-{{ $lang }}"
+                                style="display: {{ $lang == 'indonesia' ? 'block' : 'none' }}">
+                                @forelse($leaderboards[$lang]['monthly'] as $index => $score)
+                                @empty
+                                    <li style="padding: 20px; text-align: center; color: #aaa;">Belum ada data untuk bahasa
+                                        ini.</li>
+                                @endforelse
+                            </ul>
+                        @endforeach
                     </div>
 
                     {{-- TAB ALLTIME --}}
                     <div id="alltime" class="tab-content">
-                        <ul class="leaderboard-list">
-                            @forelse($alltime as $index => $score)
-                                <li class="rank-item">
-                                    <span class="rank-number">{{ $index + 1 }}</span>
-                                    <div class="rank-user">
-                                        @if ($score->user->profile && $score->user->profile->photo)
-                                            <img src="{{ asset('uploads/profiles/' . $score->user->profile->photo) }}"
-                                                class="rank-avatar">
-                                        @else
-                                            <img src="https://ui-avatars.com/api/?name={{ urlencode($score->user->name) }}&background=0f204b&color=fff"
-                                                class="rank-avatar">
-                                        @endif
-                                        <div class="rank-info">
-                                            <h5>{{ Str::limit($score->user->name, 15) }}</h5>
-                                            <span>{{ ucfirst($score->user->role) }}</span>
-                                        </div>
-                                    </div>
-                                    <span class="rank-score">{{ $score->wpm }} WPM</span>
-                                </li>
-                            @empty
-                                <li style="padding: 20px; text-align: center; color: #aaa;">Belum ada data.</li>
-                            @endforelse
-                        </ul>
+                        @foreach (['indonesia', 'java', 'php', 'flutter'] as $lang)
+                            <ul class="leaderboard-list lang-list lang-{{ $lang }}"
+                                style="display: {{ $lang == 'indonesia' ? 'block' : 'none' }}">
+                                @forelse($leaderboards[$lang]['alltime'] as $index => $score)
+                                @empty
+                                    <li style="padding: 20px; text-align: center; color: #aaa;">Belum ada data untuk bahasa
+                                        ini.</li>
+                                @endforelse
+                            </ul>
+                        @endforeach
                     </div>
                 </div>
             </aside>
@@ -509,6 +583,7 @@
             const mistakeTag = document.querySelector("#mistakes");
             const wpmTag = document.querySelector("#wpm");
             const accuracyTag = document.querySelector("#accuracy");
+            const languageSelect = document.querySelector("#languageSelect");
 
             let timer;
             let maxTime = 60;
@@ -518,6 +593,61 @@
             let correctKeystrokes = 0;
             let correctWordsCount = 0;
             let isTyping = false;
+
+            const wordListFlutter = [
+                "flutter", "dart", "widget", "state", "stateless", "stateful", "build", "context",
+                "materialapp", "scaffold", "appbar", "container", "column", "row", "stack",
+                "expanded", "padding", "margin", "center", "align", "text", "icon", "image",
+                "button", "elevatedbutton", "textbutton", "iconbutton", "floatingactionbutton",
+                "listview", "gridview", "builder", "navigator", "route", "page", "screen",
+                "drawer", "bottomnavigationbar", "tabbar", "tabview", "textfield", "form",
+                "validator", "textfieldcontroller", "setstate", "future", "async", "await",
+                "stream", "snapshot", "futurebuilder", "streambuilder", "provider", "bloc",
+                "riverpod", "getx", "controller", "model", "service", "repository", "json",
+                "encode", "decode", "http", "api", "dio", "sharedpreferences", "sqflite",
+                "firebase", "authentication", "firestore", "storage", "animation", "hero",
+                "theme", "darkmode", "lightmode", "mediaquery", "layoutbuilder", "responsive",
+                "gesturedetector", "inkwell", "listtile", "card", "dialog", "snackbar",
+                "bottomsheet", "safearea", "scrollview", "singlechildscrollview", "customscrollview",
+                "sliverappbar", "cliprrect", "opacity", "transform", "lifecycle", "dispose",
+                "initstate", "hotreload", "pubspec", "package", "plugin", "dependency",
+                "debug", "release", "emulator"
+            ];
+
+            const wordListPhp = [
+                "php", "echo", "print", "variable", "string", "integer", "float", "boolean",
+                "array", "object", "function", "class", "interface", "trait", "namespace",
+                "include", "require", "include_once", "require_once", "if", "else", "elseif",
+                "switch", "case", "for", "foreach", "while", "do", "break", "continue",
+                "return", "public", "private", "protected", "static", "final", "abstract",
+                "extends", "implements", "new", "this", "parent", "self", "const", "define",
+                "isset", "empty", "unset", "null", "true", "false", "try", "catch", "finally",
+                "throw", "exception", "mysqli", "pdo", "query", "database", "select", "insert",
+                "update", "delete", "fetch", "session", "cookie", "header", "json", "encode",
+                "decode", "html", "form", "post", "get", "request", "response", "server",
+                "client", "upload", "download", "file", "directory", "path", "url", "router",
+                "middleware", "controller", "model", "view", "template", "blade", "composer",
+                "autoload", "artisan", "laravel", "symfony", "codeigniter", "api", "token",
+                "authentication", "authorization", "validation"
+            ];
+
+            const wordListJava = [
+                "class", "object", "method", "variable", "string", "integer", "double", "float",
+                "boolean", "char", "array", "loop", "for", "while", "if", "else", "switch",
+                "case", "break", "continue", "return", "public", "private", "protected",
+                "static", "final", "void", "new", "this", "super", "extends", "implements",
+                "interface", "abstract", "package", "import", "scanner", "system", "println",
+                "print", "input", "output", "constructor", "getter", "setter", "instance",
+                "inheritance", "polymorphism", "encapsulation", "abstraction", "exception",
+                "try", "catch", "finally", "throw", "throws", "thread", "runnable", "lambda",
+                "stream", "list", "arraylist", "linkedlist", "map", "hashmap", "set", "hashset",
+                "iterator", "collection", "collections", "comparable", "comparator", "random",
+                "math", "file", "reader", "writer", "buffer", "inputstream", "outputstream",
+                "bufferedreader", "bufferedwriter", "serialization", "generic", "annotation",
+                "reflection", "enum", "record", "module", "jvm", "jdk", "jre", "bytecode",
+                "compile", "runtime", "debug", "syntax", "parameter", "argument", "function",
+                "statement", "expression"
+            ];
 
             const wordList = [
                 "aku", "kamu", "dia", "kami", "kita", "mereka", "ini", "itu", "ada", "tidak", "ya", "sudah",
@@ -540,10 +670,11 @@
                 "harap", "mimpi", "soal", "pilih", "putus", "bantu", "usaha", "hasil", "proses", "cara", "atur",
                 "berita", "sejarah", "budaya", "agama", "giat", "jalan", "temu", "ubah", "tumbuh", "butuh"
             ];
+            let activeWordList = wordList;
 
             function addWords(count) {
                 for (let i = 0; i < count; i++) {
-                    let randomWord = wordList[Math.floor(Math.random() * wordList.length)];
+                    let randomWord = activeWordList[Math.floor(Math.random() * activeWordList.length)];
                     let wordDiv = document.createElement("div");
                     wordDiv.classList.add("word");
 
@@ -725,6 +856,7 @@
             function saveScore(wpm, accuracy) {
                 const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') ||
                     "{{ csrf_token() }}";
+                const selectedLang = languageSelect.value;
 
                 fetch("{{ route('typing.store') }}", {
                         method: "POST",
@@ -736,6 +868,7 @@
                         body: JSON.stringify({
                             wpm: wpm,
                             accuracy: accuracy
+                            language: selectedLang
                         })
                     })
                     .then(async response => {
@@ -758,6 +891,26 @@
             inpField.addEventListener("input", initTyping);
             if (btnRestart) btnRestart.addEventListener("click", resetGame);
 
+            // Perubahan Utama: Event ganti bahasa diletakkan di luar resetGame()
+            languageSelect.addEventListener("change", (e) => {
+                const selected = e.target.value;
+
+                if (selected === "java") {
+                    activeWordList = wordListJava;
+                } else if (selected === "php") {
+                    activeWordList = wordListPhp;
+                } else if (selected === "flutter") {
+                    activeWordList = wordListFlutter;
+                } else {
+                    activeWordList = wordList;
+                }
+
+                document.querySelectorAll('.lang-list').forEach(el => el.style.display = 'none');
+                document.querySelectorAll('.lang-' + selected).forEach(el => el.style.display = 'block');
+
+                resetGame(); // Panggil reset agar kata ter-update dengan bahasa baru
+            });
+
             // Visual Focus
             inpField.addEventListener("focus", () => typingBox.classList.add("active"));
             inpField.addEventListener("blur", () => typingBox.classList.remove("active"));
@@ -769,6 +922,9 @@
 
                 // 2. Jika tombol Restart sedang fokus, biarkan Enter menekannya
                 if (document.activeElement === btnRestart) return;
+
+                // Jika elemen dropdown (languageSelect) sedang difokuskan, biarkan pengguna menavigasinya
+                if (document.activeElement === languageSelect) return;
 
                 // 3. Sisanya, paksa fokus ke input field agar bisa langsung ngetik
                 if (e.target.tagName !== "INPUT" && e.target.tagName !== "TEXTAREA") {

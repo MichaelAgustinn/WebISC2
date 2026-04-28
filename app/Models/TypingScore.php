@@ -12,7 +12,8 @@ class TypingScore extends Model
     protected $fillable = [
         'user_id',
         'wpm',
-        'accuracy'
+        'accuracy',
+        'language',
     ];
 
     public function user()
