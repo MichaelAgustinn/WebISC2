@@ -84,7 +84,7 @@
             z-index: 1;
         }
 
-        .login-box span:nth-child(1) {
+        .login-box>span:nth-of-type(1) {
             top: 0;
             left: -100%;
             width: 100%;
@@ -93,7 +93,7 @@
             animation: btn-anim1 6s linear infinite;
         }
 
-        .login-box span:nth-child(2) {
+        .login-box>span:nth-of-type(2) {
             top: -100%;
             right: 0;
             width: 2px;
@@ -103,7 +103,7 @@
             animation-delay: 1.5s;
         }
 
-        .login-box span:nth-child(3) {
+        .login-box>span:nth-of-type(3) {
             bottom: 0;
             right: -100%;
             width: 100%;
@@ -113,7 +113,7 @@
             animation-delay: 3s;
         }
 
-        .login-box span:nth-child(4) {
+        .login-box>span:nth-of-type(4) {
             bottom: -100%;
             left: 0;
             width: 2px;
@@ -348,9 +348,9 @@
                 <input type="password" name="password" id="passwordInput" autocomplete="off" required>
                 <label>Password</label>
                 <i class="ri-eye-off-line password-toggle" id="togglePassword"></i>
-                @error('password')
+                {{-- @error('password')
                     <span class="error-text">{{ $message }}</span>
-                @enderror
+                @enderror --}}
             </div>
 
             <a href="{{ route('password.request') }}" class="forgot-pass">Lupa sandi?</a>
