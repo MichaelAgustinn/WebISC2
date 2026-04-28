@@ -194,7 +194,6 @@
             transition: 0.3s;
         }
 
-        /* Efek Focus untuk Aksesibilitas Keyboard (Tab) */
         .btn-restart:focus {
             outline: 3px solid var(--accent);
             outline-offset: 2px;
@@ -337,9 +336,9 @@
             display: flex;
             justify-content: flex-end;
             margin-bottom: 1.5rem;
-
             position: relative;
             z-index: 1001;
+            /* Fix klik dropdown */
         }
 
         .language-selector select {
@@ -360,8 +359,8 @@
         }
 
         /* =========================================
-                                       RESPONSIVE DESIGN (TABLET & MOBILE)
-                                    ========================================= */
+               RESPONSIVE DESIGN (TABLET & MOBILE)
+            ========================================= */
         @media (max-width: 1024px) {
             .typing-wrapper {
                 grid-template-columns: 1fr;
@@ -369,8 +368,6 @@
         }
 
         @media (max-width: 768px) {
-
-            /* 1. Header lebih ringkas */
             .typing-header {
                 padding: 100px 5% 40px;
             }
@@ -379,12 +376,10 @@
                 font-size: 1.8rem;
             }
 
-            /* 2. Kurangi jarak ruang kosong (padding) di dalam card */
             .typing-card {
                 padding: 1.2rem;
             }
 
-            /* 3. Dropdown bahasa jadi full-width agar mudah di-tap */
             .language-selector {
                 justify-content: center;
                 width: 100%;
@@ -395,7 +390,6 @@
                 text-align: center;
             }
 
-            /* 4. Stats bar (Waktu, Mistakes, Akurasi) dibuat turun ke bawah (Wrap) biar nggak dempet */
             .stats-bar {
                 flex-wrap: wrap;
                 gap: 15px;
@@ -405,7 +399,6 @@
 
             .stat-item {
                 flex: 1 1 40%;
-                /* Dibagi jadi 2 kolom atas-bawah */
             }
 
             .stat-item h4 {
@@ -416,7 +409,6 @@
                 font-size: 1.3rem;
             }
 
-            /* 5. Area Ketik: Font dan line-height dikecilkan supaya teks tidak terpotong ke bawah */
             .typing-box {
                 padding: 1.2rem 1rem;
                 font-size: 1.2rem;
@@ -456,10 +448,7 @@
                             <h4>Mistakes</h4>
                             <span id="mistakes">0</span>
                         </div>
-                        {{-- <div class="stat-item"> --}}
-                        {{-- <h4>WPM</h4> --}}
                         <span hidden id="wpm">0</span>
-                        {{-- </div> --}}
                         <div class="stat-item">
                             <h4>Akurasi</h4>
                             <span id="accuracy">100%</span>
@@ -531,6 +520,23 @@
                             <ul class="leaderboard-list lang-list lang-{{ $lang }}"
                                 style="display: {{ $lang == 'indonesia' ? 'block' : 'none' }}">
                                 @forelse($leaderboards[$lang]['monthly'] as $index => $score)
+                                    <li class="rank-item">
+                                        <span class="rank-number">{{ $index + 1 }}</span>
+                                        <div class="rank-user">
+                                            @if ($score->user->profile && $score->user->profile->photo)
+                                                <img src="{{ asset('uploads/profiles/' . $score->user->profile->photo) }}"
+                                                    class="rank-avatar">
+                                            @else
+                                                <img src="https://ui-avatars.com/api/?name={{ urlencode($score->user->name) }}&background=0f204b&color=fff"
+                                                    class="rank-avatar">
+                                            @endif
+                                            <div class="rank-info">
+                                                <h5>{{ Str::limit($score->user->name, 15) }}</h5>
+                                                <span>{{ ucfirst($score->user->role) }}</span>
+                                            </div>
+                                        </div>
+                                        <span class="rank-score">{{ $score->wpm }} WPM</span>
+                                    </li>
                                 @empty
                                     <li style="padding: 20px; text-align: center; color: #aaa;">Belum ada data untuk bahasa
                                         ini.</li>
@@ -545,6 +551,23 @@
                             <ul class="leaderboard-list lang-list lang-{{ $lang }}"
                                 style="display: {{ $lang == 'indonesia' ? 'block' : 'none' }}">
                                 @forelse($leaderboards[$lang]['alltime'] as $index => $score)
+                                    <li class="rank-item">
+                                        <span class="rank-number">{{ $index + 1 }}</span>
+                                        <div class="rank-user">
+                                            @if ($score->user->profile && $score->user->profile->photo)
+                                                <img src="{{ asset('uploads/profiles/' . $score->user->profile->photo) }}"
+                                                    class="rank-avatar">
+                                            @else
+                                                <img src="https://ui-avatars.com/api/?name={{ urlencode($score->user->name) }}&background=0f204b&color=fff"
+                                                    class="rank-avatar">
+                                            @endif
+                                            <div class="rank-info">
+                                                <h5>{{ Str::limit($score->user->name, 15) }}</h5>
+                                                <span>{{ ucfirst($score->user->role) }}</span>
+                                            </div>
+                                        </div>
+                                        <span class="rank-score">{{ $score->wpm }} WPM</span>
+                                    </li>
                                 @empty
                                     <li style="padding: 20px; text-align: center; color: #aaa;">Belum ada data untuk bahasa
                                         ini.</li>
@@ -840,16 +863,14 @@
                 const finalAccText = accuracyTag.innerText.replace('%', '');
                 const finalAcc = parseInt(finalAccText) || 0;
 
-                // Menjalankan fungsi simpan skor di latar belakang
                 saveScore(finalWpm, finalAcc);
 
-                // Mengganti alert() bawaan dengan SweetAlert2
                 Swal.fire({
                     title: 'Waktu Habis! ⏱️',
                     html: `Skor kecepatanmu: <b>${finalWpm} WPM</b><br>Akurasi ketikan: <b>${finalAcc}%</b>`,
-                    icon: finalWpm > 40 ? 'success' : 'info', // Otomatis ganti ikon kalau WPM di atas 40
+                    icon: finalWpm > 40 ? 'success' : 'info',
                     confirmButtonText: 'Tutup',
-                    allowOutsideClick: false // Mencegah tertutup kalau tidak sengaja klik di luar kotak
+                    allowOutsideClick: false
                 });
             }
 
@@ -867,7 +888,7 @@
                         },
                         body: JSON.stringify({
                             wpm: wpm,
-                            accuracy: accuracy
+                            accuracy: accuracy, // <-- Koma sudah ditambahkan di sini
                             language: selectedLang
                         })
                     })
@@ -891,7 +912,6 @@
             inpField.addEventListener("input", initTyping);
             if (btnRestart) btnRestart.addEventListener("click", resetGame);
 
-            // Perubahan Utama: Event ganti bahasa diletakkan di luar resetGame()
             languageSelect.addEventListener("change", (e) => {
                 const selected = e.target.value;
 
@@ -908,7 +928,7 @@
                 document.querySelectorAll('.lang-list').forEach(el => el.style.display = 'none');
                 document.querySelectorAll('.lang-' + selected).forEach(el => el.style.display = 'block');
 
-                resetGame(); // Panggil reset agar kata ter-update dengan bahasa baru
+                resetGame();
             });
 
             // Visual Focus
@@ -917,16 +937,10 @@
 
             // --- PERBAIKAN STRUKTUR NAVIGASI KEYBOARD ---
             document.addEventListener("keydown", (e) => {
-                // 1. Izinkan TAB untuk navigasi normal (Aksesibilitas)
                 if (e.key === "Tab") return;
-
-                // 2. Jika tombol Restart sedang fokus, biarkan Enter menekannya
                 if (document.activeElement === btnRestart) return;
-
-                // Jika elemen dropdown (languageSelect) sedang difokuskan, biarkan pengguna menavigasinya
                 if (document.activeElement === languageSelect) return;
 
-                // 3. Sisanya, paksa fokus ke input field agar bisa langsung ngetik
                 if (e.target.tagName !== "INPUT" && e.target.tagName !== "TEXTAREA") {
                     inpField.focus();
                 }

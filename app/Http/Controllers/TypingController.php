@@ -51,7 +51,7 @@ class TypingController extends Controller
         $request->validate([
             'wpm' => 'required|integer',
             'accuracy' => 'required|integer',
-            'language' => 'require'
+            'language' => 'required'
         ]);
 
         // Simpan Skor
