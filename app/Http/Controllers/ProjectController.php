@@ -37,8 +37,8 @@ class ProjectController extends Controller
             'title' => 'required|max:255',
             'description' => 'required',
             'division' => 'required|in:mobile,iot,uiux,sistem_cerdas,website',
-            'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048', // Validasi backend tetap perlu
-            'team_members' => 'array' // Array ID user
+            'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'team_members' => 'array'
         ]);
 
         // 1. Upload Gambar
@@ -47,7 +47,7 @@ class ProjectController extends Controller
 
         // 2. Buat Project
         $project = Project::create([
-            'user_id' => Auth::id(),
+            'user_id' => Auth::user()->id,
             'title' => $request->title,
             'slug' => Str::slug($request->title) . '-' . Str::random(5),
             'description' => $request->description,
