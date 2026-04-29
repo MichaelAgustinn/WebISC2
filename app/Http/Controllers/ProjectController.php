@@ -21,7 +21,6 @@ class ProjectController extends Controller
 
     public function create()
     {
-        // Ambil semua user untuk dipilih jadi anggota tim (kecuali diri sendiri)
         $users = User::with('profile')
             ->where('id', '!=', auth()->id())
             ->whereHas('profile', function ($query) {
@@ -71,7 +70,12 @@ class ProjectController extends Controller
             abort(403, 'Akses ditolak: Anda bukan pemilik karya ini.');
         }
 
-        $users = User::where('id', '!=', Auth::id())->where('role', '!=', 'admin')->get();
+        $users = User::with('profile')
+            ->where('id', '!=', auth()->id())
+            ->whereHas('profile', function ($query) {
+                $query->where('email', '!=', 'isc@unsulbar.ac.id');
+            })
+            ->get();
         // Ambil ID anggota tim selain user login
         $currentTeam = $project->users->pluck('id')->toArray();
 
@@ -92,7 +96,7 @@ class ProjectController extends Controller
 
         $data = [
             'title' => $request->title,
-            'slug' => Str::slug($request->title) . '-' . Str::random(5), // Update slug (opsional)
+            'slug' => Str::slug($request->title) . '-' . Str::random(5),
             'description' => $request->description,
             'division' => $request->division,
         ];
@@ -111,7 +115,6 @@ class ProjectController extends Controller
 
         $project->update($data);
 
-        // Sync Tim (Hati-hati jangan hapus diri sendiri)
         $team = $request->team_members ?? [];
         if (!in_array(Auth::id(), $team)) {
             array_push($team, Auth::id());
