@@ -22,7 +22,12 @@ class ProjectController extends Controller
     public function create()
     {
         // Ambil semua user untuk dipilih jadi anggota tim (kecuali diri sendiri)
-        $users = User::where('id', '!=', Auth::id())->where('role', '!=', 'admin')->get();
+        $users = User::with('profile')
+            ->where('id', '!=', auth()->id())
+            ->whereHas('profile', function ($query) {
+                $query->where('email', '!=', 'isc@unsulbar.ac.id');
+            })
+            ->get();
         return view('user.projects.form', compact('users'));
     }
 
