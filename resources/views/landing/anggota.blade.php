@@ -242,12 +242,41 @@
                                 alt="{{ $member->name }}">
                         @endif
 
-                        {{-- ? untuk nanti jika ingin menambah table soscial untuk setiap anggota --}}
-                        {{-- <div class="member-social">
-                            <a href="#"><i class="ri-github-line"></i></a>
-                            <a href="#"><i class="ri-linkedin-fill"></i></a>
-                            <a href="#"><i class="ri-instagram-line"></i></a>
-                        </div> --}}
+                        {{-- ? ini untuk nanti jika ingin menambah table soscial untuk setiap anggota --}}
+                        @if (
+                            $member->profile &&
+                                ($member->profile->instagram ||
+                                    $member->profile->linkedin ||
+                                    $member->profile->github ||
+                                    $member->profile->personal_link))
+                            <div class="member-social">
+
+                                @if ($member->profile->github)
+                                    <a href="{{ $member->profile->github }}" target="_blank">
+                                        <i class="ri-github-line"></i>
+                                    </a>
+                                @endif
+
+                                @if ($member->profile->linkedin)
+                                    <a href="{{ $member->profile->linkedin }}" target="_blank">
+                                        <i class="ri-linkedin-fill"></i>
+                                    </a>
+                                @endif
+
+                                @if ($member->profile->instagram)
+                                    <a href="{{ $member->profile->instagram }}" target="_blank">
+                                        <i class="ri-instagram-line"></i>
+                                    </a>
+                                @endif
+
+                                @if ($member->profile->personal_link)
+                                    <a href="{{ $member->profile->personal_link }}" target="_blank">
+                                        <i class="ri-global-line"></i>
+                                    </a>
+                                @endif
+
+                            </div>
+                        @endif
                     </div>
                     <div class="member-info">
                         <h3 class="member-name">{{ $member->name }}</h3>
