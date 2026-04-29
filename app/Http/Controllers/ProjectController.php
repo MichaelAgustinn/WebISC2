@@ -62,7 +62,7 @@ class ProjectController extends Controller
     public function edit(Project $project)
     {
         // Pastikan user adalah anggota project ini
-        if ($project->user_id !== Auth::id()) {
+        if ($project->user_id != Auth::id()) {
             abort(403, 'Akses ditolak: Anda bukan pemilik karya ini.');
         }
 
@@ -75,7 +75,7 @@ class ProjectController extends Controller
 
     public function update(Request $request, Project $project)
     {
-        if ($project->user_id !== Auth::id()) {
+        if ($project->user_id != Auth::id()) {
             abort(403, 'Akses ditolak: Anda bukan pemilik karya ini.');
         }
 
@@ -118,7 +118,7 @@ class ProjectController extends Controller
 
     public function destroy(Project $project)
     {
-        if ($project->user_id !== Auth::id()) {
+        if ($project->user_id != Auth::id()) {
             abort(403, 'Akses ditolak: Anda bukan pemilik karya ini.');
         }
 
