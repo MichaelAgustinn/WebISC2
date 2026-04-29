@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
             'id' => 1,
             'name' => 'Michael Agustin',
             'email' => 'michaelagustinn080@gmail.com',
-            'password' => bcrypt('miky310505'),
+            'password' => bcrypt('12345678'),
             'role' => 'admin',
             'created_at' => now(),
             'updated_at' => now(),
