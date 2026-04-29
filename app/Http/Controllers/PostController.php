@@ -158,7 +158,7 @@ class PostController extends Controller
 
     public function destroy(Post $post)
     {
-        if ($post->user_id !== Auth::id()) abort(403);
+        if ($post->user_id !== Auth::user()->id) abort(403);
 
         if ($post->thumbnail && File::exists(public_path($post->thumbnail))) {
             File::delete(public_path($post->thumbnail));
