@@ -3,8 +3,8 @@
 @push('styles')
     <style>
         /* =========================================
-                   PROJECT DETAIL STYLES
-                ========================================= */
+                                       PROJECT DETAIL STYLES
+                                    ========================================= */
         .project-header {
             padding: 160px 5% 80px;
             background: linear-gradient(135deg, var(--primary) 0%, #081226 100%);
@@ -311,7 +311,7 @@
         </div>
         <h1>{{ $project->title }}</h1>
         <p class="project-tag-line">
-            Proyek unggulan dari divisi {{ ucwords(str_replace('_', ' ', $project->division)) }} Informatics Study Club.
+            Proyek dari anggota divisi {{ ucwords(str_replace('_', ' ', $project->division)) }} Informatics Study Club.
         </p>
     </header>
 
