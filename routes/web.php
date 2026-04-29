@@ -67,7 +67,10 @@ Route::get('/', function () {
 
 // ? halaman anggota area
 Route::get('/anggota', function () {
-    $members = User::where('email', '!=', 'isc@unsulbar.ac.id')->with('profile')->get();
+    $members = User::where('email', '!=', 'isc@unsulbar.ac.id')
+        ->with('profile')
+        ->orderBy('name', 'asc')
+        ->get();
 
     $landingData = App\Models\LandingPage::pluck('value', 'key')->toArray();
 
