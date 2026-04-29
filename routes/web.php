@@ -78,9 +78,7 @@ Route::get('/anggota', function () {
 })->name('anggota');
 
 Route::get('/anggota/{slug}', function ($slug) {
-    // Cari user berdasarkan slug, pastikan bukan admin utama
     $member = User::with(['profile', 'projects' => function ($query) {
-        // Tambahkan KONDISI STATUS di sini
         $query->where('status', true)
             ->latest(); // Urutkan dari yang terbaru
     }])
@@ -138,7 +136,7 @@ Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLinkE
 Route::get('/reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
 Route::post('/reset-password', [PasswordResetController::class, 'reset'])->name('password.update');
 
- Route::get('documents/{document}/download', [DocumentController::class, 'download'])->name('documents.download');
+Route::get('documents/{document}/download', [DocumentController::class, 'download'])->name('documents.download');
 
 // ! Guest belum Login
 Route::middleware('guest')->group(function () {
@@ -264,7 +262,6 @@ Route::middleware(['auth', 'role:admin,pengurus'])->group(function () {
 
     // ? document area
     Route::resource('documents', DocumentController::class)->except(['show', 'edit', 'update']);
-   
 });
 
 

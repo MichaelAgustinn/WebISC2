@@ -42,11 +42,9 @@
         .profile-content-wrapper {
             max-width: 900px;
             margin: 0 auto;
-            /* Tengah secara horizontal container */
             padding: 0 20px;
             position: relative;
             margin-top: -100px;
-            /* Menarik konten ke atas menimpa header */
             padding-bottom: 5rem;
         }
 
@@ -58,14 +56,9 @@
             object-fit: cover;
             background: var(--white);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-
-            /* --- PERBAIKAN POSISI TENGAH --- */
             display: block;
-            /* Wajib agar margin auto bekerja */
             margin-left: auto;
-            /* Dorong dari kiri */
             margin-right: auto;
-            /* Dorong dari kanan */
             position: relative;
             z-index: 2;
         }
@@ -97,6 +90,39 @@
             margin-bottom: 1.5rem;
         }
 
+        /* --- TAMBAHAN: STYLING SOSIAL MEDIA --- */
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 2rem;
+        }
+
+        .social-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            background: #f8fafc;
+            color: var(--primary);
+            border-radius: 50%;
+            font-size: 1.3rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 1px solid #e2e8f0;
+        }
+
+        .social-icon:hover {
+            background: var(--accent);
+            color: var(--white);
+            border-color: var(--accent);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* -------------------------------------- */
+
         .profile-stats {
             display: flex;
             justify-content: center;
@@ -127,7 +153,6 @@
             box-shadow: 0 5px 25px rgba(0, 0, 0, 0.05);
             margin-bottom: 4rem;
             text-align: left;
-            /* Teks paragraf rata kiri agar rapi */
             border: 1px solid #eee;
         }
 
@@ -148,7 +173,6 @@
             line-height: 1.8;
             font-size: 1.05rem;
             white-space: pre-line;
-            /* Agar Enter terbaca sebagai baris baru */
         }
 
         /* 4. PROJECTS SECTION */
@@ -292,6 +316,40 @@
                 {{ $member->profile->division ? ucwords(str_replace('_', ' ', $member->profile->division)) : 'ANGGOTA' }}
             </span>
 
+            @if (
+                $member->profile &&
+                    ($member->profile->instagram ||
+                        $member->profile->linkedin ||
+                        $member->profile->github ||
+                        $member->profile->personal_link))
+                <div class="social-links">
+                    @if ($member->profile->instagram)
+                        <a href="{{ $member->profile->instagram }}" target="_blank" class="social-icon" title="Instagram">
+                            <i class="ri-instagram-line"></i>
+                        </a>
+                    @endif
+
+                    @if ($member->profile->linkedin)
+                        <a href="{{ $member->profile->linkedin }}" target="_blank" class="social-icon" title="LinkedIn">
+                            <i class="ri-linkedin-fill"></i>
+                        </a>
+                    @endif
+
+                    @if ($member->profile->github)
+                        <a href="{{ $member->profile->github }}" target="_blank" class="social-icon" title="GitHub">
+                            <i class="ri-github-fill"></i>
+                        </a>
+                    @endif
+
+                    @if ($member->profile->personal_link)
+                        <a href="{{ $member->profile->personal_link }}" target="_blank" class="social-icon"
+                            title="Personal Website">
+                            <i class="ri-global-line"></i>
+                        </a>
+                    @endif
+                </div>
+            @endif
+
             <div class="profile-stats">
                 <div class="stat-item">
                     <i class="ri-calendar-check-line"></i>
@@ -309,7 +367,7 @@
         </div>
 
         <div class="bio-box">
-            <h3 class="bio-heading"><i class="ri-user-smile-line"></i> Tentang Saya</h3>
+            <h3 class="bio-heading"><i class="ri-user-smile-line"></i> Tentang {{ $member->name }}</h3>
             <p class="bio-text">
                 @if ($member->profile && $member->profile->bio)
                     {{ $member->profile->bio }}

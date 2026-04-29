@@ -54,6 +54,10 @@ class ProfileController extends Controller
             'division' => 'nullable|string',
             'bio' => 'nullable|string',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Max 2MB
+            'instagram' => 'nullable|string',
+            'linkedin' => 'nullable|string',
+            'github' => 'nullable|string',
+            'personal_link' => 'nullable|string',
         ]);
 
         // 2. Update Tabel Users (Data Akun)
@@ -70,6 +74,11 @@ class ProfileController extends Controller
             'division' => $request->division,
             'special_team' => $request->special_team,
             'bio' => $request->bio,
+            'instagram' => $request->instagram,
+            'linkedin' => $request->linkedin,
+            'github' => $request->github,
+            'personal_link' => $request->personal_link,
+
         ];
 
         // 4. Handle Upload Foto (Ke folder Public)
