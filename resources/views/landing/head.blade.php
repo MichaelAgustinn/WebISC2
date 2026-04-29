@@ -1125,7 +1125,7 @@
             height: 40px;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 50%;
-            color: var(--primary);
+            color: var(--accent);
             font-size: 1.2rem;
             transition: var(--transition);
             border: 1px solid transparent;

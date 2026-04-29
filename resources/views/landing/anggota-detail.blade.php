@@ -98,6 +98,10 @@
             margin-bottom: 2rem;
         }
 
+        .social-links a {
+            color: var(--primary);
+        }
+
         .social-icon {
             display: flex;
             align-items: center;
