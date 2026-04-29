@@ -68,6 +68,7 @@ Route::get('/', function () {
 // ? halaman anggota area
 Route::get('/anggota', function () {
     $members = User::where('email', '!=', 'isc@unsulbar.ac.id')
+        ->where('role', '!=', 'none')
         ->with('profile')
         ->orderBy('name', 'asc')
         ->get();
