@@ -22,7 +22,7 @@
                                 <div class="blog-meta">
                                     <span><i class="ri-calendar-line"></i> {{ $project->created_at->format('M Y') }}</span>
                                     <span><i class="ri-group-line"></i>
-                                        {{ $project->users->count() > 0 ? $project->users->first()->name . ($project->users->count() > 1 ? ' & Team' : '') : 'ISC Member' }}
+                                        {{ $project->users->count() > 0 ? $project->owner->name . ($project->users->count() > 1 ? ' & Team' : '') : 'ISC Member' }}
                                     </span>
                                 </div>
                                 <h3 class="blog-title">{{ $project->title }}</h3>
