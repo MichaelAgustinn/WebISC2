@@ -3,8 +3,8 @@
 @push('styles')
     <style>
         /* =========================================
-                                                       PROJECT DETAIL STYLES
-                                                       ========================================= */
+                   PROJECT DETAIL STYLES
+                ========================================= */
         .project-header {
             padding: 160px 5% 80px;
             background: linear-gradient(135deg, var(--primary) 0%, #081226 100%);
@@ -133,16 +133,6 @@
             gap: 8px;
         }
 
-        .tech-badge {
-            font-size: 0.8rem;
-            background: var(--bg-light);
-            color: var(--primary);
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-weight: 600;
-            border: 1px solid #e2e8f0;
-        }
-
         /* --- BUTTONS --- */
         .project-actions {
             margin-top: 2rem;
@@ -159,20 +149,20 @@
             padding: 12px;
             border-radius: 8px;
             font-weight: 700;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
             text-decoration: none;
             cursor: pointer;
             border: none;
             font-family: inherit;
             font-size: 1rem;
+            position: relative;
+            overflow: hidden;
         }
 
-        /* STYLE KHUSUS TOMBOL LIKE */
         .btn-like {
             background: #fff1f2;
             color: #e11d48;
             border: 1px solid #ffe4e6;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .btn-like:hover {
@@ -180,15 +170,55 @@
             transform: translateY(-2px);
         }
 
-        .btn-like:active {
-            transform: scale(0.95);
-        }
-
-        /* State LIKED (PENTING: !important agar menimpa warna default) */
         .btn-like.liked {
             background: #e11d48 !important;
             color: white !important;
             border-color: #e11d48 !important;
+        }
+
+        .btn-share {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid #eee;
+        }
+
+        .btn-share:hover {
+            border-color: var(--primary);
+            background: #f8fafc;
+            transform: translateY(-2px);
+        }
+
+        .btn-share.copied {
+            background: #10b981 !important;
+            color: white !important;
+            border-color: #10b981 !important;
+        }
+
+        /* --- TOAST NOTIFICATION STYLES --- */
+        .custom-toast {
+            position: fixed;
+            bottom: -100px;
+            /* Sembunyi di bawah layar */
+            left: 50%;
+            transform: translateX(-50%);
+            background: #10b981;
+            /* Warna hijau sukses */
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: bottom 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 9999;
+        }
+
+        .custom-toast.show {
+            bottom: 40px;
+            /* Muncul ke atas */
         }
 
         /* --- NAVIGATION FOOTER --- */
@@ -404,9 +434,9 @@
                             Suka
                         </button>
 
-                        <button class="btn-action"
-                            style="background: transparent; color: var(--primary); border: 2px solid #eee;">
-                            <i class="ri-share-forward-line"></i> Bagikan
+                        <button id="btnShare" class="btn-action btn-share">
+                            <i id="shareIcon" class="ri-share-forward-line"></i>
+                            <span id="shareText">Bagikan</span>
                         </button>
                     </div>
 
@@ -416,7 +446,56 @@
         </div>
     </section>
 
+    <div id="copyToast" class="custom-toast">
+        <i class="ri-links-fill text-lg"></i> Link berhasil disalin ke clipboard!
+    </div>
+
     <script>
+        document.getElementById('btnShare').addEventListener('click', async () => {
+            const btn = document.getElementById('btnShare');
+            const icon = document.getElementById('shareIcon');
+            const text = document.getElementById('shareText');
+
+            const shareData = {
+                title: document.title,
+                text: 'Coba lihat karya menarik ini dari Informatics Study Club!',
+                url: window.location.href
+            };
+
+            // Jika device mendukung Web Share API (Biasanya Mobile)
+            if (navigator.share && /Mobi|Android/i.test(navigator.userAgent)) {
+                try {
+                    await navigator.share(shareData);
+                } catch (err) {
+                    console.log('User membatalkan share:', err);
+                }
+            } else {
+                // FALLBACK: Copy to Clipboard untuk PC / Browser yang tidak support
+                navigator.clipboard.writeText(window.location.href).then(() => {
+
+                    // 1. Ubah Tampilan Tombol Sementara
+                    btn.classList.add('copied');
+                    icon.classList.replace('ri-share-forward-line', 'ri-check-double-line');
+                    text.innerText = 'Tersalin!';
+
+                    // 2. Tampilkan Toast Melayang
+                    const toast = document.getElementById('copyToast');
+                    toast.classList.add('show');
+
+                    // 3. Kembalikan seperti semula setelah 3 detik
+                    setTimeout(() => {
+                        btn.classList.remove('copied');
+                        icon.classList.replace('ri-check-double-line', 'ri-share-forward-line');
+                        text.innerText = 'Bagikan';
+                        toast.classList.remove('show');
+                    }, 3000);
+
+                }).catch(err => {
+                    console.error('Gagal menyalin teks: ', err);
+                });
+            }
+        });
+
         function toggleLike(btn, projectId) {
             // 1. Cek Login
             @guest
@@ -429,29 +508,26 @@
         const countSpan = document.getElementById(`like-count-${projectId}`);
         let currentCount = parseInt(countSpan.innerText);
 
-        // 3. Cek Status Saat Ini (Berdasarkan class 'liked')
+        // 3. Cek Status Saat Ini
         const isCurrentlyLiked = btn.classList.contains('liked');
 
-        // 4. OPTIMISTIC UI UPDATE (Ubah tampilan DULUAN sebelum request selesai)
+        // 4. OPTIMISTIC UI UPDATE
         if (isCurrentlyLiked) {
-            // Jika tadinya liked -> jadi unlike (Hapus Merah)
             btn.classList.remove('liked');
             icon.classList.remove('ri-heart-fill');
             icon.classList.add('ri-heart-line');
             countSpan.innerText = currentCount - 1;
         } else {
-            // Jika tadinya unliked -> jadi like (Tambah Merah)
             btn.classList.add('liked');
             icon.classList.remove('ri-heart-line');
             icon.classList.add('ri-heart-fill');
             countSpan.innerText = currentCount + 1;
 
-            // Animasi kecil
             icon.style.transform = 'scale(1.2)';
             setTimeout(() => icon.style.transform = 'scale(1)', 200);
         }
 
-        // 5. Kirim Request ke Server (Background Process)
+        // 5. Kirim Request
         fetch(`/projects/${projectId}/like`, {
                 method: 'POST',
                 headers: {
@@ -464,15 +540,13 @@
                 return response.json();
             })
             .then(data => {
-                // Sinkronisasi ulang angka dari server
                 if (data.count !== undefined) {
                     countSpan.innerText = data.count;
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-
-                // 6. ROLLBACK (Jika error, kembalikan tampilan ke awal)
+                // Rollback
                 if (isCurrentlyLiked) {
                     btn.classList.add('liked');
                     icon.classList.replace('ri-heart-line', 'ri-heart-fill');
@@ -482,7 +556,6 @@
                     icon.classList.replace('ri-heart-fill', 'ri-heart-line');
                     countSpan.innerText = currentCount;
                 }
-                alert('Gagal memproses like. Periksa koneksi internet Anda.');
             });
         }
     </script>
