@@ -34,42 +34,44 @@
         </div>
 
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-            <table class="w-full text-left border-collapse">
-                <thead class="bg-gray-50 text-gray-500 uppercase text-xs">
-                    <tr>
-                        <th class="px-6 py-4">Foto</th>
-                        <th class="px-6 py-4">Nama</th>
-                        <th class="px-6 py-4">Jabatan (Position)</th>
-                        <th class="px-6 py-4 text-right">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-100">
-                    @forelse($advisors as $dosen)
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-6 py-4">
-                                <img src="{{ asset('uploads/advisors/' . $dosen->photo) }}"
-                                    class="w-12 h-12 rounded-full object-cover border border-gray-200">
-                            </td>
-                            <td class="px-6 py-4 font-medium text-gray-800">{{ $dosen->name }}</td>
-                            <td class="px-6 py-4 text-indigo-600 text-sm font-medium">{{ $dosen->position }}</td>
-                            <td class="px-6 py-4 text-right space-x-2">
-                                <button @click="editData({{ $dosen }})"
-                                    class="text-indigo-600 hover:text-indigo-900 font-medium text-sm">Edit</button>
-                                <form action="{{ route('advisors.destroy', $dosen->id) }}" method="POST"
-                                    class="inline-block" onsubmit="return confirm('Hapus data dosen ini?')">
-                                    @csrf @method('DELETE')
-                                    <button type="submit"
-                                        class="text-red-500 hover:text-red-700 font-medium text-sm">Hapus</button>
-                                </form>
-                            </td>
-                        </tr>
-                    @empty
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse min-w-[800px]">
+                    <thead class="bg-gray-50 text-gray-500 uppercase text-xs">
                         <tr>
-                            <td colspan="4" class="px-6 py-8 text-center text-gray-400">Belum ada data dosen.</td>
+                            <th class="px-6 py-4">Foto</th>
+                            <th class="px-6 py-4">Nama</th>
+                            <th class="px-6 py-4">Jabatan (Position)</th>
+                            <th class="px-6 py-4 text-right">Aksi</th>
                         </tr>
-                    @endforelse
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        @forelse($advisors as $dosen)
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4">
+                                    <img src="{{ asset('uploads/advisors/' . $dosen->photo) }}"
+                                        class="w-12 h-12 rounded-full object-cover border border-gray-200">
+                                </td>
+                                <td class="px-6 py-4 font-medium text-gray-800">{{ $dosen->name }}</td>
+                                <td class="px-6 py-4 text-indigo-600 text-sm font-medium">{{ $dosen->position }}</td>
+                                <td class="px-6 py-4 text-right space-x-2">
+                                    <button @click="editData({{ $dosen }})"
+                                        class="text-indigo-600 hover:text-indigo-900 font-medium text-sm">Edit</button>
+                                    <form action="{{ route('advisors.destroy', $dosen->id) }}" method="POST"
+                                        class="inline-block" onsubmit="return confirm('Hapus data dosen ini?')">
+                                        @csrf @method('DELETE')
+                                        <button type="submit"
+                                            class="text-red-500 hover:text-red-700 font-medium text-sm">Hapus</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="4" class="px-6 py-8 text-center text-gray-400">Belum ada data dosen.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <div x-show="showModal" style="display: none;" class="fixed inset-0 z-50 overflow-y-auto" aria-modal="true">
