@@ -3,8 +3,8 @@
 @push('styles')
     <style>
         /* =========================================
-                                               PROJECT DETAIL STYLES
-                                               ========================================= */
+                                                       PROJECT DETAIL STYLES
+                                                       ========================================= */
         .project-header {
             padding: 160px 5% 80px;
             background: linear-gradient(135deg, var(--primary) 0%, #081226 100%);
@@ -388,23 +388,6 @@
                                 <span style="font-size: 0.85rem; color: #aaa;">Tidak ada anggota tim.</span>
                             @endif
 
-                        </div>
-                    </div>
-
-                    <div class="info-group">
-                        <span class="info-label">Tech Stack</span>
-                        <div class="tech-stack">
-                            @if ($project->division == 'mobile')
-                                <span class="tech-badge">Flutter</span><span class="tech-badge">Dart</span>
-                            @elseif($project->division == 'website')
-                                <span class="tech-badge">Laravel</span><span class="tech-badge">Tailwind</span>
-                            @elseif($project->division == 'iot')
-                                <span class="tech-badge">Arduino</span><span class="tech-badge">ESP32</span>
-                            @elseif($project->division == 'sistem_cerdas')
-                                <span class="tech-badge">Python</span><span class="tech-badge">TensorFlow</span>
-                            @else
-                                <span class="tech-badge">Figma</span><span class="tech-badge">Design Thinking</span>
-                            @endif
                         </div>
                     </div>
 
