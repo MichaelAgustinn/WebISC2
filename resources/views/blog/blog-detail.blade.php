@@ -1016,7 +1016,7 @@
 
         // Tutup semua menu komentar lain
         document.querySelectorAll('.comment-dropdown-menu').forEach(el => {
-            if (el.id !== 'cmt-menu-' + id) el.classList.remove('active');
+            if (el.id != 'cmt-menu-' + id) el.classList.remove('active');
         });
 
         // Toggle menu ini
