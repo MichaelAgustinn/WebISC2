@@ -905,7 +905,7 @@
                                             {{ $comment->body }}
                                         </p>
 
-                                        @if (Auth::id() === $comment->user_id)
+                                        @if (Auth::id() == $comment->user_id)
                                             <div id="edit-form-{{ $comment->id }}" class="edit-form-container">
                                                 <form action="{{ route('comments.update', $comment->id) }}"
                                                     method="POST">
