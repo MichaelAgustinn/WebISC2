@@ -5,7 +5,7 @@
     </div>
 
     <div class="blog-grid">
-        @forelse ($posts->take(3) as $post)
+        @forelse ($posts->take(4) as $post)
             <article class="blog-card">
                 <div class="card-img">
                     @if ($post->thumbnail)
