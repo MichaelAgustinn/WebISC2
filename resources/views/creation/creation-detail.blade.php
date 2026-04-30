@@ -3,8 +3,8 @@
 @push('styles')
     <style>
         /* =========================================
-                                       PROJECT DETAIL STYLES
-                                    ========================================= */
+                PROJECT DETAIL STYLES
+            ========================================= */
         .project-header {
             padding: 160px 5% 80px;
             background: linear-gradient(135deg, var(--primary) 0%, #081226 100%);
@@ -20,6 +20,11 @@
             display: flex;
             align-items: center;
             gap: 10px;
+        }
+
+        .project-breadcrumb a {
+            color: var(--accent);
+            text-decoration: none;
         }
 
         .project-header h1 {
@@ -85,6 +90,11 @@
             font-size: 1.05rem;
             line-height: 1.8;
             white-space: pre-line;
+            /* PERBAIKAN: Teks Rata Kanan Kiri (Justify) */
+            text-align: justify;
+            text-justify: inter-word;
+            hyphens: auto;
+            -webkit-hyphens: auto;
         }
 
         /* --- SIDEBAR INFO --- */
@@ -198,11 +208,9 @@
         .custom-toast {
             position: fixed;
             bottom: -100px;
-            /* Sembunyi di bawah layar */
             left: 50%;
             transform: translateX(-50%);
             background: #10b981;
-            /* Warna hijau sukses */
             color: white;
             padding: 12px 24px;
             border-radius: 50px;
@@ -218,7 +226,6 @@
 
         .custom-toast.show {
             bottom: 40px;
-            /* Muncul ke atas */
         }
 
         /* --- NAVIGATION FOOTER --- */
@@ -235,6 +242,7 @@
             align-items: center;
             gap: 15px;
             text-decoration: none;
+            transition: 0.3s;
         }
 
         .nav-project-text span {
@@ -266,6 +274,7 @@
             font-size: 1.2rem;
             color: var(--primary);
             transition: 0.3s;
+            flex-shrink: 0;
         }
 
         .nav-project-link:hover .nav-icon-box {
@@ -273,6 +282,7 @@
             color: var(--accent);
         }
 
+        /* --- RESPONSIVE DESIGN (TABLET) --- */
         @media (max-width: 1024px) {
             .project-wrapper {
                 grid-template-columns: 1fr;
@@ -293,10 +303,57 @@
             }
         }
 
+        /* --- RESPONSIVE DESIGN (MOBILE) --- */
         @media (max-width: 768px) {
+            .project-header {
+                padding: 100px 5% 40px;
+                /* Padding header dikurangi */
+            }
+
+            .project-header h1 {
+                font-size: 1.8rem;
+                /* Judul jauh lebih kecil */
+            }
+
+            .project-tag-line {
+                font-size: 0.95rem;
+            }
+
+            .project-container {
+                padding: 2rem 0;
+                /* Padding container dikurangi */
+            }
+
             .project-nav-footer {
                 flex-direction: column;
-                gap: 2rem;
+                gap: 15px;
+            }
+
+            /* Desain Navigasi Next/Prev di HP dirapikan menjadi kotak (card) */
+            .nav-project-link {
+                width: 100%;
+                background: #f8fafc;
+                padding: 15px;
+                border-radius: 12px;
+                border: 1px solid #eee;
+                justify-content: flex-start !important;
+            }
+
+            /* Paksa tombol Next agar rata kiri di layar HP */
+            .nav-next {
+                flex-direction: row !important;
+                text-align: left !important;
+            }
+
+            .nav-icon-box {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+
+            .nav-project-text h5 {
+                font-size: 1rem;
+                /* Ukuran judul navigasi lebih pas */
             }
         }
     </style>
@@ -342,8 +399,8 @@
                     @endif
 
                     @if ($nextProject)
-                        <a href="{{ route('landing.creation.detail', $nextProject->slug) }}" class="nav-project-link"
-                            style="text-align: right; flex-direction: row-reverse;">
+                        <a href="{{ route('landing.creation.detail', $nextProject->slug) }}"
+                            class="nav-project-link nav-next" style="text-align: right; flex-direction: row-reverse;">
                             <div class="nav-icon-box"><i class="ri-arrow-right-line"></i></div>
                             <div class="nav-project-text">
                                 <span>Selanjutnya</span>
@@ -449,7 +506,9 @@
     <div id="copyToast" class="custom-toast">
         <i class="ri-links-fill text-lg"></i> Link berhasil disalin ke clipboard!
     </div>
+@endsection
 
+@push('scripts')
     <script>
         document.getElementById('btnShare').addEventListener('click', async () => {
             const btn = document.getElementById('btnShare');
@@ -559,4 +618,4 @@
             });
         }
     </script>
-@endsection
+@endpush
