@@ -17,9 +17,10 @@
                 </div>
                 <div class="blog-date">{{ $post->created_at->format('d-m-Y') ?? '' }}</div>
                 <div class="blog-content">
-                    <h3 class="blog-title">{{ $post->title ?? '' }}</h3>
+                    <h3 class="blog-title">{{ \Illuminate\Support\Str::words($post->title, 7, '...') }}</h3>
                     <p style="font-size: 0.9rem; color: #666; margin-bottom: 1rem;">
-                        {!! \Illuminate\Support\Str::words($post->description, 10, '...') !!}</p>
+                        {!! \Illuminate\Support\Str::words($post->description, 7, '...') !!}</p>
+                        </br>
                     <a href="{{ route('blog.show', $post->slug) }}" class="read-more">Baca Selengkapnya <i
                             class="ri-arrow-right-line"></i></a>
                 </div>
