@@ -5,7 +5,7 @@
     </div>
 
     <div class="blog-grid">
-        @forelse ($posts->take(4) as $post)
+        @forelse ($posts->take(3) as $post)
             <article class="blog-card">
                 <div class="card-img">
                     @if ($post->thumbnail)
@@ -20,7 +20,7 @@
                     <h3 class="blog-title">{{ \Illuminate\Support\Str::words($post->title, 7, '...') }}</h3>
                     <p style="font-size: 0.9rem; color: #666; margin-bottom: 1rem;">
                         {!! \Illuminate\Support\Str::words($post->description, 7, '...') !!}</p>
-                        </br>
+                    </br>
                     <a href="{{ route('blog.show', $post->slug) }}" class="read-more">Baca Selengkapnya <i
                             class="ri-arrow-right-line"></i></a>
                 </div>
