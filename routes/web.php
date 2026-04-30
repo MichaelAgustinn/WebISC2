@@ -59,7 +59,7 @@ Route::get('/', function () {
         ->unique('user_id')
         ->take(5);
 
-    $posts = Post::latest()->take(5)->get();
+    $posts = Post::latest()->take(3)->get();
 
     return view('index', compact('data', 'faqs', 'teams', 'recentProjects', 'weeklyTop', 'allTimeTop', 'posts'));
 })->name('home');
