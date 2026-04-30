@@ -213,7 +213,7 @@ class PostController extends Controller
 
     public function destroyComment(Comment $comment)
     {
-        if (Auth::id() !== $comment->user_id) {
+        if (Auth::id() != $comment->user_id) {
             abort(403, 'Anda tidak berhak menghapus komentar ini.');
         }
 
@@ -223,7 +223,7 @@ class PostController extends Controller
 
     public function updateComment(Request $request, Comment $comment)
     {
-        if (Auth::id() !== $comment->user_id) {
+        if (Auth::id() != $comment->user_id) {
             abort(403, 'Anda tidak berhak mengedit komentar ini.');
         }
 
