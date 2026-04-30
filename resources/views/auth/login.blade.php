@@ -78,13 +78,13 @@
             color: var(--accent);
         }
 
-        .login-box span {
+        .login-box span.border-anim {
             position: absolute;
             display: block;
             z-index: 1;
         }
 
-        .login-box>span:nth-of-type(1) {
+        .login-box>span.border-anim:nth-of-type(1) {
             top: 0;
             left: -100%;
             width: 100%;
@@ -93,7 +93,7 @@
             animation: btn-anim1 6s linear infinite;
         }
 
-        .login-box>span:nth-of-type(2) {
+        .login-box>span.border-anim:nth-of-type(2) {
             top: -100%;
             right: 0;
             width: 2px;
@@ -103,7 +103,7 @@
             animation-delay: 1.5s;
         }
 
-        .login-box>span:nth-of-type(3) {
+        .login-box>span.border-anim:nth-of-type(3) {
             bottom: 0;
             right: -100%;
             width: 100%;
@@ -113,7 +113,7 @@
             animation-delay: 3s;
         }
 
-        .login-box>span:nth-of-type(4) {
+        .login-box>span.border-anim:nth-of-type(4) {
             bottom: -100%;
             left: 0;
             width: 2px;
@@ -296,13 +296,36 @@
             font-family: 'Poppins', sans-serif;
             transition: 0.3s;
             box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
-        .btn-submit:hover {
+        .btn-submit:hover:not(:disabled) {
             background: #fff;
             color: var(--primary);
             box-shadow: 0 0 25px var(--accent);
             transform: translateY(-2px);
+        }
+
+        /* --- TAMBAHAN UNTUK DISABLE STATE & ANIMASI --- */
+        .btn-submit:disabled {
+            background: #b09647;
+            opacity: 0.8;
+            cursor: not-allowed;
+            transform: translateY(0);
+            box-shadow: none;
+        }
+
+        @keyframes spin-anim {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .spin-icon {
+            animation: spin-anim 1s linear infinite;
+            display: inline-block;
         }
 
         /* Error Message Style */
@@ -322,7 +345,7 @@
         <a href="/" class="back-arrow" title="Kembali ke Beranda">
             <i class="ri-arrow-left-line"></i>
         </a>
-        <span></span><span></span><span></span><span></span>
+        <span class="border-anim"></span><span class="border-anim"></span><span class="border-anim"></span><span class="border-anim"></span>
 
         <div class="login-logo">
             <img src="{{ asset('Assets/all-logo.png') }}" alt="Logo" style="height: 130px">
@@ -335,8 +358,11 @@
                 {{ session('status') }}
             </div>
         @endif
-        <form action="{{ route('login.post') }}" method="POST">
-            @csrf <div class="user-box">
+        
+        <!-- Tambahkan ID loginForm -->
+        <form action="{{ route('login.post') }}" method="POST" id="loginForm">
+            @csrf 
+            <div class="user-box">
                 <input type="text" name="email" value="{{ old('email') }}" required>
                 <label>Email</label>
                 @error('email')
@@ -355,7 +381,10 @@
 
             <a href="{{ route('password.request') }}" class="forgot-pass">Lupa sandi?</a>
 
-            <button type="submit" class="btn-submit">Masuk Sekarang</button>
+            <!-- Tambahkan ID btnLogin dan btnText -->
+            <button type="submit" class="btn-submit" id="btnLogin">
+                <span id="btnText">Masuk Sekarang</span>
+            </button>
 
             <div class="register-link">
                 Belum punya akun? <a href="{{ route('register') }}">Buat akun</a>
@@ -369,9 +398,11 @@
         const loginCard = document.getElementById('loginCard');
         const togglePassword = document.getElementById('togglePassword');
         const passwordInput = document.getElementById('passwordInput');
-        let width, height;
-        let particles = [],
-            orbs = [];
+        
+        // Deklarasi variabel tombol & form
+        const loginForm = document.getElementById('loginForm');
+        const btnLogin = document.getElementById('btnLogin');
+        const btnText = document.getElementById('btnText');
 
         togglePassword.addEventListener('click', function() {
             const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
@@ -379,6 +410,22 @@
             this.classList.toggle('ri-eye-off-line');
             this.classList.toggle('ri-eye-line');
         });
+
+        // --- SCRIPT UNTUK MENCEGAH DOUBLE SUBMIT ---
+        loginForm.addEventListener('submit', function(e) {
+            // Pastikan form sudah valid sesuai atribut "required" di HTML
+            if (this.checkValidity()) {
+                // Nonaktifkan tombol
+                btnLogin.disabled = true;
+                // Ubah teks & tambahkan icon berputar
+                btnText.innerHTML = '<i class="ri-loader-4-line spin-icon"></i> MEMPROSES...';
+            }
+        });
+        // -------------------------------------------
+
+        let width, height;
+        let particles = [],
+            orbs = [];
 
         function resize() {
             width = canvas.width = window.innerWidth;
