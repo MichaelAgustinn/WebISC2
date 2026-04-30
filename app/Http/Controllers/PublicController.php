@@ -46,8 +46,8 @@ class PublicController extends Controller
         $project = Project::where('status', true)->with('users')->where('slug', $slug)->firstOrFail();
 
         // Logic Next/Prev Project
-        $prevProject = Project::where('id', '<', $project->id)->orderBy('id', 'desc')->first();
-        $nextProject = Project::where('id', '>', $project->id)->orderBy('id', 'asc')->first();
+        $prevProject = Project::where('status', true)->where('id', '<', $project->id)->orderBy('id', 'desc')->first();
+        $nextProject = Project::where('status', true)->where('id', '>', $project->id)->orderBy('id', 'asc')->first();
         $landingData = LandingPage::pluck('value', 'key')->toArray();
         return view('creation.creation-detail', ['project' => $project, 'prevProject' => $prevProject, 'nextProject' => $nextProject, 'data' => $landingData]);
     }
