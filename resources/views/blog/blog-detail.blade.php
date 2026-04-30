@@ -873,7 +873,7 @@
                                                     class="comment-date">{{ $comment->created_at->diffForHumans() }}</span>
                                             </div>
 
-                                            @if (Auth::id() === $comment->user_id)
+                                            @if (Auth::id() == $comment->user_id)
                                                 <div class="comment-actions">
                                                     <button type="button" class="btn-more"
                                                         onclick="toggleCmtMenu({{ $comment->id }}, event)">
