@@ -4,22 +4,24 @@
 
 @push('styles')
     <style>
-        /* Menyesuaikan style CKEditor dengan desain form kamu tanpa merusak UI asli */
+        /* Menyesuaikan style CKEditor dengan desain form tanpa merusak UI asli */
         .ck-editor__editable_inline {
             min-height: 60vh;
             font-size: 1.125rem;
             color: #4b5563;
             border: none !important;
             box-shadow: none !important;
-            padding-left: 0 !important;
-            padding-right: 0 !important;
+            padding: 20px 0 !important;
         }
 
+        /* MEMBUAT TOOLBAR RESPONSIVE DI MOBILE */
         .ck-toolbar {
             border: none !important;
             border-bottom: 2px solid #f3f4f6 !important;
             background: #ffffff !important;
             padding: 10px 0 !important;
+            flex-wrap: wrap !important;
+            /* Membuat menu turun ke bawah jika layar sempit */
         }
 
         .ck.ck-editor__main>.ck-editor__editable:not(.ck-focused) {
@@ -78,7 +80,7 @@
 
                         <div class="w-full mt-4">
                             <textarea name="description" id="editor"
-                                class="w-full w-full border-0 focus:ring-0 text-lg text-gray-600 leading-relaxed placeholder-gray-300 px-0 resize-none min-h-[60vh]"
+                                class="w-full border-0 focus:ring-0 text-lg text-gray-600 leading-relaxed placeholder-gray-300 px-0 resize-none min-h-[60vh]"
                                 placeholder="Mulailah menulis cerita Anda di sini...">{{ old('description') }}</textarea>
                         </div>
 
@@ -86,7 +88,6 @@
                 </div>
 
                 <div class="lg:col-span-1 space-y-6">
-
                     <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 sticky top-6 z-10">
                         <h3 class="font-semibold text-gray-800 mb-4 border-b pb-2">Publikasi</h3>
 
@@ -97,7 +98,7 @@
                             </div>
                             <div class="flex justify-between">
                                 <span>Penulis:</span>
-                                <span class="font-medium text-gray-800">{{ Auth::user()->name }}</span>
+                                <span class="font-medium text-gray-800">{{ Auth::user()->name ?? 'Admin' }}</span>
                             </div>
                         </div>
 
@@ -158,21 +159,46 @@
     </div>
 
     {{-- SCRIPTS --}}
-    <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/39.0.2/super-build/ckeditor.js"></script>
 
     <script>
-        // Init CKEditor pada textarea #editor
-        ClassicEditor
-            .create(document.querySelector('#editor'), {
-                toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote',
+        // Init CKEditor Super Build
+        CKEDITOR.ClassicEditor.create(document.querySelector('#editor'), {
+            toolbar: {
+                items: [
+                    'heading', '|',
+                    'fontSize', 'fontFamily', '|',
+                    'fontColor', 'fontBackgroundColor', '|',
+                    'bold', 'italic', 'underline', 'strikethrough', '|',
+                    'alignment', '|',
+                    'bulletedList', 'numberedList', 'todoList', '|',
+                    'outdent', 'indent', '|',
+                    'link', 'insertTable', 'mediaEmbed', 'blockQuote', 'horizontalLine', '|',
                     'undo', 'redo'
-                ]
-            })
-            .catch(error => {
-                console.error(error);
-            });
+                ],
+                shouldNotGroupWhenFull: true // Mencegah menu disembunyikan di layar kecil (Responsive)
+            },
+            placeholder: 'Mulailah menulis cerita Anda di sini...',
+            list: {
+                properties: {
+                    styles: true,
+                    startIndex: true,
+                    reversed: true
+                }
+            },
+            // Menghilangkan plugin premium yang berbayar agar tidak muncul warning
+            removePlugins: [
+                'CKBox', 'CKFinder', 'EasyImage', 'RealTimeCollaborativeComments',
+                'RealTimeCollaborativeTrackChanges', 'RealTimeCollaborativeRevisionHistory', 'PresenceList',
+                'Comments', 'TrackChanges', 'TrackChangesData', 'RevisionHistory', 'Pagination', 'WProofreader',
+                'MathType', 'SlashCommand', 'Template', 'DocumentOutline', 'FormatPainter', 'TableOfContents',
+                'PasteFromOfficeEnhanced', 'CaseChange'
+            ]
+        }).catch(error => {
+            console.error(error);
+        });
 
-        // --- 1. LOGIKA MULTI-TAGS (SAMA PERSIS) ---
+        // --- 1. LOGIKA MULTI-TAGS ---
         const tagContainer = document.getElementById('tagContainer');
         const tagInput = document.getElementById('tagInput');
         const hiddenInput = document.getElementById('hiddenCategories');
@@ -220,21 +246,7 @@
             renderTags();
         }
 
-        // --- 2. AUTO RESIZE TEXTAREA (SAMA PERSIS - dibiarkan agar tidak merusak kodemu) ---
-        const textarea = document.getElementById('editor');
-
-        function resizeTextarea() {
-            if (textarea) {
-                textarea.style.height = 'auto';
-                textarea.style.height = (textarea.scrollHeight) + 'px';
-            }
-        }
-        window.addEventListener('load', resizeTextarea);
-        if (textarea) {
-            textarea.addEventListener('input', resizeTextarea);
-        }
-
-        // --- 3. IMAGE PREVIEW (SAMA PERSIS) ---
+        // --- 2. IMAGE PREVIEW ---
         function previewImage(event) {
             const input = event.target;
             const previewBox = document.getElementById('image-preview');

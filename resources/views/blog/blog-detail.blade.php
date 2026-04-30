@@ -695,6 +695,22 @@
             cursor: pointer;
         }
 
+        .article-body ul {
+            list-style-type: disc !important;
+            margin-left: 1.5rem !important;
+            padding-left: 1rem !important;
+        }
+
+        .article-body ol {
+            list-style-type: decimal !important;
+            margin-left: 1.5rem !important;
+            padding-left: 1rem !important;
+        }
+
+        .article-body p {
+            margin-bottom: 1rem;
+        }
+
         @media (max-width: 1024px) {
             .blog-wrapper {
                 grid-template-columns: 1fr;
