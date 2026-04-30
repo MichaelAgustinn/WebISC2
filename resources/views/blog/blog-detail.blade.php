@@ -87,10 +87,17 @@
             color: #334155;
             font-size: 1.05rem;
             line-height: 1.8;
+            overflow-wrap: break-word;
+            /* Mencegah teks keluar kotak */
         }
 
+        /* PERBAIKAN: Paragraf Rata Kanan Kiri (Justify) Tanpa Spasi Lebar */
         .article-body p {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
+            text-align: justify;
+            text-justify: inter-word;
+            hyphens: auto;
+            -webkit-hyphens: auto;
         }
 
         .article-body h2 {
@@ -130,6 +137,18 @@
 
         .article-body li {
             margin-bottom: 0.5rem;
+        }
+
+        .article-body ul {
+            list-style-type: disc !important;
+            margin-left: 1.5rem !important;
+            padding-left: 1rem !important;
+        }
+
+        .article-body ol {
+            list-style-type: decimal !important;
+            margin-left: 1.5rem !important;
+            padding-left: 1rem !important;
         }
 
         .article-body blockquote {
@@ -454,13 +473,6 @@
             font-weight: 700;
         }
 
-        .active-cat {
-            color: var(--primary) !important;
-            font-weight: 700 !important;
-            background: #f1f5f9 !important;
-            border-left: 3px solid var(--accent);
-        }
-
         /* --- 2. STYLE KHUSUS KOMENTAR & DROPDOWN --- */
         .comments-section {
             margin-top: 4rem;
@@ -476,7 +488,6 @@
             font-weight: 700;
         }
 
-        /* Layout Item Komentar - PENTING: Overflow Visible */
         .comment-item {
             display: flex;
             gap: 1.5rem;
@@ -485,7 +496,6 @@
             padding-bottom: 2rem;
             position: relative;
             overflow: visible !important;
-            /* Agar dropdown tidak terpotong */
         }
 
         .comment-item:last-child {
@@ -531,7 +541,6 @@
             margin: 0;
         }
 
-        /* Tombol Titik Tiga */
         .comment-actions {
             position: relative;
             display: inline-block;
@@ -556,7 +565,6 @@
             color: var(--primary);
         }
 
-        /* Dropdown Menu - Menggunakan Class Unik (.comment-dropdown) BUKAN .dropdown-item */
         .comment-dropdown-menu {
             display: none;
             position: absolute;
@@ -568,7 +576,6 @@
             border-radius: 8px;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
             z-index: 100;
-            /* Lebih tinggi dari elemen biasa */
             overflow: hidden;
         }
 
@@ -605,7 +612,6 @@
             background: #fef2f2;
         }
 
-        /* Form Edit Inline */
         .edit-form-container {
             display: none;
             margin-top: 10px;
@@ -674,14 +680,18 @@
             font-weight: 700;
         }
 
-        .btn-cancel {
-            background: #f1f5f9;
-            color: #64748b;
-            border: none;
+        .btn-cancel,
+        .btn-save {
             padding: 6px 15px;
             border-radius: 5px;
             font-size: 0.8rem;
             cursor: pointer;
+        }
+
+        .btn-cancel {
+            background: #f1f5f9;
+            color: #64748b;
+            border: none;
             margin-right: 5px;
         }
 
@@ -689,28 +699,11 @@
             background: var(--primary);
             color: #fff;
             border: none;
-            padding: 6px 15px;
-            border-radius: 5px;
-            font-size: 0.8rem;
-            cursor: pointer;
         }
 
-        .article-body ul {
-            list-style-type: disc !important;
-            margin-left: 1.5rem !important;
-            padding-left: 1rem !important;
-        }
+        /* --- 3. RESPONSIVE DESIGN (TABLET & MOBILE) --- */
 
-        .article-body ol {
-            list-style-type: decimal !important;
-            margin-left: 1.5rem !important;
-            padding-left: 1rem !important;
-        }
-
-        .article-body p {
-            margin-bottom: 1rem;
-        }
-
+        /* Tablet & Layar Menengah */
         @media (max-width: 1024px) {
             .blog-wrapper {
                 grid-template-columns: 1fr;
@@ -726,7 +719,62 @@
             }
 
             .article-header h1 {
-                font-size: 2rem;
+                font-size: 2.2rem;
+            }
+        }
+
+        /* Khusus Mobile (HP) */
+        @media (max-width: 768px) {
+            .article-header {
+                padding: 100px 5% 40px;
+                /* Padding dikurangi */
+            }
+
+            .article-header h1 {
+                font-size: 1.6rem;
+                /* Judul jauh lebih kecil */
+                margin-bottom: 1rem;
+            }
+
+            .article-meta-header {
+                font-size: 0.85rem;
+                gap: 12px;
+            }
+
+            .blog-container {
+                padding: 2rem 0;
+                /* Jarak area blog dikurangi */
+            }
+
+            .article-body {
+                font-size: 1rem;
+                /* Ukuran font paragraf sedikit disesuaikan */
+            }
+
+            /* Perbaikan Tombol Next/Prev */
+            .post-navigation {
+                grid-template-columns: 1fr;
+                /* Di HP ditumpuk atas-bawah */
+                gap: 15px;
+            }
+
+            .nav-card {
+                text-align: left !important;
+                /* Reset agar semuanya sejajar ke kiri */
+                padding: 1rem;
+                /* Ukuran kotak diperkecil */
+            }
+
+            .nav-title {
+                font-size: 0.95rem;
+                /* Judul artikel pada tombol diperkecil */
+            }
+
+            .author-box {
+                flex-direction: column;
+                /* Ditumpuk atas bawah */
+                text-align: center;
+                padding: 1.5rem;
             }
         }
     </style>
@@ -835,13 +883,13 @@
                         @endif
 
                         @if ($nextPost)
-                            <a href="{{ route('blog.show', $nextPost->slug) }}" class="nav-card"
+                            <a href="{{ route('blog.show', $nextPost->slug) }}" class="nav-card right-card"
                                 style="text-align: right;">
                                 <span class="nav-label">Selanjutnya <i class="ri-arrow-right-line"></i></span>
                                 <h5 class="nav-title">{{ Str::limit($nextPost->title, 40) }}</h5>
                             </a>
                         @else
-                            <div class="nav-card disabled" style="text-align: right;">
+                            <div class="nav-card disabled right-card" style="text-align: right;">
                                 <span class="nav-label">Selanjutnya <i class="ri-arrow-right-line"></i></span>
                                 <h5 class="nav-title">-</h5>
                             </div>
@@ -1009,53 +1057,55 @@
     </section>
 @endsection
 
-<script>
-    /** 1. Toggle Comment Menu */
-    function toggleCmtMenu(id, event) {
-        if (event) event.stopPropagation();
+@push('scripts')
+    <script>
+        /** 1. Toggle Comment Menu */
+        function toggleCmtMenu(id, event) {
+            if (event) event.stopPropagation();
 
-        // Tutup semua menu komentar lain
-        document.querySelectorAll('.comment-dropdown-menu').forEach(el => {
-            if (el.id != 'cmt-menu-' + id) el.classList.remove('active');
-        });
-
-        // Toggle menu ini
-        const menu = document.getElementById('cmt-menu-' + id);
-        if (menu) menu.classList.toggle('active');
-    }
-
-    /** 2. Enable Edit Comment */
-    function enableCmtEdit(id) {
-        // Hide Text
-        const textBody = document.getElementById('comment-body-' + id);
-        if (textBody) textBody.style.display = 'none';
-
-        // Show Form
-        const editForm = document.getElementById('edit-form-' + id);
-        if (editForm) editForm.classList.add('active');
-
-        // Hide Menu
-        const menu = document.getElementById('cmt-menu-' + id);
-        if (menu) menu.classList.remove('active');
-    }
-
-    /** 3. Cancel Edit Comment */
-    function cancelCmtEdit(id) {
-        // Show Text
-        const textBody = document.getElementById('comment-body-' + id);
-        if (textBody) textBody.style.display = 'block';
-
-        // Hide Form
-        const editForm = document.getElementById('edit-form-' + id);
-        if (editForm) editForm.classList.remove('active');
-    }
-
-    /** 4. Click Outside (Khusus Comment Dropdown) */
-    window.addEventListener('click', function(e) {
-        if (!e.target.closest('.btn-more')) {
+            // Tutup semua menu komentar lain
             document.querySelectorAll('.comment-dropdown-menu').forEach(el => {
-                el.classList.remove('active');
+                if (el.id != 'cmt-menu-' + id) el.classList.remove('active');
             });
+
+            // Toggle menu ini
+            const menu = document.getElementById('cmt-menu-' + id);
+            if (menu) menu.classList.toggle('active');
         }
-    });
-</script>
+
+        /** 2. Enable Edit Comment */
+        function enableCmtEdit(id) {
+            // Hide Text
+            const textBody = document.getElementById('comment-body-' + id);
+            if (textBody) textBody.style.display = 'none';
+
+            // Show Form
+            const editForm = document.getElementById('edit-form-' + id);
+            if (editForm) editForm.classList.add('active');
+
+            // Hide Menu
+            const menu = document.getElementById('cmt-menu-' + id);
+            if (menu) menu.classList.remove('active');
+        }
+
+        /** 3. Cancel Edit Comment */
+        function cancelCmtEdit(id) {
+            // Show Text
+            const textBody = document.getElementById('comment-body-' + id);
+            if (textBody) textBody.style.display = 'block';
+
+            // Hide Form
+            const editForm = document.getElementById('edit-form-' + id);
+            if (editForm) editForm.classList.remove('active');
+        }
+
+        /** 4. Click Outside (Khusus Comment Dropdown) */
+        window.addEventListener('click', function(e) {
+            if (!e.target.closest('.btn-more')) {
+                document.querySelectorAll('.comment-dropdown-menu').forEach(el => {
+                    el.classList.remove('active');
+                });
+            }
+        });
+    </script>
+@endpush
