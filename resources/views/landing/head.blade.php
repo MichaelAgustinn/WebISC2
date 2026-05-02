@@ -1166,10 +1166,9 @@
 
             .blog-card:nth-child(3) {
                 grid-column: 1 / -1;
-
                 justify-self: center;
-                width: 100%;
-                max-width: 400px;
+                width: calc(50% - 1rem);
+                max-width: none;
             }
 
             .project-info-card {
