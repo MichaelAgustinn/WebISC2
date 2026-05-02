@@ -188,12 +188,9 @@
         .dropdown-menu {
             position: absolute;
             top: 100%;
-
             left: auto;
             right: 0;
-
             z-index: 9999;
-
             background-color: var(--white);
             min-width: 220px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
@@ -201,7 +198,6 @@
             padding: 10px 0;
             opacity: 0;
             visibility: hidden;
-
             transform: translateY(20px);
             transition: all 0.3s ease;
             border-top: 3px solid var(--accent);
@@ -533,23 +529,6 @@
             border-bottom-color: var(--accent);
         }
 
-        .card-img {
-            height: 220px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .card-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .creation-card:hover .card-img img {
-            transform: scale(1.1);
-        }
-
         .card-content {
             padding: 1.5rem;
         }
@@ -746,6 +725,7 @@
             color: var(--primary);
         }
 
+        /* --- PERBAIKAN: Penanganan Gambar Blog --- */
         .card-img {
             width: 100%;
             height: 220px;
@@ -1178,6 +1158,11 @@
                 grid-template-columns: 1fr;
             }
 
+            /* --- PERBAIKAN: Menjadikan .blog-grid 2 kolom di Tablet --- */
+            .blog-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
             .project-info-card {
                 position: static;
                 margin-bottom: 3rem;
@@ -1211,6 +1196,11 @@
             .navbar {
                 background: var(--primary);
                 padding: 1rem 5%;
+            }
+
+            /* --- PERBAIKAN: Menjadikan .blog-grid 1 kolom di Mobile --- */
+            .blog-grid {
+                grid-template-columns: 1fr;
             }
 
             .vm-card {
@@ -1430,8 +1420,8 @@
         }
 
         /* =========================================
-   BACK TO TOP BUTTON
-   ========================================= */
+           BACK TO TOP BUTTON
+           ========================================= */
         .back-to-top {
             position: fixed;
             bottom: 30px;
