@@ -1152,23 +1152,30 @@
 
         /* Tablet & Small Desktop (Max 1024px) */
         @media (max-width: 1024px) {
-            .blog-wrapper {
-                grid-template-columns: 1fr;
-            }
-
             .project-wrapper {
                 grid-template-columns: 1fr;
             }
 
+            .blog-wrapper {
+                grid-template-columns: 1fr;
+            }
+
             .blog-grid {
-                grid-template-columns: repeat(2, 1fr);
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 2rem;
+            }
+
+            .blog-card {
+                flex: 0 0 calc(50% - 1rem);
+                min-width: 280px;
             }
 
             .blog-card:nth-child(3) {
-                grid-column: 1 / -1;
-                justify-self: center;
-                width: calc(50% - 1rem);
-                max-width: none;
+                grid-column: auto;
+                width: auto;
+                max-width: calc(50% - 1rem);
             }
 
             .project-info-card {
