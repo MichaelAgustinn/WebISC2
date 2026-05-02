@@ -1160,9 +1160,16 @@
                 grid-template-columns: 1fr;
             }
 
-            /* --- PERBAIKAN: Menjadikan .blog-grid 2 kolom di Tablet --- */
             .blog-grid {
                 grid-template-columns: repeat(2, 1fr);
+            }
+
+            .blog-card:nth-child(3) {
+                grid-column: 1 / -1;
+
+                justify-self: center;
+                width: 100%;
+                max-width: 400px;
             }
 
             .project-info-card {
