@@ -17,7 +17,7 @@
                 </div>
                 <div class="blog-date">{{ $post->created_at->format('d-m-Y') ?? '' }}</div>
                 <div class="blog-content">
-                    <h3 class="blog-title">{{ \Illuminate\Support\Str::words($post->title, 6, '...') }}</h3>
+                    <h3 class="blog-title">{{ \Illuminate\Support\Str::words($post->title, 5, '...') }}</h3>
                     <p style="font-size: 0.9rem; color: #666; margin-bottom: 1rem;">
                         {!! \Illuminate\Support\Str::words($post->description, 7, '...') !!}</p>
                     </br>
