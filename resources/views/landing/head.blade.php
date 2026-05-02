@@ -717,6 +717,7 @@
             display: flex;
             flex-direction: column;
             border-bottom: 3px solid transparent;
+            min-width: 0;
         }
 
         .blog-card:hover {
@@ -743,6 +744,23 @@
             font-size: 1.3rem;
             margin-bottom: 0.5rem;
             color: var(--primary);
+        }
+
+        .card-img {
+            width: 100%;
+            height: 220px;
+            overflow: hidden;
+        }
+
+        .card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .blog-card:hover .card-img img {
+            transform: scale(1.05);
         }
 
         .read-more {
@@ -1156,6 +1174,24 @@
                 grid-template-columns: 1fr;
             }
 
+            .project-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .project-info-card {
+                position: static;
+                margin-bottom: 3rem;
+                order: -1;
+            }
+
+            .project-header {
+                padding: 120px 5% 60px;
+            }
+
+            .project-header h1 {
+                font-size: 2.2rem;
+            }
+
             .sidebar {
                 min-width: auto;
                 position: static;
@@ -1323,6 +1359,51 @@
             section,
             .blog-container {
                 padding: 3rem 5% !important;
+            }
+
+            .project-header {
+                padding: 100px 5% 40px;
+            }
+
+            .project-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .project-tag-line {
+                font-size: 0.95rem;
+            }
+
+            .project-container {
+                padding: 2rem 0;
+            }
+
+            .project-nav-footer {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-project-link {
+                width: 100%;
+                background: #f8fafc;
+                padding: 15px;
+                border-radius: 12px;
+                border: 1px solid #eee;
+                justify-content: flex-start !important;
+            }
+
+            .nav-next {
+                flex-direction: row !important;
+                text-align: left !important;
+            }
+
+            .nav-icon-box {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+
+            .nav-project-text h5 {
+                font-size: 1rem;
             }
         }
 
