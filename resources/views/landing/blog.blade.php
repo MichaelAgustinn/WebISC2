@@ -17,20 +17,23 @@
                 </div>
                 <div class="blog-date">{{ $post->created_at->format('d-m-Y') ?? '' }}</div>
                 <div class="blog-content">
-                    <h3 class="blog-title">{{ \Illuminate\Support\Str::words($post->title, 7, '...') }}</h3>
+                    <h3 class="blog-title">{{ \Illuminate\Support\Str::words($post->title, 6, '...') }}</h3>
+
                     <p style="font-size: 0.9rem; color: #666; margin-bottom: 1rem;">
-                        {!! \Illuminate\Support\Str::words($post->description, 7, '...') !!}</p>
-                    </br>
+                        {{ \Illuminate\Support\Str::words(strip_tags($post->description), 10, '...') }}
+                    </p>
+
                     <a href="{{ route('blog.show', $post->slug) }}" class="read-more">Baca Selengkapnya <i
                             class="ri-arrow-right-line"></i></a>
                 </div>
             </article>
         @empty
-            <div style="text-align: center">
+            <div style="text-align: center; grid-column: 1 / -1;">
                 <p>Belum Ada Artikel</p>
             </div>
         @endforelse
     </div>
+
     <div class="btn-view-all-wrapper">
         <a href="{{ route('blog.index') }}" class="btn-view-all">
             Lihat Semua Artikel

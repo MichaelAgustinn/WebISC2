@@ -683,8 +683,9 @@
 
         .blog-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 2rem;
+            align-items: stretch;
         }
 
         .blog-card {
@@ -696,7 +697,8 @@
             display: flex;
             flex-direction: column;
             border-bottom: 3px solid transparent;
-            min-width: 0;
+            width: 100%;
+            height: 100%;
         }
 
         .blog-card:hover {
