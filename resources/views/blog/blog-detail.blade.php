@@ -727,12 +727,10 @@
         @media (max-width: 768px) {
             .article-header {
                 padding: 100px 5% 40px;
-                /* Padding dikurangi */
             }
 
             .article-header h1 {
                 font-size: 1.6rem;
-                /* Judul jauh lebih kecil */
                 margin-bottom: 1rem;
             }
 
@@ -743,36 +741,34 @@
 
             .blog-container {
                 padding: 2rem 0;
-                /* Jarak area blog dikurangi */
             }
 
             .article-body {
                 font-size: 1rem;
-                /* Ukuran font paragraf sedikit disesuaikan */
             }
 
-            /* Perbaikan Tombol Next/Prev */
+            .article-body p {
+                text-align: left;
+                hyphens: none;
+                -webkit-hyphens: none;
+            }
+
             .post-navigation {
                 grid-template-columns: 1fr;
-                /* Di HP ditumpuk atas-bawah */
                 gap: 15px;
             }
 
             .nav-card {
                 text-align: left !important;
-                /* Reset agar semuanya sejajar ke kiri */
                 padding: 1rem;
-                /* Ukuran kotak diperkecil */
             }
 
             .nav-title {
                 font-size: 0.95rem;
-                /* Judul artikel pada tombol diperkecil */
             }
 
             .author-box {
                 flex-direction: column;
-                /* Ditumpuk atas bawah */
                 text-align: center;
                 padding: 1.5rem;
             }
