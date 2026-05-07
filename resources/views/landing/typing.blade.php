@@ -359,8 +359,8 @@
         }
 
         /* =========================================
-               RESPONSIVE DESIGN (TABLET & MOBILE)
-            ========================================= */
+                                       RESPONSIVE DESIGN (TABLET & MOBILE)
+                                    ========================================= */
         @media (max-width: 1024px) {
             .typing-wrapper {
                 grid-template-columns: 1fr;
@@ -608,6 +608,7 @@
             const accuracyTag = document.querySelector("#accuracy");
             const languageSelect = document.querySelector("#languageSelect");
 
+            let isTabPressed = false;
             let timer;
             let maxTime = 60;
             let timeLeft = maxTime;
@@ -931,18 +932,40 @@
                 resetGame();
             });
 
-            // Visual Focus
             inpField.addEventListener("focus", () => typingBox.classList.add("active"));
             inpField.addEventListener("blur", () => typingBox.classList.remove("active"));
 
-            // --- PERBAIKAN STRUKTUR NAVIGASI KEYBOARD ---
             document.addEventListener("keydown", (e) => {
-                if (e.key === "Tab") return;
-                if (document.activeElement === btnRestart) return;
+
+                if (e.key === "Tab") {
+                    isTabPressed = true;
+                    e.preventDefault();
+                    return;
+                }
+
+
+                if (e.key === "Enter" && isTabPressed) {
+                    e.preventDefault();
+                    resetGame();
+                    isTabPressed = false;
+                    return;
+                }
+
+                if (e.key !== "Tab") {
+                    isTabPressed = false;
+                }
+
                 if (document.activeElement === languageSelect) return;
+                if (document.activeElement === btnRestart) return;
 
                 if (e.target.tagName !== "INPUT" && e.target.tagName !== "TEXTAREA") {
                     inpField.focus();
+                }
+            });
+
+            document.addEventListener("keyup", (e) => {
+                if (e.key === "Tab") {
+                    isTabPressed = false;
                 }
             });
 
