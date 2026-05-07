@@ -26,6 +26,7 @@ use App\Models\Project;
 use App\Models\Team;
 use App\Models\TypingScore;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Route;
 
@@ -67,12 +68,29 @@ Route::get('/', function () {
 // ? landingpage end
 
 // ? halaman anggota area
-Route::get('/anggota', function () {
+Route::get('/anggota', function (Request $request) {
+    // Ambil keyword pencarian dari URL (misal: ?search=keyword)
+    $search = $request->input('search');
+
     $members = User::where('email', '!=', 'isc@unsulbar.ac.id')
         ->where('role', '!=', 'none')
         ->with('profile')
+        // Logic Pencarian
+        ->when($search, function ($query, $search) {
+            // Bungkus dalam parameter closure agar tidak merusak filter email & role di atas
+            $query->where(function ($q) use ($search) {
+                // Cari berdasarkan nama di tabel user
+                $q->where('name', 'like', "%{$search}%")
+                    // ATAU cari ke relasi profile (divisi & angkatan)
+                    ->orWhereHas('profile', function ($qProfile) use ($search) {
+                        $qProfile->where('division', 'like', "%{$search}%")
+                            ->orWhere('angkatan', 'like', "%{$search}%");
+                    });
+            });
+        })
         ->orderBy('name', 'asc')
-        ->paginate(12);
+        ->paginate(12)
+        ->withQueryString();
 
     $landingData = App\Models\LandingPage::pluck('value', 'key')->toArray();
 

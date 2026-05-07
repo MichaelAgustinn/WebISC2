@@ -222,11 +222,14 @@
         <p>Talenta-talenta muda yang berdedikasi membangun inovasi dan teknologi masa depan.</p>
     </header>
 
+    <!-- 2. SEARCH BAR -->
     <div class="member-search-container">
-        <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="Cari nama, divisi, atau angkatan...">
-            <button><i class="ri-search-line"></i></button>
-        </div>
+        <form action="{{ route('anggota') }}" method="GET" class="search-bar"
+            style="width: 100%; max-width: 600px; display: flex;">
+            <input type="text" name="search" id="searchInput" value="{{ request('search') }}"
+                placeholder="Cari nama, divisi, atau angkatan...">
+            <button type="submit"><i class="ri-search-line"></i></button>
+        </form>
     </div>
 
     <section class="member-section">
