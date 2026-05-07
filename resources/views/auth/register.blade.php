@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta angkatan="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - Informatics Study Club</title>
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Poppins:wght@500;700;900&display=swap"
@@ -348,11 +348,26 @@
 
             <form action="{{ route('register.post') }}" method="POST">
                 @csrf
-
                 <div class="user-box @error('name') has-error @enderror">
                     <input type="text" name="name" value="{{ old('name') }}" required>
                     <label>Nama Lengkap</label>
                     @error('name')
+                        <div class="error-text">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="user-box @error('nim') has-error @enderror">
+                    <input type="text" name="nim" value="{{ old('nim') }}" required>
+                    <label>NIM</label>
+                    @error('nim')
+                        <div class="error-text">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="user-box @error('angkatan') has-error @enderror">
+                    <input type="text" name="angkatan" value="{{ old('angkatan') }}" required>
+                    <label>Angkatan</label>
+                    @error('angkatan')
                         <div class="error-text">{{ $message }}</div>
                     @enderror
                 </div>

@@ -14,6 +14,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\PublicFormController;
+use App\Http\Controllers\RegistController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TypingController;
 use App\Models\Advisor;
@@ -148,7 +149,9 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [AuthController::class, 'processLogin'])->name('login.post');
 
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-    Route::post('/register', [AuthController::class, 'processRegister'])->name('register.post');
+    Route::post('/register', [RegistController::class, 'regist'])->name('register.post');
+
+    Route::get('/waiting-verification', [RegistController::class, 'waiting'])->name('waiting.verification');
 });
 // ! guest area end
 
@@ -260,7 +263,9 @@ Route::middleware(['auth', 'role:admin,pengurus'])->group(function () {
     // ? team area end
 
     //? Route Manajemen User
-    Route::get('/admin/users', [AdminUserController::class, 'index'])->name('users.index');
+    Route::get('/admin/verified', [AdminUserController::class, 'index'])->name('users.index');
+    Route::get('/admin/unverified', [AdminUserController::class, 'unverified'])->name('users.unverified');
+    Route::put('/admin/unverified/submit/{id}', [AdminUserController::class, 'verify'])->name('users.verify');
     Route::put('/admin/users/{user}/role', [AdminUserController::class, 'updateRole'])->name('users.update-role');
     Route::delete('/admin/users/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
 
@@ -271,5 +276,5 @@ Route::middleware(['auth', 'role:admin,pengurus'])->group(function () {
 
 // ! just for testing, remove in production
 Route::get('/test', function () {
-    return view('blog.blog');
+    return view('auth.waiting-verification');
 });

@@ -2,16 +2,33 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Profile;
+use App\Models\Regist;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class AdminUserController extends Controller
 {
     public function index(Request $request)
     {
-        $currentUser = Auth::user();
         $query = User::query();
+
+        if ($request->has('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%')
+                ->orWhere('email', 'like', '%' . $request->search . '%');
+        }
+
+        $users = $query->latest()->paginate(10);
+
+        return view('admin.users.index', compact('users'));
+    }
+
+    public function unverified(Request $request)
+    {
+        $query = Regist::query();
 
         // Search feature
         if ($request->has('search')) {
@@ -19,19 +36,43 @@ class AdminUserController extends Controller
                 ->orWhere('email', 'like', '%' . $request->search . '%');
         }
 
-        // Logic Filter Data:
-        // Jika Pengurus yang login, sembunyikan Admin dan sesama Pengurus dari list
-        // Agar mereka tidak salah edit atasan/rekan.
-        if ($currentUser->role == 'pengurus') {
-            $query->whereNotIn('role', ['admin', 'pengurus']);
-        } else {
-            // Jika Admin, sembunyikan dirinya sendiri agar tidak menurunkan role sendiri secara tidak sengaja
-            $query->where('id', '!=', $currentUser->id);
-        }
-
         $users = $query->latest()->paginate(10);
 
-        return view('admin.users.index', compact('users'));
+        return view('admin.users.verify', compact('users'));
+    }
+
+    public function verify($id)
+    {
+        $regist = Regist::find($id);
+
+        if (!$regist) {
+
+            return redirect()
+                ->back()
+                ->with('error', 'Data user tidak ditemukan');
+        }
+
+        $user = User::create([
+            'name' => $regist->name,
+            'email' => $regist->email,
+            'password' => $regist->password,
+            'role' => 'anggota',
+
+        ]);
+
+        Profile::create([
+            'user_id' => $user->id,
+            'nim' => $regist->nim,
+            'phone_number' => $regist->phone_number,
+            'angkatan' => $regist->angkatan,
+
+        ]);
+
+        $regist->delete();
+
+        return redirect()
+            ->route('users.index')
+            ->with('success', 'User berhasil diaktivasi');
     }
 
     public function updateRole(Request $request, User $user)
@@ -43,25 +84,17 @@ class AdminUserController extends Controller
         $currentUser = Auth::user();
         $newRole = $request->role;
 
-        // --- SECURITY GATE ---
-
-        // 1. Validasi untuk PENGURUS
         if ($currentUser->role == 'pengurus') {
-            // Pengurus tidak boleh mengedit Admin atau Pengurus lain
             if ($user->role == 'admin' || $user->role == 'pengurus') {
                 return back()->with('error', 'Anda tidak memiliki akses untuk mengubah user ini.');
             }
 
-            // Pengurus hanya boleh set ke 'anggota' atau 'none'
             if (!in_array($newRole, ['anggota', 'none'])) {
                 return back()->with('error', 'Pengurus hanya bisa mengubah role ke Anggota atau None.');
             }
         }
 
-        // 2. Validasi untuk ADMIN (Opsional, misal Admin tidak boleh bikin Admin baru sembarangan)
-        // Disini kita asumsi Admin bebas, kecuali mengubah dirinya sendiri (sudah difilter di index)
 
-        // Update Role
         $user->update(['role' => $newRole]);
 
         return back()->with('success', "Role pengguna {$user->name} berhasil diubah menjadi " . ucfirst($newRole));
@@ -69,7 +102,6 @@ class AdminUserController extends Controller
 
     public function destroy(User $user)
     {
-        // Proteksi level Pengurus hapus user
         if (Auth::user()->role == 'pengurus' && ($user->role == 'admin' || $user->role == 'pengurus')) {
             return back()->with('error', 'Akses ditolak.');
         }

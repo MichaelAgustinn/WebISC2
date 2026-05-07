@@ -6,18 +6,17 @@ use App\Models\User;
 use App\Models\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
-    // Tampilkan Halaman Login
     public function showLogin()
     {
         return view('auth.login');
     }
 
-    // Proses Login
     public function processLogin(Request $request)
     {
         $credentials = $request->validate([
@@ -25,11 +24,31 @@ class AuthController extends Controller
             'password' => ['required'],
         ]);
 
+        //! Cek apakah user terdaftar dan berhasil login
         if (Auth::attempt($credentials)) {
+
             $request->session()->regenerate();
-            return redirect()->intended('dashboard')->with('success', 'Selamat datang kembali!');
+
+            return redirect()
+                ->intended('dashboard')
+                ->with('success', 'Selamat datang kembali!');
         }
 
+        // ! Ambil data user yang belum di verifikasi berdasarkan email
+        $isWaiting = DB::table('regists')
+            ->where('email', $request->email)
+            ->first();
+
+        // ! Jika email ditemukan di tabel pending
+        if ($isWaiting) {
+
+            //? Cek apakah password sesuai
+            if (Hash::check($request->password, $isWaiting->password)) {
+                return view('auth.waiting-verification');
+            }
+        }
+
+        // Jika login gagal sepenuhnya
         return back()->withErrors([
             'email' => 'Email atau password salah.',
         ])->onlyInput('email');
@@ -48,28 +67,24 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'phone_number' => 'required|numeric',
-            'password' => 'required|min:6|confirmed', // Pastikan input confirm password bernama 'password_confirmation'
+            'password' => 'required|min:6|confirmed',
         ]);
 
-        // 1. Buat User (Tabel Users)
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => 'none', // Default role 'none' (Guest/Belum diverifikasi)
+            'role' => 'none',
             'slug' => Str::slug($request->name) . '-' . Str::random(4),
         ]);
 
-        // 2. Buat Profile (Tabel Profiles)
-        // Kita simpan nomor HP di tabel profile sesuai struktur database sebelumnya
         Profile::create([
             'user_id' => $user->id,
-            'nim' => null, // Default
+            'nim' => null,
             'phone_number' => $request->phone_number,
-            'angkatan' => date('Y'), // Default tahun ini
+            'angkatan' => date('Y'),
         ]);
 
-        // 3. Auto Login setelah register
         Auth::login($user);
 
         return redirect()->route('dashboard')->with('success', 'Akun berhasil dibuat!');
