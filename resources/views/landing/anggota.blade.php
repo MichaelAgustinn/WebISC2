@@ -300,6 +300,13 @@
             @endforelse
 
         </div>
+
+        @if ($members->hasPages())
+            <div style="margin-top: 3rem; display: flex; justify-content: center;">
+                {{ $members->links('vendor.pagination.custom') }}
+            </div>
+        @endif
+
     </section>
 
     <script>

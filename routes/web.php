@@ -72,7 +72,7 @@ Route::get('/anggota', function () {
         ->where('role', '!=', 'none')
         ->with('profile')
         ->orderBy('name', 'asc')
-        ->get();
+        ->paginate(12);
 
     $landingData = App\Models\LandingPage::pluck('value', 'key')->toArray();
 
