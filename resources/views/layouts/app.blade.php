@@ -110,6 +110,17 @@
                         Kelola FAQ
                     </a>
 
+                    <a href="{{ route('admin-events.index') }}"
+                        class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs('admin-events.*') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600' }} transition-colors">
+                        <svg class="mr-3 h-5 w-5 {{ request()->routeIs('admin-events.*') ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-500' }}"
+                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <!-- Ikon Kalender -->
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        Kelola Event
+                    </a>
+
                     <a href="{{ route('teams.index') }}"
                         class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs('teams.*') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600' }} transition-colors">
                         <svg class="mr-3 h-5 w-5 {{ request()->routeIs('teams.*') ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-500' }}"
@@ -364,5 +375,6 @@
         </div>
     </div>
 </body>
+@stack('scripts')
 
 </html>

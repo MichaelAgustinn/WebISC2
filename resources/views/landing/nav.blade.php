@@ -20,6 +20,7 @@
             <a href="#">Information <i class="ri-arrow-down-s-line"></i></a>
             <ul class="dropdown-menu">
                 <li><a href="{{ route('landing.forms.index') }}">Formulir Acara</a></li>
+                <li><a href="{{ route('events.public') }}">Events & Acara</a></li>
                 <li><a href="{{ route('dosen') }}">Dosen Pembimbing</a></li>
                 <li><a href="{{ route('anggota') }}">Anggota ISC</a></li>
                 <li><a href="{{ route('dokumen') }}">Dokumen</a></li>

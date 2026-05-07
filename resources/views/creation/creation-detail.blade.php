@@ -3,8 +3,8 @@
 @push('styles')
     <style>
         /* =========================================
-                PROJECT DETAIL STYLES
-            ========================================= */
+                    PROJECT DETAIL STYLES
+                ========================================= */
         .project-header {
             padding: 160px 5% 80px;
             background: linear-gradient(135deg, var(--primary) 0%, #081226 100%);
@@ -307,12 +307,10 @@
         @media (max-width: 768px) {
             .project-header {
                 padding: 100px 5% 40px;
-                /* Padding header dikurangi */
             }
 
             .project-header h1 {
                 font-size: 1.8rem;
-                /* Judul jauh lebih kecil */
             }
 
             .project-tag-line {
@@ -321,7 +319,6 @@
 
             .project-container {
                 padding: 2rem 0;
-                /* Padding container dikurangi */
             }
 
             .project-nav-footer {
@@ -329,7 +326,6 @@
                 gap: 15px;
             }
 
-            /* Desain Navigasi Next/Prev di HP dirapikan menjadi kotak (card) */
             .nav-project-link {
                 width: 100%;
                 background: #f8fafc;
@@ -339,7 +335,6 @@
                 justify-content: flex-start !important;
             }
 
-            /* Paksa tombol Next agar rata kiri di layar HP */
             .nav-next {
                 flex-direction: row !important;
                 text-align: left !important;
@@ -353,7 +348,6 @@
 
             .nav-project-text h5 {
                 font-size: 1rem;
-                /* Ukuran judul navigasi lebih pas */
             }
         }
     </style>
@@ -451,9 +445,7 @@
                                 </div>
                             @endif
 
-                            {{-- 2. LOOPING ANGGOTA TIM (Kecuali Ketua) --}}
                             @foreach ($project->users as $member)
-                                {{-- Cek agar Ketua tidak muncul 2 kali --}}
                                 @if ($project->user_id != $member->id)
                                     <div style="display: flex; align-items: center; gap: 10px;">
                                         @if ($member->profile && $member->profile->photo)
@@ -470,7 +462,6 @@
                                 @endif
                             @endforeach
 
-                            {{-- Jika tidak ada anggota selain ketua --}}
                             @if ($project->users->where('id', '!=', $project->user_id)->isEmpty() && !$project->owner)
                                 <span style="font-size: 0.85rem; color: #aaa;">Tidak ada anggota tim.</span>
                             @endif
@@ -529,19 +520,15 @@
                     console.log('User membatalkan share:', err);
                 }
             } else {
-                // FALLBACK: Copy to Clipboard untuk PC / Browser yang tidak support
                 navigator.clipboard.writeText(window.location.href).then(() => {
 
-                    // 1. Ubah Tampilan Tombol Sementara
                     btn.classList.add('copied');
                     icon.classList.replace('ri-share-forward-line', 'ri-check-double-line');
                     text.innerText = 'Tersalin!';
 
-                    // 2. Tampilkan Toast Melayang
                     const toast = document.getElementById('copyToast');
                     toast.classList.add('show');
 
-                    // 3. Kembalikan seperti semula setelah 3 detik
                     setTimeout(() => {
                         btn.classList.remove('copied');
                         icon.classList.replace('ri-check-double-line', 'ri-share-forward-line');
@@ -605,7 +592,6 @@
             })
             .catch(error => {
                 console.error('Error:', error);
-                // Rollback
                 if (isCurrentlyLiked) {
                     btn.classList.add('liked');
                     icon.classList.replace('ri-heart-line', 'ri-heart-fill');

@@ -279,3 +279,4 @@
         });
     }
 </script>
+@stack('scripts')

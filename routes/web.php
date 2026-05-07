@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\AdvisorController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\FormController;
 use App\Http\Controllers\LandingPageController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\PublicController;
+use App\Http\Controllers\PublicEventController;
 use App\Http\Controllers\PublicFormController;
 use App\Http\Controllers\RegistController;
 use App\Http\Controllers\TeamController;
@@ -66,6 +68,16 @@ Route::get('/', function () {
     return view('index', compact('data', 'faqs', 'teams', 'recentProjects', 'weeklyTop', 'allTimeTop', 'posts'));
 })->name('home');
 // ? landingpage end
+
+//? event area public
+Route::get('/events', [PublicEventController::class, 'index'])->name('events.public');
+
+Route::get('/events/{slug}', [PublicEventController::class, 'show'])->name('landing.events.show');
+
+Route::post('/events/{event}/register', [PublicEventController::class, 'register'])
+    ->middleware('auth')
+    ->name('landing.events.register');
+//? event area public end
 
 // ? halaman anggota area
 Route::get('/anggota', function (Request $request) {
@@ -213,6 +225,10 @@ Route::middleware('auth')->group(function () {
 
     // ? route untuk like
     Route::post('/projects/{project}/like', [ProjectController::class, 'toggleLike'])->name('projects.like');
+
+    // ? event controller
+    Route::resource('admin-events', EventController::class);
+    Route::get('/admin/events/{id}/registrants', [EventController::class, 'registrants'])->name('admin-events.registrants');
 });
 
 // ! route untuk anggota pengurus dan admin
