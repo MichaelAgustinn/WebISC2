@@ -25,6 +25,7 @@ use App\Models\Faq;
 use App\Models\LandingPage;
 use App\Models\Post;
 use App\Models\Project;
+use App\Models\Regist;
 use App\Models\Team;
 use App\Models\TypingScore;
 use App\Models\User;
@@ -199,7 +200,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::get('/dashboard', function () {
-        $totalAnggota = User::where('role', 'anggota')->count();
+        $totalAnggota = User::where('role', 'anggota')->count() + Regist::all()->count();
         $totalPengurus = User::whereIn('role', ['pengurus', 'admin'])->count();
         $totalAkun = User::where('email', '!=', 'isc@unsulbar.ac.id')->count();
 
