@@ -200,9 +200,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::get('/dashboard', function () {
-        $totalAnggota = User::where('role', 'anggota')->count() + Regist::all()->count();
+        $totalAnggota = User::where('role', 'anggota')->count();
         $totalPengurus = User::whereIn('role', ['pengurus', 'admin'])->count();
-        $totalAkun = User::where('email', '!=', 'isc@unsulbar.ac.id')->count();
+        $totalAkun = User::where('email', '!=', 'isc@unsulbar.ac.id')->count()  + Regist::all()->count();
 
         $totalProject = Project::count();
         $projectAktif = Project::where('status', true)->count();
