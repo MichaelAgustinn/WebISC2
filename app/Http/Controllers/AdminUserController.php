@@ -7,6 +7,7 @@ use App\Models\Regist;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class AdminUserController extends Controller
 {
@@ -55,7 +56,7 @@ class AdminUserController extends Controller
             'email' => $regist->email,
             'password' => $regist->password,
             'role' => 'anggota',
-
+            'slug' => Str::slug($regist->name) . '-' . $regist->nim,
         ]);
 
         Profile::create([
@@ -63,7 +64,6 @@ class AdminUserController extends Controller
             'nim' => $regist->nim,
             'phone_number' => $regist->phone_number,
             'angkatan' => $regist->angkatan,
-
         ]);
 
         $regist->delete();
