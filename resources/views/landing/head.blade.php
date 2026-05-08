@@ -475,6 +475,21 @@
             background: var(--bg-light);
         }
 
+        .vm-text,
+        .vm-mission-list {
+            text-align: justify;
+        }
+
+        /* Tablet & Mobile */
+        @media (max-width: 1024px) {
+
+            .vm-text,
+            .vm-mission-list {
+                text-align: left;
+            }
+
+        }
+
         .filter-menu {
             display: flex;
             justify-content: center;
