@@ -287,19 +287,7 @@
                     </div>
                 @endif
 
-                <!-- MENU AKUN & BAWAH -->
                 <div class="mt-auto border-t border-gray-100 pt-4 pb-2 flex flex-col gap-2">
-                    <p class="px-3 text-xs font-bold uppercase text-gray-400 tracking-wider">Akun</p>
-                    <a href="{{ route('profile.edit') }}"
-                        class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs('profile.*') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600' }} transition-colors">
-                        <svg class="mr-3 h-5 w-5 {{ request()->routeIs('profile.*') ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-500' }}"
-                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                        </svg>
-                        Profile Saya
-                    </a>
-
                     <a href="{{ route('home') }}"
                         class="mt-2 group flex items-center justify-center rounded-lg px-3 py-2.5 text-sm font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 transition-all shadow-sm">
                         <svg class="mr-2 h-5 w-5 text-indigo-600" fill="none" viewBox="0 0 24 24"
