@@ -381,9 +381,7 @@
             box-shadow: 0 0 0 3px rgba(8, 18, 38, 0.08);
         }
 
-        /* =========================================
-                                                                                                                                                                                                                           RESPONSIVE DESIGN (TABLET & MOBILE)
-                                                                                                                                                                                                                        ========================================= */
+        /* == RESPONSIVE DESIGN (TABLET & MOBILE) ==*/
         @media (max-width: 1024px) {
             .typing-wrapper {
                 grid-template-columns: 1fr;
