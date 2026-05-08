@@ -41,7 +41,7 @@
                             <!-- Menampilkan Image -->
                             <td class="px-6 py-4 align-top">
                                 @if ($project->image)
-                                    <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}"
+                                    <img src="{{ asset('uploads/projects/' . $project->image) }}"
                                         class="h-16 w-24 object-cover rounded-lg border border-gray-200 shadow-sm">
                                 @else
                                     <div
