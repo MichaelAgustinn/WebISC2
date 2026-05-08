@@ -476,7 +476,7 @@
                         <div class="flex items-center gap-4">
                             <span class="flex items-center gap-1">
                                 Dibuat dengan <span class="text-red-500 animate-pulse">❤</span> oleh
-                                <div class="font-medium text-gray-700 hover:text-indigo-600 transition">Divisi
+                                <div class="font-medium text-gray-700 transition">Divisi
                                     Website</div>
                             </span>
                         </div>
