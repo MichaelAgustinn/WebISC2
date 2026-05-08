@@ -25,17 +25,17 @@
                 <div class="footer-nav">
                     <a href="#home">Home</a>
                     <a href="#about">About</a>
-                    <a href="">Creation</a>
+                    <a href="#creation">Creation</a>
                     <a href="#team">Team</a>
-                    <a href="">Blog</a>
+                    <a href="#blog">Blog</a>
                 </div>
             @else
                 <div class="footer-nav">
                     <a href="/#home">Home</a>
                     <a href="/#about">About</a>
-                    <a href="">Creation</a>
+                    <a href="/#creation">Creation</a>
                     <a href="/#team">Team</a>
-                    <a href="">Blog</a>
+                    <a href="/#blog">Blog</a>
                 </div>
             @endif
         </div>
