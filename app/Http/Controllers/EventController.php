@@ -125,7 +125,7 @@ class EventController extends Controller
 
         $internalEvents = $user->events()->get()->map(function ($event) {
             return (object) [
-                'type'        => 'Internal',
+                'type'        => 'Event Internal',
                 'title'       => $event->name,
                 'description' => $event->deskripsi,
                 'image'       => $event->photo,
@@ -138,7 +138,7 @@ class EventController extends Controller
         $externalEvents = $user->formResponses()->with('form')->get()->map(function ($response) {
             $form = $response->form;
             return (object) [
-                'type'        => 'Eksternal',
+                'type'        => 'Event Umum',
                 'title'       => $form ? $form->title : 'Form Dihapus',
                 'description' => $form ? $form->description : '-',
                 'image'       => $form ? $form->cover_image : null,
