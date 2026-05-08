@@ -22,7 +22,7 @@
                     'website' => 'website',
                     'iot' => 'iot',
                     'uiux' => 'uiux',
-                    'sistem_cerdas' => 'sc', // Konversi khusus
+                    'sistem_cerdas' => 'sc',
                 ];
                 $dataCategory = $categoryMap[$project->division] ?? 'other';
             @endphp
@@ -47,9 +47,13 @@
                     </h3>
                 </div>
             </div>
+            <div id="empty-message"
+                style="display: none; grid-column: 1 / -1; text-align: center; color: #888; padding: 2rem;">
+                <p>Belum ada karya terbaru dari divisi ini</p>
+            </div>
         @empty
             <div style="grid-column: 1 / -1; text-align: center; color: #888; padding: 2rem;">
-                <p>Belum ada karya yang ditampilkan.</p>
+                <p>Belum ada karya terbaru yang ditampilkan.</p>
             </div>
         @endforelse
     </div>

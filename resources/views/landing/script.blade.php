@@ -88,43 +88,73 @@
         // =========================================
         const filterBtns = document.querySelectorAll('.filter-btn');
         const creationCards = document.querySelectorAll('.creation-card');
+        const emptyMessage = document.getElementById('empty-message');
+
+        // Set opacity awal untuk pesan kosong (supaya bisa dianimasikan fade-in/fade-out)
+        if (emptyMessage) {
+            emptyMessage.style.transition = 'opacity 0.3s ease';
+            emptyMessage.style.opacity = '0';
+        }
 
         if (filterBtns.length > 0) {
             filterBtns.forEach(btn => {
                 btn.addEventListener('click', () => {
+
+                    // 1. Update status tombol aktif
                     filterBtns.forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
 
                     const filterValue = btn.getAttribute('data-filter');
+                    let visibleCount = 0;
 
+                    // 2. Langsung sembunyikan pesan kosong setiap kali filter diklik
+                    emptyMessage.style.opacity = '0';
+                    emptyMessage.style.display = 'none';
+
+                    // 3. Logic Filter Card (Cepat & Responsif)
                     creationCards.forEach(card => {
                         const category = card.getAttribute('data-category');
+
                         card.classList.remove('js-reveal');
                         card.classList.add('revealed');
 
-                        if (filterValue !== 'all' && category !== filterValue) {
+                        if (filterValue === 'all' || category === filterValue) {
+                            visibleCount++;
+
+                            card.style.display = 'block';
+                            requestAnimationFrame(() => {
+                                card.style.opacity = '1';
+                                card.style.transform = 'scale(1) translateY(0)';
+                            });
+
+                        } else {
                             card.style.opacity = '0';
                             card.style.transform = 'scale(0.8)';
+
                             setTimeout(() => {
-                                card.style.display = 'none';
-                            }, 400);
+                                if (card.style.opacity === '0') {
+                                    card.style.display = 'none';
+                                }
+                            }, 200);
                         }
                     });
 
-                    setTimeout(() => {
-                        creationCards.forEach(card => {
-                            const category = card.getAttribute('data-category');
-                            if (filterValue === 'all' || category ===
-                                filterValue) {
-                                card.style.display = 'block';
-                                setTimeout(() => {
-                                    card.style.opacity = '1';
-                                    card.style.transform =
-                                        'scale(1) translateY(0)';
-                                }, 50);
-                            }
-                        });
-                    }, 400);
+                    // 4. DELAY KHUSUS UNTUK TULISAN "BELUM ADA KARYA"
+                    if (filterValue !== 'all' && visibleCount === 0) {
+
+                        // Tunggu 250ms (biarkan card lama menghilang dulu) baru munculkan teks
+                        setTimeout(() => {
+                            emptyMessage.style.display = 'block';
+
+                            // requestAnimationFrame agar transisi opacity berjalan mulus
+                            requestAnimationFrame(() => {
+                                emptyMessage.style.opacity = '1';
+                            });
+                        },
+                        250); // Sesuaikan angka 250ms ini jika dirasa kurang lama/terlalu lama
+
+                    }
+
                 });
             });
         }
