@@ -83,6 +83,25 @@
                     </div>
 
                     <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+                        <h3 class="font-bold text-gray-800 mb-4">Link Project</h3>
+
+                        <div class="space-y-4">
+
+                            {{-- Demo --}}
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    Link Demo
+                                </label>
+
+                                <input type="url" name="link" value="{{ old('link', $project->link ?? '') }}"
+                                    placeholder="https://example.com"
+                                    class="w-full rounded-lg border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
                         <h3 class="font-bold text-gray-800 mb-3">Kategori Divisi</h3>
                         <div class="space-y-2">
                             @foreach (['mobile' => 'Mobile Dev', 'website' => 'Web Dev', 'iot' => 'IoT', 'uiux' => 'UI/UX', 'sistem_cerdas' => 'AI'] as $key => $label)

@@ -14,10 +14,9 @@ return new class extends Migration
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('slug')->unique(); // Untuk URL SEO friendly
+            $table->string('slug')->unique();
             $table->text('description');
-            $table->string('image'); // Cover karya
-            // Tercatat di divisi mana karya ini
+            $table->string('image');
             $table->enum('division', ['mobile', 'iot', 'uiux', 'sistem_cerdas', 'website']);
             $table->timestamps();
         });

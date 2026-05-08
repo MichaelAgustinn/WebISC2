@@ -22,7 +22,7 @@ class ProjectController extends Controller
     public function create()
     {
         $users = User::with('profile')
-            ->where('id', '!=', auth()->id())
+            ->where('id', '!=', Auth::id())
             ->whereHas('profile', function ($query) {
                 $query->where('email', '!=', 'isc@unsulbar.ac.id');
             })
@@ -37,7 +37,8 @@ class ProjectController extends Controller
             'description' => 'required',
             'division' => 'required|in:mobile,iot,uiux,sistem_cerdas,website',
             'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
-            'team_members' => 'array'
+            'team_members' => 'array',
+            'link' => 'nullable'
         ]);
 
         // 1. Upload Gambar
@@ -49,6 +50,7 @@ class ProjectController extends Controller
             'user_id' => Auth::user()->id,
             'title' => $request->title,
             'slug' => Str::slug($request->title) . '-' . Str::random(5),
+            'link' => $request->link,
             'description' => $request->description,
             'division' => $request->division,
             'image' => $imageName,
@@ -71,7 +73,7 @@ class ProjectController extends Controller
         }
 
         $users = User::with('profile')
-            ->where('id', '!=', auth()->id())
+            ->where('id', '!=', Auth::id())
             ->whereHas('profile', function ($query) {
                 $query->where('email', '!=', 'isc@unsulbar.ac.id');
             })
@@ -88,9 +90,11 @@ class ProjectController extends Controller
             abort(403, 'Akses ditolak: Anda bukan pemilik karya ini.');
         }
 
+        // dd($request->link);
         $request->validate([
             'title' => 'required|max:255',
             'description' => 'required',
+            'link' => 'nullable',
             'division' => 'required',
         ]);
 
@@ -99,8 +103,8 @@ class ProjectController extends Controller
             'slug' => Str::slug($request->title) . '-' . Str::random(5),
             'description' => $request->description,
             'division' => $request->division,
+            'link' => $request->link,
         ];
-
         // Cek jika ada gambar baru
         if ($request->hasFile('image')) {
             // Hapus gambar lama

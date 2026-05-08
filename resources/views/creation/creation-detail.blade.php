@@ -3,8 +3,8 @@
 @push('styles')
     <style>
         /* =========================================
-                    PROJECT DETAIL STYLES
-                ========================================= */
+                                                        PROJECT DETAIL STYLES
+                                                    ========================================= */
         .project-header {
             padding: 160px 5% 80px;
             background: linear-gradient(135deg, var(--primary) 0%, #081226 100%);
@@ -470,6 +470,24 @@
                     </div>
 
                     <div class="project-actions">
+
+                        @if ($project->link)
+                            <div class="info-group">
+                                <span class="info-label">Link Project</span>
+
+                                <div class="project-actions">
+                                    <a href="{{ $project->link }}" target="_blank" class="btn-action"
+                                        style="
+                    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+                    color: white;
+                ">
+                                        <i class="ri-links-line text-xl"></i>
+                                        Kunjungi Link
+                                    </a>
+                                </div>
+                            </div>
+                        @endif
+
                         <button onclick="toggleLike(this, {{ $project->id }})" id="like-btn-{{ $project->id }}"
                             class="btn-action btn-like {{ Auth::check() && $project->isLikedBy(Auth::id()) ? 'liked' : '' }}">
 
