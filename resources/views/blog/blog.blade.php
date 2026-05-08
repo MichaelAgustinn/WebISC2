@@ -1,5 +1,7 @@
 @extends('landing.master')
 
+@section('title', 'Berita & Artikel')
+
 @section('content')
     <header class="blog-header">
         <h1>Wawasan & Informasi</h1>

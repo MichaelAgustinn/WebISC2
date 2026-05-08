@@ -2,7 +2,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @stack('meta')
-    <title>Informatics Study Club</title>
+    <title>
+        @hasSection('title')
+            @yield('title') - Informatics Study Club
+        @else
+            Informatics Study Club
+        @endif
+    </title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

@@ -1,5 +1,7 @@
 @extends('landing.master')
 
+@section('title', 'Event & Kegiatan')
+
 @push('styles')
     <style>
         /* Desain Khusus Card Event */

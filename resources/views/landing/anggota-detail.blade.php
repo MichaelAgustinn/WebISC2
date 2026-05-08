@@ -1,5 +1,7 @@
 @extends('landing.master')
 
+@section('title', $member->name)
+
 @push('styles')
     <style>
         /* 1. HEADER PROFILE (NAVY BACKGROUND) */

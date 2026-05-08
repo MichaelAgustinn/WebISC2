@@ -1,5 +1,7 @@
 @extends('landing.master')
 
+@section('title', 'Event - ' . $event->name)
+
 @push('styles')
     <style>
         .event-header {

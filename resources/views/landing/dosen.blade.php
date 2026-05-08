@@ -1,5 +1,7 @@
 @extends('landing.master')
 
+@section('title', 'Dosen Pembimbing')
+
 @push('styles')
     <style>
         /* 1. HEADER HALAMAN */

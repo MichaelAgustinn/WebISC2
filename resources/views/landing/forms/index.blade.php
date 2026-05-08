@@ -1,5 +1,7 @@
 @extends('landing.master')
 
+@section('title', 'Formulir & Pendaftaran')
+
 @section('content')
     <header class="blog-header">
         <h1>Formulir & Pendaftaran</h1>

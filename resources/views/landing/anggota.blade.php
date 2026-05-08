@@ -1,5 +1,7 @@
 @extends('landing.master')
 
+@section('title', 'Anggota')
+
 @push('styles')
     <style>
         /* 1. HEADER HALAMAN (NAVY BACKGROUND) */

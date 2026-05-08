@@ -1,10 +1,10 @@
 @extends('landing.master')
 
+@section('title', 'Karya - ' . $project->owner->name)
+
 @push('styles')
     <style>
-        /* =========================================
-                                                        PROJECT DETAIL STYLES
-                                                    ========================================= */
+        /* == PROJECT DETAIL STYLES == */
         .project-header {
             padding: 160px 5% 80px;
             background: linear-gradient(135deg, var(--primary) 0%, #081226 100%);
@@ -458,7 +458,7 @@
                                         <span style="font-weight: 500; font-size: 0.9rem; color: var(--text-dark);">
                                             <a href="{{ route('anggota.show', $member->slug) }}"> {{ $member->name }}</a>
                                         </span>
-                                    </div> 
+                                    </div>
                                 @endif
                             @endforeach
 

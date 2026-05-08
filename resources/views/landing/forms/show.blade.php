@@ -1,5 +1,7 @@
 @extends('landing.master')
 
+@section('title', 'Formulir - ' . $form->title)
+
 @push('styles')
     <style>
         .form-header-bg {
