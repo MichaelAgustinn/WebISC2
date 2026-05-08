@@ -382,8 +382,8 @@
         }
 
         /* =========================================
-                                                                                                                                       RESPONSIVE DESIGN (TABLET & MOBILE)
-                                                                                                                                    ========================================= */
+                                                                                                                                                                                                       RESPONSIVE DESIGN (TABLET & MOBILE)
+                                                                                                                                                                                                    ========================================= */
         @media (max-width: 1024px) {
             .typing-wrapper {
                 grid-template-columns: 1fr;
@@ -607,6 +607,7 @@
        2. JAVASCRIPT LOGIC
     ========================================= --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script>
         function openTab(evt, tabName) {
             if (evt) evt.preventDefault();
@@ -698,7 +699,7 @@
             ];
 
             const wordList = [
-                "aku", "kamu", "dia", "kami", "kita", "mereka", "ini", "itu", "ada", "tidak", "ya", "sudah",
+                "aku", "kamu", "dia", "kami", "kita", "mereka", "ini", "itu", "ada", "tidak", "sudah",
                 "belum", "makan", "minum", "pergi", "datang", "lihat", "tahu", "mau", "bisa", "harus", "akan",
                 "jadi", "buat", "ambil", "beri", "pakai", "kerja", "main", "tidur", "bangun", "duduk",
                 "berdiri", "jalan", "lari", "senyum", "tanya", "jawab", "pikir", "rasa", "cinta", "suka",
@@ -915,22 +916,144 @@
                 const finalAccText = accuracyTag.innerText.replace('%', '');
                 const finalAcc = parseInt(finalAccText) || 0;
 
+                // Simpan skor
                 saveScore(finalWpm, finalAcc);
 
+                // Tambahkan ID "scorecard-export" pada div pembungkus utama
+                // Kita juga menambahkan sedikit watermark "ISC Typing Test" di bawahnya
+                const customHtml = `
+                    <div id="scorecard-export" style="background: #f8fafc; border-radius: 15px; padding: 30px 20px; margin-bottom: 15px; border: 1px solid #e2e8f0; position: relative; overflow: hidden;">
+                        <div style="font-size: 4rem; font-weight: 900; color: var(--accent, #f59e0b); line-height: 1; text-shadow: 2px 2px 0px rgba(0,0,0,0.1);">${finalWpm}</div>
+                        <div style="font-size: 1.2rem; color: var(--primary, #081226); font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 25px;">WPM</div>
+                        
+                        <div style="display: flex; justify-content: space-around; font-size: 0.95rem; background: white; padding: 15px; border-radius: 12px; border: 1px solid #cbd5e1; box-shadow: 0 4px 6px rgba(0,0,0,0.02);">
+                            <div style="display: flex; flex-direction: column; gap: 5px;">
+                                <span style="font-size: 0.8rem; color: #64748b; text-transform: uppercase; font-weight: 600;">Typo</span>
+                                <div><span style="color: #ef4444; font-weight: 900; font-size: 1.3rem;">${mistakes}</span></div>
+                            </div>
+                            <div style="width: 2px; background: #e2e8f0; border-radius: 5px;"></div>
+                            <div style="display: flex; flex-direction: column; gap: 5px;">
+                                <span style="font-size: 0.8rem; color: #64748b; text-transform: uppercase; font-weight: 600;">Akurasi</span>
+                                <div><span style="color: #22c55e; font-weight: 900; font-size: 1.3rem;">${finalAcc}%</span></div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 20px; font-size: 0.75rem; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">
+                            <i class="ri-keyboard-line"></i> ISC Typing Test
+                        </div>
+                    </div>
+                    
+                    <style>
+                        @keyframes spin { 100% { transform: rotate(360deg); } }
+                    </style>
+
+                    <button id="btnShare" style="width: 100%; padding: 14px; background: var(--primary, #081226); color: #fff; border: none; border-radius: 50px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.3s ease; display: flex; justify-content: center; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(8, 18, 38, 0.2);">
+                        <i class="ri-camera-lens-fill"></i> Bagikan Gambar 🚀
+                    </button>
+                `;
+
                 Swal.fire({
-                    title: 'Waktu Habis! ⏱️',
-                    html: `
-                        Skor kecepatanmu: <b>${finalWpm} WPM</b><br>
-                        Salah Ketik (Typo): <b style="color:#ef4444;">${mistakes}x salah</b><br>
-                        Akurasi: <b>${finalAcc}%</b>
-                    `,
-                    icon: finalWpm > 40 ? 'success' : 'info',
-                    confirmButtonText: 'Tutup',
+                    title: '<span style="color: var(--primary, #081226); font-weight: 800;">Waktu Habis! ⏱️</span>',
+                    html: customHtml,
+                    backdrop: `rgba(8, 18, 38, 0.85)`,
+                    showConfirmButton: false,
                     showCloseButton: true,
                     allowOutsideClick: false,
-                    timer: 5000,
-                    timerProgressBar: true
-                }).then((result) => {
+                    focusConfirm: false,
+                    allowEnterKey: false,
+                    allowEscapeKey: false,
+                    timer: 10000,
+                    timerProgressBar: true,
+                    didOpen: () => {
+                        const btnShare = document.getElementById('btnShare');
+                        const scorecard = document.getElementById('scorecard-export');
+
+                        btnShare.addEventListener('click', async () => {
+                            const originalText = btnShare.innerHTML;
+                            btnShare.innerHTML =
+                                `<i class="ri-loader-4-line" style="animation: spin 1s linear infinite;"></i> Memproses...`;
+                            btnShare.style.opacity = "0.7";
+                            btnShare.disabled = true;
+
+                            try {
+                                const canvas = await html2canvas(scorecard, {
+                                    scale: 3,
+                                    backgroundColor: "#ffffff",
+                                    useCORS: true
+                                });
+
+                                canvas.toBlob(async (blob) => {
+                                    const file = new File([blob],
+                                        `ISC_Score_${finalWpm}WPM.png`, {
+                                            type: 'image/png'
+                                        });
+                                    const shareText =
+                                        `Kalahkan Skorku ${finalWpm} WPM dan Akurasi ${finalAcc}%. \n\nCoba tesnya di sini: ${window.location.href}`;
+                                    const shareData = {
+                                        title: 'Skor Kecepatan Ketik ISC',
+                                        text: `Kalahkan Skorku ${finalWpm} WPM dan Akurasi ${finalAcc}%. Coba tesnya di sini: ${window.location.href}`,
+                                        files: [file]
+                                    };
+
+                                    if (navigator.canShare && navigator
+                                        .canShare({
+                                            files: [file]
+                                        })) {
+                                        try {
+                                            await navigator.share(shareData);
+                                            resetShareButton(btnShare,
+                                                originalText);
+                                        } catch (err) {
+                                            resetShareButton(btnShare,
+                                                originalText);
+                                        }
+                                    } else {
+                                        const url = URL.createObjectURL(blob);
+                                        const a = document.createElement('a');
+                                        a.href = url;
+                                        a.download = file.name;
+                                        document.body.appendChild(a);
+                                        a.click();
+                                        document.body.removeChild(a);
+                                        URL.revokeObjectURL(url);
+
+                                        btnShare.innerHTML =
+                                            `<i class="ri-check-double-line"></i> Gambar Diunduh!`;
+                                        btnShare.style.background = "#22c55e";
+                                        btnShare.style.opacity = "1";
+
+                                        setTimeout(() => {
+                                            btnShare.innerHTML =
+                                                originalText;
+                                            btnShare.style.background =
+                                                "var(--primary, #081226)";
+                                            btnShare.disabled = false;
+                                        }, 2500);
+                                    }
+                                }, 'image/png');
+
+                            } catch (error) {
+                                console.error('Gagal membuat gambar:', error);
+                                btnShare.innerHTML =
+                                    `<i class="ri-error-warning-line"></i> Gagal Memproses`;
+                                setTimeout(() => resetShareButton(btnShare, originalText),
+                                    2000);
+                            }
+                        });
+
+                        function resetShareButton(btn, text) {
+                            btn.innerHTML = text;
+                            btn.style.opacity = "1";
+                            btn.disabled = false;
+                        }
+
+                        // Efek Hover
+                        btnShare.addEventListener("mouseenter", () => btnShare.style.transform =
+                            "translateY(-3px)");
+                        btnShare.addEventListener("mouseleave", () => btnShare.style.transform =
+                            "translateY(0)");
+                    }
+                }).then(() => {
                     window.location.reload();
                 });
             }
@@ -993,6 +1116,8 @@
             inpField.addEventListener("blur", () => typingBox.classList.remove("active"));
 
             document.addEventListener("keydown", (e) => {
+
+                if (timeLeft <= 0) return;
 
                 if (e.key === "Tab") {
                     isTabPressed = true;
