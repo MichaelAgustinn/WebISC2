@@ -251,14 +251,18 @@ Route::middleware(['auth', 'role:admin,pengurus,anggota'])->group(function () {
 
     Route::resource('projects', ProjectController::class);
 
-    // Update Komentar
+    // ? Update Komentar
     Route::put('/comments/{comment}', [PostController::class, 'updateComment'])->name('comments.update');
 
-    // Hapus Komentar
+    // ? Hapus Komentar
     Route::delete('/comments/{comment}', [PostController::class, 'destroyComment'])->name('comments.destroy');
 
-    // Tambah komentar
+    //? Tambah komentar
     Route::post('/blog/{post}/comment', [PostController::class, 'storeComment'])->name('posts.comment');
+
+    // ?  lihat project
+    Route::get('/all-project', [ProjectVerificationController::class, 'allProject'])
+        ->name('admin.projects.all');
 });
 
 // ! route untuk admin dan pengurus

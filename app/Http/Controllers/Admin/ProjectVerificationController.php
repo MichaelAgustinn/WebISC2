@@ -21,6 +21,19 @@ class ProjectVerificationController extends Controller
     return view('admin.projects.index', compact('projects'));
   }
 
+  public function allProject(Request $request)
+  {
+    $query = Project::where('status', true);
+
+    if ($search = $request->query('search')) {
+      $query->where('title', 'like', "%{$search}%");
+    }
+
+    $projects = $query->latest()->paginate(15);
+
+    return view('admin.projects.monitoring', compact('projects'));
+  }
+
   public function verify(Project $project)
   {
     $project->status = true;

@@ -458,7 +458,7 @@
                                         <span style="font-weight: 500; font-size: 0.9rem; color: var(--text-dark);">
                                             <a href="{{ route('anggota.show', $member->slug) }}"> {{ $member->name }}</a>
                                         </span>
-                                    </div>
+                                    </div> 
                                 @endif
                             @endforeach
 

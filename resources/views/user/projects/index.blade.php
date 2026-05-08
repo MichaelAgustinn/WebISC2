@@ -76,11 +76,19 @@
                             </td>
 
                             <td class="px-6 py-4">
-                                <span
-                                    class="flex items-center gap-1.5 text-green-600 text-xs font-bold bg-green-50 px-2 py-1 rounded border border-green-100 w-fit">
-                                    <span class="h-1.5 w-1.5 rounded-full bg-green-500"></span>
-                                    Published
-                                </span>
+                                @if ($project->status)
+                                    <span
+                                        class="flex items-center gap-1.5 text-green-600 text-xs font-bold bg-green-50 px-2 py-1 rounded border border-green-100 w-fit">
+                                        <span class="h-1.5 w-1.5 rounded-full bg-green-500"></span>
+                                        Published
+                                    </span>
+                                @else
+                                    <span
+                                        class="flex items-center gap-1.5 text-red-600 text-xs font-bold bg-red-50 px-2 py-1 rounded border border-red-100 w-fit">
+                                        <span class="h-1.5 w-1.5 rounded-full bg-red-500"></span>
+                                        Belum verifikasi
+                                    </span>
+                                @endif
                             </td>
 
                             <td class="px-6 py-4 text-right whitespace-nowrap">

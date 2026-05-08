@@ -44,6 +44,7 @@
 
     <div class="flex h-screen overflow-hidden" x-data="{ sidebarOpen: false }">
 
+        <!-- Mobile Sidebar Overlay -->
         <div x-show="sidebarOpen" @click="sidebarOpen = false"
             x-transition:enter="transition-opacity ease-linear duration-300" x-transition:enter-start="opacity-0"
             x-transition:enter-end="opacity-100" x-transition:leave="transition-opacity ease-linear duration-300"
@@ -51,9 +52,11 @@
             class="fixed inset-0 z-40 bg-black bg-opacity-50 md:hidden" aria-hidden="true">
         </div>
 
+        <!-- Sidebar -->
         <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
             class="fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-xl transition-transform duration-300 ease-in-out md:static md:translate-x-0 border-r border-gray-100 flex flex-col">
 
+            <!-- Logo -->
             <div class="flex h-16 items-center justify-center border-b border-gray-100 bg-white px-6 shrink-0">
                 <a href="{{ route('dashboard') }}"
                     class="flex items-center gap-2 font-bold text-xl text-black-600 hover:text-indigo-700 transition">
@@ -62,169 +65,243 @@
                 </a>
             </div>
 
-            <nav class="mt-6 flex flex-col space-y-1 px-3 overflow-y-auto flex-1 pb-4">
+            <!-- Navigation Links -->
+            <nav class="mt-6 flex flex-col gap-6 px-3 overflow-y-auto flex-1 pb-4">
 
-                <p class="px-3 text-xs font-semibold uppercase text-gray-400 mt-2 mb-2 tracking-wider">Utama</p>
-
-                <a href="{{ route('dashboard') }}"
-                    class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs('dashboard') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600' }} transition-colors">
-                    <svg class="mr-3 h-5 w-5 {{ request()->routeIs('dashboard') ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-500' }}"
-                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                    </svg>
-                    Dashboard
-                </a>
-
-                @if (Auth::user()->role == 'admin' || Auth::user()->role == 'pengurus')
-                    <p class="px-3 text-xs font-semibold uppercase text-gray-400 mt-6 mb-2 tracking-wider">Konten Web
-                    </p>
-
-                    <a href="{{ route('landing.index') }}"
-                        class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs('landing.*') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600' }} transition-colors">
-                        <svg class="mr-3 h-5 w-5 {{ request()->routeIs('landing.*') ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-500' }}"
-                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                        </svg>
-                        Landing Page
-                    </a>
-
-                    <a href="{{ route('forms.index') }}"
-                        class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs('forms.*') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600' }} transition-colors">
-                        <svg class="mr-3 h-5 w-5 {{ request()->routeIs('forms.*') ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-500' }}"
-                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
-                        Kelola Formulir
-                    </a>
-
-                    <a href="{{ route('faq.index') }}"
-                        class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs('faq.*') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600' }} transition-colors">
-                        <svg class="mr-3 h-5 w-5 {{ request()->routeIs('faq.*') ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-500' }}"
-                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        Kelola FAQ
-                    </a>
-
-                    <a href="{{ route('admin-events.index') }}"
-                        class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs('admin-events.*') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600' }} transition-colors">
-                        <svg class="mr-3 h-5 w-5 {{ request()->routeIs('admin-events.*') ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-500' }}"
-                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <!-- Ikon Kalender -->
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                        Kelola Event
-                    </a>
-
-                    <a href="{{ route('teams.index') }}"
-                        class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs('teams.*') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600' }} transition-colors">
-                        <svg class="mr-3 h-5 w-5 {{ request()->routeIs('teams.*') ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-500' }}"
-                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                        </svg>
-                        Kelola Pengurus
-                    </a>
-
-                    <a href="{{ route('advisors.index') }}"
-                        class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs('advisors.*') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600' }} transition-colors">
-                        <svg class="mr-3 h-5 w-5 {{ request()->routeIs('advisors.*') ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-500' }}"
-                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                        </svg>
-                        Kelola Dosen
-                    </a>
+                <!-- 1. UTAMA -->
+                {{-- TODO_REMOVE_ADMIN_PROD: Hapus 'admin' dari array di bawah saat production --}}
+                @if (in_array(Auth::user()->role, ['anggota', 'pengurus', 'admin']))
+                    <div>
+                        <p class="px-3 text-xs font-bold uppercase text-gray-400 mb-2 tracking-wider">Utama</p>
+                        <div class="space-y-1">
+                            <a href="{{ route('dashboard') }}"
+                                class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs('dashboard') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600' }} transition-colors">
+                                <svg class="mr-3 h-5 w-5 {{ request()->routeIs('dashboard') ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-500' }}"
+                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                                </svg>
+                                Dashboard
+                            </a>
+                        </div>
+                    </div>
                 @endif
 
-                @if (Auth::user()->role == 'admin' || Auth::user()->role == 'pengurus')
-                    <p class="px-3 text-xs font-semibold uppercase text-gray-400 mt-6 mb-2 tracking-wider">Anggota &
-                        Karya</p>
+                <!-- 2. MANAJEMEN KARYA -->
+                @if (in_array(Auth::user()->role, ['anggota', 'pengurus', 'admin']))
+                    <div>
+                        <p class="px-3 text-xs font-bold uppercase text-gray-400 mb-2 tracking-wider">Manajemen Karya
+                        </p>
+                        <div class="space-y-1">
+                            @if (in_array(Auth::user()->role, ['pengurus', 'anggota', 'admin']))
+                                <a href="{{ route('admin.projects.all') }}"
+                                    class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs('admin.projects.all') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600' }} transition-colors">
+                                    <svg class="mr-3 h-5 w-5 {{ request()->routeIs('admin.projects.all') ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-500' }}"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                    Daftar Karya
+                                </a>
+                            @endif
 
-                    <a href="{{ route('admin.projects.index') }}"
-                        class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs('admin.projects.*') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600' }} transition-colors">
-                        <svg class="mr-3 h-5 w-5 {{ request()->routeIs('admin.projects.*') ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-500' }}"
-                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                        Karya (Projects)
-                    </a>
+                            @if (in_array(Auth::user()->role, ['pengurus', 'admin']))
+                                <a href="{{ route('admin.projects.index') }}"
+                                    class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs('admin.projects.index') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600' }} transition-colors">
+                                    <svg class="mr-3 h-5 w-5  {{ request()->routeIs('admin.projects.index') ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-500' }}"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    Verifikasi Karya
+                                </a>
+                            @endif
 
-                    <a href="{{ route('users.unverified') }}"
-                        class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs('users.unverified') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600' }} transition-colors">
-                        <svg class="mr-3 h-5 w-5 {{ request()->routeIs('users.unverified') ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-500' }}"
-                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                        </svg>
-                        Verifikasi Anggota
-                    </a>
-
-                    <a href="{{ route('users.index') }}"
-                        class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs('users.index') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600' }} transition-colors">
-                        <svg class="mr-3 h-5 w-5 {{ request()->routeIs('users.index') ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-500' }}"
-                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                        </svg>
-                        Anggota Aktif
-                    </a>
+                            {{-- TODO_REMOVE_ADMIN_PROD: Hapus 'admin' dari array di bawah saat production --}}
+                            @if (in_array(Auth::user()->role, ['pengurus', 'anggota', 'admin']))
+                                <a href="{{ route('myproject.index') }}"
+                                    class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs('myproject.*') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600' }} transition-colors">
+                                    <svg class="mr-3 h-5 w-5 {{ request()->routeIs('myproject.*') ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-500' }}"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                                    </svg>
+                                    Karya Saya
+                                </a>
+                            @endif
+                        </div>
+                    </div>
                 @endif
 
-                <p class="px-3 text-xs font-semibold uppercase text-gray-400 mt-6 mb-2 tracking-wider">Administrasi</p>
+                <!-- 3. MANAJEMEN SDM -->
+                @if (in_array(Auth::user()->role, ['admin', 'pengurus']))
+                    <div>
+                        <p class="px-3 text-xs font-bold uppercase text-gray-400 mb-2 tracking-wider">Manajemen SDM</p>
+                        <div class="space-y-1">
+                            @if (in_array(Auth::user()->role, ['admin', 'pengurus']))
+                                <a href="{{ route('teams.index') }}"
+                                    class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs('teams.*') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600' }} transition-colors">
+                                    <svg class="mr-3 h-5 w-5 {{ request()->routeIs('teams.*') ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-500' }}"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                    </svg>
+                                    Pengurus
+                                </a>
 
-                @if (Auth::user()->role == 'admin' || Auth::user()->role == 'pengurus')
-                    <a href="{{ route('documents.index') }}"
-                        class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs('documents.*') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600' }} transition-colors">
-                        <svg class="mr-3 h-5 w-5 {{ request()->routeIs('documents.*') ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-500' }}"
-                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
-                        Arsip Dokumen Saya
-                    </a>
-                    <a href="{{ route('posts.manage') }}"
-                        class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs('posts.*') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600' }} transition-colors">
-                        <svg class="mr-3 h-5 w-5 {{ request()->routeIs('posts.*') ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-500' }}"
-                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
-                        </svg>
-                        Artikel Saya
-                    </a>
+                                <a href="{{ route('advisors.index') }}"
+                                    class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs('advisors.*') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600' }} transition-colors">
+                                    <svg class="mr-3 h-5 w-5 {{ request()->routeIs('advisors.*') ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-500' }}"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                    </svg>
+                                    Dosen Pembimbing
+                                </a>
+                            @endif
+
+                            {{-- TODO_REMOVE_ADMIN_PROD: Hapus 'admin' dari array di bawah saat production --}}
+                            @if (in_array(Auth::user()->role, ['pengurus', 'admin']))
+                                <a href="{{ route('users.index') }}"
+                                    class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs('users.index') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600' }} transition-colors">
+                                    <svg class="mr-3 h-5 w-5 {{ request()->routeIs('users.index') ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-500' }}"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                    </svg>
+                                    Daftar Anggota
+                                </a>
+
+                                {{-- TODO_REMOVE_ADMIN_PROD: Hapus 'admin' dari array di bawah saat production --}}
+                                <a href="{{ route('users.unverified') }}"
+                                    class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs('users.unverified') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600' }} transition-colors">
+                                    <svg class="mr-3 h-5 w-5 {{ request()->routeIs('users.unverified') ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-500' }}"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                                    </svg>
+                                    Verifikasi Anggota
+                                </a>
+                            @endif
+                        </div>
+                    </div>
                 @endif
 
-                @if (Auth::user()->role != 'none')
-                    <a href="{{ route('myproject.index') }}"
-                        class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs('myproject.*') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600' }} transition-colors">
-                        <svg class="mr-3 h-5 w-5 {{ request()->routeIs('myproject.*') ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-500' }}"
-                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                        Karya Saya (Projects)
-                    </a>
+                <!-- 4. KONTEN WEB -->
+                @if (in_array(Auth::user()->role, ['admin']))
+                    <div>
+                        <p class="px-3 text-xs font-bold uppercase text-gray-400 mb-2 tracking-wider">Konten Web</p>
+                        <div class="space-y-1">
+                            <a href="{{ route('landing.index') }}"
+                                class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs('landing.*') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600' }} transition-colors">
+                                <svg class="mr-3 h-5 w-5 {{ request()->routeIs('landing.*') ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-500' }}"
+                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                </svg>
+                                Landing Page
+                            </a>
+
+                            <a href="{{ route('faq.index') }}"
+                                class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs('faq.*') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600' }} transition-colors">
+                                <svg class="mr-3 h-5 w-5 {{ request()->routeIs('faq.*') ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-500' }}"
+                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                Kelola FAQ
+                            </a>
+                        </div>
+                    </div>
                 @endif
 
-                <a href="{{ route('profile.edit') }}"
-                    class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs('profile.*') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600' }} transition-colors">
-                    <svg class="mr-3 h-5 w-5 {{ request()->routeIs('profile.*') ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-500' }}"
-                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
-                    Profile Saya
-                </a>
+                <!-- 5. KEGIATAN & ACARA -->
+                @if (in_array(Auth::user()->role, ['pengurus', 'admin', 'anggota']))
+                    <div>
+                        <p class="px-3 text-xs font-bold uppercase text-gray-400 mb-2 tracking-wider">Kegiatan & Acara
+                        </p>
+                        <div class="space-y-1">
+                            @if (in_array(Auth::user()->role, ['pengurus', 'admin']))
+                                <a href="#"
+                                    class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
+                                    <svg class="mr-3 h-5 w-5 text-gray-400 group-hover:text-indigo-500" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                    </svg>
+                                    Internal
+                                </a>
 
-                <div class="mt-auto pt-4 pb-2">
+                                <a href="{{ route('admin-events.index') }}"
+                                    class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs('admin-events.*') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600' }} transition-colors">
+                                    <svg class="mr-3 h-5 w-5 {{ request()->routeIs('admin-events.*') ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-500' }}"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                    Umum
+                                </a>
+                            @endif
+
+                            {{-- TODO_REMOVE_ADMIN_PROD: Hapus 'admin' dari array di bawah saat production --}}
+                            @if (in_array(Auth::user()->role, ['anggota', 'pengurus', 'admin']))
+                                <a href="#"
+                                    class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
+                                    <svg class="mr-3 h-5 w-5 text-gray-400 group-hover:text-indigo-500" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 8v1m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    Event Saya
+                                </a>
+                            @endif
+                        </div>
+                    </div>
+                @endif
+
+                <!-- 6. LAINNYA -->
+                @if (in_array(Auth::user()->role, ['admin', 'pengurus']))
+                    <div>
+                        <p class="px-3 text-xs font-bold uppercase text-gray-400 mb-2 tracking-wider">Lainnya</p>
+                        <div class="space-y-1">
+                            <a href="{{ route('documents.index') }}"
+                                class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs('documents.*') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600' }} transition-colors">
+                                <svg class="mr-3 h-5 w-5 {{ request()->routeIs('documents.*') ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-500' }}"
+                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                                Dokumen
+                            </a>
+
+                            <a href="{{ route('posts.manage') }}"
+                                class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs('posts.*') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600' }} transition-colors">
+                                <svg class="mr-3 h-5 w-5 {{ request()->routeIs('posts.*') ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-500' }}"
+                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                                </svg>
+                                Artikel
+                            </a>
+                        </div>
+                    </div>
+                @endif
+
+                <!-- MENU AKUN & BAWAH -->
+                <div class="mt-auto border-t border-gray-100 pt-4 pb-2 flex flex-col gap-2">
+                    <p class="px-3 text-xs font-bold uppercase text-gray-400 tracking-wider">Akun</p>
+                    <a href="{{ route('profile.edit') }}"
+                        class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs('profile.*') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600' }} transition-colors">
+                        <svg class="mr-3 h-5 w-5 {{ request()->routeIs('profile.*') ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-500' }}"
+                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                        Profile Saya
+                    </a>
+
                     <a href="{{ route('home') }}"
-                        class="group flex items-center justify-center rounded-lg px-3 py-2.5 text-sm font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 transition-all shadow-sm">
+                        class="mt-2 group flex items-center justify-center rounded-lg px-3 py-2.5 text-sm font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 transition-all shadow-sm">
                         <svg class="mr-2 h-5 w-5 text-indigo-600" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
