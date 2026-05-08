@@ -415,6 +415,13 @@
             color: var(--text-light);
             margin-bottom: 1.5rem;
             font-size: 1.1rem;
+            text-align: justify
+        }
+
+        @media (max-width: 1024px) {
+            .about-text p {
+                text-align: left
+            }
         }
 
         /* Visi Misi Section */
