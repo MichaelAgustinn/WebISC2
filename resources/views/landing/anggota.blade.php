@@ -313,29 +313,36 @@
     </section>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const searchInput = document.getElementById('searchInput');
-            const memberCards = document.querySelectorAll('.member-card');
+        const searchInput = document.getElementById('searchInput');
+        const memberGrid = document.getElementById('memberGrid');
 
-            if (searchInput) {
-                searchInput.addEventListener('keyup', function(e) {
-                    const term = e.target.value.toLowerCase();
+        let debounceTimer;
 
-                    memberCards.forEach(card => {
-                        const name = card.querySelector('.member-name').textContent.toLowerCase();
-                        const divisi = card.querySelector('.member-divisi').textContent
-                            .toLowerCase();
-                        const year = card.querySelector('.member-year').textContent.toLowerCase();
+        searchInput.addEventListener('keyup', function() {
 
-                        // Cari berdasarkan Nama, Divisi, atau Angkatan
-                        if (name.includes(term) || divisi.includes(term) || year.includes(term)) {
-                            card.style.display = "block"; // Kembalikan ke block/default grid item
-                        } else {
-                            card.style.display = "none";
+            clearTimeout(debounceTimer);
+
+            debounceTimer = setTimeout(() => {
+
+                fetch(`/anggota?search=${encodeURIComponent(this.value)}`, {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
                         }
+                    })
+                    .then(response => response.text())
+                    .then(html => {
+
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, 'text/html');
+
+                        const newGrid = doc.getElementById('memberGrid');
+
+                        memberGrid.innerHTML = newGrid.innerHTML;
+
                     });
-                });
-            }
+
+            }, 300);
+
         });
     </script>
 @endsection

@@ -82,30 +82,41 @@ Route::post('/events/{event}/register', [PublicEventController::class, 'register
 
 // ? halaman anggota area
 Route::get('/anggota', function (Request $request) {
-    // Ambil keyword pencarian dari URL (misal: ?search=keyword)
+
     $search = $request->input('search');
 
     $members = User::where('email', '!=', 'isc@unsulbar.ac.id')
         ->where('role', '!=', 'none')
         ->with('profile')
-        // Logic Pencarian
+
         ->when($search, function ($query, $search) {
-            // Bungkus dalam parameter closure agar tidak merusak filter email & role di atas
+
             $query->where(function ($q) use ($search) {
-                // Cari berdasarkan nama di tabel user
+
                 $q->where('name', 'like', "%{$search}%")
-                    // ATAU cari ke relasi profile (divisi & angkatan)
+
                     ->orWhereHas('profile', function ($qProfile) use ($search) {
+
                         $qProfile->where('division', 'like', "%{$search}%")
                             ->orWhere('angkatan', 'like', "%{$search}%");
                     });
             });
         })
+
         ->orderBy('name', 'asc')
         ->paginate(12)
         ->withQueryString();
 
     $landingData = App\Models\LandingPage::pluck('value', 'key')->toArray();
+
+    // TAMBAHAN AJAX
+    if ($request->ajax()) {
+
+        return view('landing.anggota', [
+            'members' => $members,
+            'data' => $landingData
+        ])->render();
+    }
 
     return view('landing.anggota', [
         'members' => $members,
