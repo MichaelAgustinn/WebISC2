@@ -697,25 +697,18 @@
             ];
 
             const wordList = [
-                "aku", "kamu", "dia", "kami", "kita", "mereka", "ini", "itu", "ada", "tidak", "sudah",
-                "belum", "makan", "minum", "pergi", "datang", "lihat", "tahu", "mau", "bisa", "harus", "akan",
-                "jadi", "buat", "ambil", "beri", "pakai", "kerja", "main", "tidur", "bangun", "duduk",
-                "berdiri", "jalan", "lari", "senyum", "tanya", "jawab", "pikir", "rasa", "cinta", "suka",
-                "benci", "besar", "kecil", "panjang", "pendek", "tinggi", "rendah", "cepat", "lambat", "baru",
-                "lama", "baik", "buruk", "benar", "salah", "mudah", "sulit", "dekat", "jauh", "banyak",
-                "sedikit", "semua", "orang", "anak", "teman", "rumah", "sekolah", "kantor", "pasar", "kota",
-                "desa", "negara", "dunia", "hari", "malam", "pagi", "siang", "sore", "minggu", "bulan", "tahun",
-                "waktu", "air", "api", "tanah", "angin", "langit", "laut", "gunung", "sungai", "hutan", "hewan",
-                "tani", "ikan", "nasi", "roti", "buah", "sayur", "daging", "gula", "garam", "kopi", "teh",
-                "susu", "baju", "celana", "sepatu", "buku", "meja", "kursi", "pintu", "kaca", "mobil", "motor",
-                "sepeda", "uang", "harga", "nama", "cerita", "lagu", "film", "gambar", "suara", "warna",
-                "hitam", "putih", "merah", "biru", "hijau", "kuning", "coklat", "abu", "manis", "asin", "pahit",
-                "pedas", "asam", "dingin", "panas", "hujan", "cerah", "gelap", "terang", "sehat", "sakit",
-                "kuat", "lemah", "kaya", "miskin", "tua", "muda", "pria", "wanita", "guru", "murid", "dokter",
-                "petani", "nelayan", "polisi", "tentara", "sopir", "tulis", "baca", "main", "pimpin",
-                "rakyat", "bahasa", "kata", "kalimat", "angka", "bentuk", "ukur", "contoh", "alasan", "tuju",
-                "harap", "mimpi", "soal", "pilih", "putus", "bantu", "usaha", "hasil", "proses", "cara", "atur",
-                "berita", "sejarah", "budaya", "agama", "giat", "jalan", "temu", "ubah", "tumbuh", "butuh"
+                "aku", "anda", "anak", "akan", "ada", "air", "akibat", "antara", "apa", "bagian",
+                "bagus", "baik", "bahwa", "banyak", "baru", "besar", "biasa", "bisa", "boleh",
+                "bukan", "cara", "cepat", "cukup", "dan", "dapat", "dari", "datang", "dengan", "dia",
+                "di", "diri", "hal", "hari", "harga", "harus", "hidup", "hati", "ia", "ingin", "ini", "itu",
+                "jadi", "jalan", "jangan", "jelas", "juga", "jumlah", "kali", "kalau", "kami", "kamu",
+                "karena", "ke", "kecil", "kembali", "kepada", "kepala", "kerja", "ketika", "kita", "kurang",
+                "lagi", "lain", "langsung", "lalu", "luar", "maka", "makan", "malam", "mana", "masalah",
+                "masuk", "mata", "mau", "melalui", "melakukan", "membuat", "memberi", "memiliki", "mencari",
+                "menjadi",
+                "mengatakan", "mereka", "mudah", "mungkin", "mulai", "naik", "nama", "namun", "orang",
+                "pada", "paling", "perlu", "pernah", "punya", "saat", "salah", "sama", "sampai", "sangat",
+                "saya"
             ];
             let activeWordList = wordList;
 
