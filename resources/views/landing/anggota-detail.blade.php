@@ -93,18 +93,18 @@
         }
 
         /* --- TAMBAHAN: STYLING SOSIAL MEDIA --- */
-        .social-links {
+        .social-links-inner {
             display: flex;
             justify-content: center;
             gap: 12px;
             margin-bottom: 2rem;
         }
 
-        .social-links a {
+        .social-links-inner a {
             color: var(--primary);
         }
 
-        .social-icon {
+        .social-icon-inner {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -119,7 +119,7 @@
             border: 1px solid #e2e8f0;
         }
 
-        .social-icon:hover {
+        .social-icon-inner:hover {
             background: var(--accent);
             color: var(--white);
             border-color: var(--accent);
@@ -328,27 +328,27 @@
                         $member->profile->linkedin ||
                         $member->profile->github ||
                         $member->profile->personal_link))
-                <div class="social-links">
+                <div class="social-links-inner">
                     @if ($member->profile->instagram)
-                        <a href="{{ $member->profile->instagram }}" target="_blank" class="social-icon" title="Instagram">
+                        <a href="{{ $member->profile->instagram }}" target="_blank" class="social-icon-inner" title="Instagram">
                             <i class="ri-instagram-line"></i>
                         </a>
                     @endif
 
                     @if ($member->profile->linkedin)
-                        <a href="{{ $member->profile->linkedin }}" target="_blank" class="social-icon" title="LinkedIn">
+                        <a href="{{ $member->profile->linkedin }}" target="_blank" class="social-icon-inner" title="LinkedIn">
                             <i class="ri-linkedin-fill"></i>
                         </a>
                     @endif
 
                     @if ($member->profile->github)
-                        <a href="{{ $member->profile->github }}" target="_blank" class="social-icon" title="GitHub">
+                        <a href="{{ $member->profile->github }}" target="_blank" class="social-icon-inner" title="GitHub">
                             <i class="ri-github-fill"></i>
                         </a>
                     @endif
 
                     @if ($member->profile->personal_link)
-                        <a href="{{ $member->profile->personal_link }}" target="_blank" class="social-icon"
+                        <a href="{{ $member->profile->personal_link }}" target="_blank" class="social-icon-inner"
                             title="Personal Website">
                             <i class="ri-global-line"></i>
                         </a>
