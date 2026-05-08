@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -120,8 +121,43 @@ class EventController extends Controller
 
     public function myEvents()
     {
-        $events = Auth::user()->registeredEvents()->orderBy('created_at', 'desc')->paginate(10);
+        $user = Auth::user();
 
-        return view('events.my-events', compact('events'));
+        $internalEvents = $user->events()->get()->map(function ($event) {
+            return (object) [
+                'type'        => 'Internal',
+                'title'       => $event->name,
+                'description' => $event->deskripsi,
+                'image'       => $event->photo,
+                'joined_at'   => $event->pivot->created_at,
+                'link'        => $event->link
+            ];
+        });
+
+
+        $externalEvents = $user->formResponses()->with('form')->get()->map(function ($response) {
+            $form = $response->form;
+            return (object) [
+                'type'        => 'Eksternal',
+                'title'       => $form ? $form->title : 'Form Dihapus',
+                'description' => $form ? $form->description : '-',
+                'image'       => $form ? $form->cover_image : null,
+                'joined_at'   => $response->created_at,
+                'link'        => null
+            ];
+        });
+        // dd($externalEvents);
+
+
+        $allEvents = $internalEvents->concat($externalEvents)->sortByDesc('joined_at');
+
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $perPage = 10;
+        $currentItems = $allEvents->slice(($currentPage - 1) * $perPage, $perPage)->all();
+        $paginatedEvents = new LengthAwarePaginator($currentItems, count($allEvents), $perPage, $currentPage, [
+            'path' => LengthAwarePaginator::resolveCurrentPath()
+        ]);
+
+        return view('events.my-events', ['events' => $paginatedEvents]);
     }
 }

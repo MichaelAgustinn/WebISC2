@@ -17,7 +17,6 @@
                     <tr>
                         <th class="px-6 py-4 font-semibold w-32">Poster</th>
                         <th class="px-6 py-4 font-semibold">Detail Event</th>
-                        <th class="px-6 py-4 font-semibold w-48">Waktu Pelaksanaan</th>
                         <th class="px-6 py-4 font-semibold w-40">Tanggal Daftar</th>
                     </tr>
                 </thead>
@@ -25,10 +24,9 @@
                     @forelse($events as $event)
                         <tr class="hover:bg-gray-50 transition-colors">
 
-                            <!-- Menampilkan Gambar/Poster Event (Asumsi ada field 'image' atau 'poster') -->
                             <td class="px-6 py-4 align-top">
-                                @if ($event->image)
-                                    <img src="{{ asset('storage/' . $event->image) }}" alt="{{ $event->name }}"
+                                @if (!empty($event->image))
+                                    <img src="{{ asset($event->image) }}" alt="{{ $event->title }}"
                                         class="h-20 w-20 object-cover rounded-lg border border-gray-200 shadow-sm">
                                 @else
                                     <div
@@ -61,36 +59,6 @@
                                 </p>
                             </td>
 
-                            <!-- Waktu Pelaksanaan Event (Asumsi ada field 'start_date' atau 'date') -->
-                            <td class="px-6 py-4 align-top">
-                                @if (isset($event->start_date))
-                                    <div class="flex items-center gap-2 text-sm text-gray-700 mb-1">
-                                        <svg class="w-4 h-4 text-indigo-500" fill="none" viewBox="0 0 24 24"
-                                            stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                        </svg>
-                                        {{ \Carbon\Carbon::parse($event->start_date)->format('d M Y') }}
-                                    </div>
-                                @else
-                                    <span class="text-xs text-gray-400">TBA</span>
-                                @endif
-
-                                {{-- Jika ada field lokasi --}}
-                                @if (isset($event->location))
-                                    <div class="flex items-start gap-2 text-xs text-gray-500 mt-2">
-                                        <svg class="w-3.5 h-3.5 mt-0.5 text-gray-400 flex-shrink-0" fill="none"
-                                            viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                                        </svg>
-                                        <span class="line-clamp-1">{{ $event->location }}</span>
-                                    </div>
-                                @endif
-                            </td>
-
                             <!-- Tanggal Mendaftar/Join (Diambil dari pivot table user_event) -->
                             <td class="px-6 py-4 align-top">
                                 <span
@@ -102,7 +70,7 @@
                                     Terdaftar
                                 </span>
                                 <div class="text-xs text-gray-400 mt-2">
-                                    {{ $event->pivot->created_at ? $event->pivot->created_at->format('d M Y, H:i') : '-' }}
+                                    {{ $event->joined_at ? \Carbon\Carbon::parse($event->joined_at)->format('d M Y, H:i') : '-' }}
                                 </div>
                             </td>
 
