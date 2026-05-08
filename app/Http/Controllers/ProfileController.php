@@ -46,12 +46,20 @@ class ProfileController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
+
             'email' => [
                 'required',
                 'email',
                 Rule::unique('users')->ignore($user->id)
             ],
-            'nim' => 'nullable|string|max:20|unique:profiles,nim',
+
+            'nim' => [
+                'nullable',
+                'string',
+                'max:20',
+                Rule::unique('profiles', 'nim')->ignore(optional($user->profile)->id),
+            ],
+
             'phone_number' => 'nullable|string|max:15',
             'angkatan' => 'nullable|numeric',
             'division' => 'nullable|string',
