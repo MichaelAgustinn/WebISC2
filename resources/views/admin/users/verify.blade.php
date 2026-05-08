@@ -165,7 +165,7 @@
                             {{-- DELETE --}}
                             <td class="px-6 py-5 text-right">
 
-                                <form action="{{ route('regist.destroy', $user->slug) }}" method="POST"
+                                <form action="{{ route('regist.destroy', $user) }}" method="POST"
                                     onsubmit="return confirm('Yakin ingin menghapus user ini?')">
 
                                     @csrf
