@@ -64,7 +64,7 @@
             <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden h-fit">
                 <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
                     <h3 class="font-semibold text-gray-800">Karya Terbaru</h3>
-                    <a href="{{ route('projects.index') }}"
+                    <a href="{{ route('admin.projects.all') }}"
                         class="text-indigo-600 text-sm font-medium hover:underline">Lihat
                         Semua</a>
                 </div>
