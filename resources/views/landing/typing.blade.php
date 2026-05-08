@@ -958,7 +958,7 @@
                     allowOutsideClick: false,
                     focusConfirm: false,
                     allowEnterKey: false,
-                    allowEscapeKey: false,
+                    allowEscapeKey: true,
                     timer: 10000,
                     timerProgressBar: true,
                     didOpen: () => {
