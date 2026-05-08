@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Regist;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Str;
 
@@ -35,5 +36,15 @@ class RegistController extends Controller
         ]);
 
         return redirect()->route('waiting.verification')->with('success', 'registrasi berhasil, mohon tunggu untuk di verifikasi');
+    }
+
+    public function destroy(Regist $user)
+    {
+        if (Auth::user()->role == 'pengurus' && ($user->role == 'admin' || $user->role == 'pengurus')) {
+            return back()->with('error', 'Akses ditolak.');
+        }
+
+        $user->delete();
+        return back()->with('success', 'Berhasil dihapus.');
     }
 }

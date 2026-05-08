@@ -318,6 +318,7 @@ Route::middleware(['auth', 'role:admin,pengurus'])->group(function () {
     Route::put('/admin/unverified/submit/{id}', [AdminUserController::class, 'verify'])->name('users.verify');
     Route::put('/admin/users/{user}/role', [AdminUserController::class, 'updateRole'])->name('users.update-role');
     Route::delete('/admin/users/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
+    Route::delete('/admin/regist/{user}', [RegistController::class, 'destroy'])->name('users.destroy');
 
     // ? document area
     Route::resource('documents', DocumentController::class)->except(['show', 'edit', 'update']);
