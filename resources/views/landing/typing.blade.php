@@ -382,8 +382,8 @@
         }
 
         /* =========================================
-                                                                                                                                                                                                       RESPONSIVE DESIGN (TABLET & MOBILE)
-                                                                                                                                                                                                    ========================================= */
+                                                                                                                                                                                                                           RESPONSIVE DESIGN (TABLET & MOBILE)
+                                                                                                                                                                                                                        ========================================= */
         @media (max-width: 1024px) {
             .typing-wrapper {
                 grid-template-columns: 1fr;
@@ -807,6 +807,7 @@
                         correctWordsCount++;
                     } else {
                         currentWordDiv.classList.add("error-word");
+                        mistakes++;
                     }
 
                     currentWordDiv.classList.remove("active");
@@ -836,9 +837,7 @@
                     let expectedChar = originalChars[addedCharIndex] ? originalChars[addedCharIndex].innerText :
                         null;
 
-                    if (typedValue[addedCharIndex] !== expectedChar) {
-                        mistakes++;
-                    } else {
+                    if (typedValue[addedCharIndex] !== expectedChar) {} else {
                         correctKeystrokes++;
                     }
                 }
@@ -928,7 +927,7 @@
                         
                         <div style="display: flex; justify-content: space-around; font-size: 0.95rem; background: white; padding: 15px; border-radius: 12px; border: 1px solid #cbd5e1; box-shadow: 0 4px 6px rgba(0,0,0,0.02);">
                             <div style="display: flex; flex-direction: column; gap: 5px;">
-                                <span style="font-size: 0.8rem; color: #64748b; text-transform: uppercase; font-weight: 600;">Typo</span>
+                                <span style="font-size: 0.8rem; color: #64748b; text-transform: uppercase; font-weight: 600;">Kata Typo</span>
                                 <div><span style="color: #ef4444; font-weight: 900; font-size: 1.3rem;">${mistakes}</span></div>
                             </div>
                             <div style="width: 2px; background: #e2e8f0; border-radius: 5px;"></div>
