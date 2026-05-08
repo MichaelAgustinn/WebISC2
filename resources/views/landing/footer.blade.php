@@ -11,10 +11,10 @@
                     <i class="ri-mail-line"></i>
                     {{ $data['contact_email'] ?? 'email@contoh.com' }}
                 </li>
-                <li>
+                {{-- <li>
                     <i class="ri-phone-line"></i>
                     {{ $data['contact_phone'] ?? '-' }}
-                </li>
+                </li> --}}
 
             </ul>
         </div>
