@@ -426,8 +426,17 @@
 
         .vm-container {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+
+        /* Tablet & Mobile */
+        @media (max-width: 1024px) {
+
+            .vm-container {
+                grid-template-columns: 1fr;
+            }
+
         }
 
         .vm-card {
