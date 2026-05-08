@@ -120,7 +120,7 @@
             position: relative;
             transition: color 0.1s, background-color 0.1s;
             border-bottom: 2px solid transparent;
-            color: #94a3b8;
+            color: #000000;
             font-weight: 500;
         }
 
