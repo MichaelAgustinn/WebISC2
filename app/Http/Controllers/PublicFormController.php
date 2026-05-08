@@ -39,8 +39,9 @@ class PublicFormController extends Controller
             ->where('user_id', Auth::id())
             ->exists();
 
+        $data = LandingPage::pluck('value', 'key')->toArray();
         // Kirim variabel $hasSubmitted ke view
-        return view('landing.forms.show', compact('form', 'hasSubmitted'));
+        return view('landing.forms.show', compact('form', 'hasSubmitted', 'data'));
     }
 
     public function submit(Request $request, $slug)

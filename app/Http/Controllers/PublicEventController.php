@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\LandingPage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,8 +20,9 @@ class PublicEventController extends Controller
 
         $events = $query->latest()->paginate(12);
         $recentEvents = Event::latest()->take(5)->get();
+        $data = LandingPage::pluck('value', 'key')->toArray();
 
-        return view('landing.events', compact('events', 'recentEvents'));
+        return view('landing.events', compact('events', 'recentEvents', 'data'));
     }
 
     public function show($slug)
@@ -37,10 +39,13 @@ class PublicEventController extends Controller
             ->orderBy('id', 'asc')
             ->first();
 
+        $data = LandingPage::pluck('value', 'key')->toArray();
+
         return view('landing.events-detail', compact(
             'event',
             'prevEvent',
-            'nextEvent'
+            'nextEvent',
+            'data'
         ));
     }
 
