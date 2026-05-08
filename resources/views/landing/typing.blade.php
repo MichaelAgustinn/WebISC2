@@ -712,7 +712,7 @@
                 "hitam", "putih", "merah", "biru", "hijau", "kuning", "coklat", "abu", "manis", "asin", "pahit",
                 "pedas", "asam", "dingin", "panas", "hujan", "cerah", "gelap", "terang", "sehat", "sakit",
                 "kuat", "lemah", "kaya", "miskin", "tua", "muda", "pria", "wanita", "guru", "murid", "dokter",
-                "petani", "nelayan", "polisi", "tentara", "sopir", "tulis", "baca", "nyanyi", "main", "pimpin",
+                "petani", "nelayan", "polisi", "tentara", "sopir", "tulis", "baca", "main", "pimpin",
                 "rakyat", "bahasa", "kata", "kalimat", "angka", "bentuk", "ukur", "contoh", "alasan", "tuju",
                 "harap", "mimpi", "soal", "pilih", "putus", "bantu", "usaha", "hasil", "proses", "cara", "atur",
                 "berita", "sejarah", "budaya", "agama", "giat", "jalan", "temu", "ubah", "tumbuh", "butuh"
