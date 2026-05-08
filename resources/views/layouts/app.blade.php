@@ -350,6 +350,41 @@
                         </div>
                     @endif
 
+                    @if ($errors->any())
+                        <div class="mb-6 flex items-center justify-between rounded-lg border border-red-200 bg-red-50 p-4 text-red-700 shadow-sm"
+                            x-data="{ show: true }" x-show="show">
+
+                            <div class="flex items-center gap-3">
+
+                                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+
+                                </svg>
+
+                                @foreach ($errors->all() as $error)
+                                    <span class="font-medium">
+                                        {{ $error }}
+                                    </span>
+                                @endforeach
+
+                            </div>
+
+                            <button @click="show = false" class="text-red-600 hover:text-red-800">
+
+                                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M6 18L18 6M6 6l12 12" />
+
+                                </svg>
+
+                            </button>
+
+                        </div>
+                    @endif
+
                     @yield('content')
                 </div>
 

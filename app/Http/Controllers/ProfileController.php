@@ -44,23 +44,30 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
 
-        // 1. Validasi Input
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => ['required', 'email', Rule::unique('users')->ignore($user->id)],
-            'nim' => 'nullable|string|max:20',
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('users')->ignore($user->id)
+            ],
+            'nim' => 'nullable|string|max:20|unique:profiles,nim',
             'phone_number' => 'nullable|string|max:15',
             'angkatan' => 'nullable|numeric',
             'division' => 'nullable|string',
             'bio' => 'nullable|string',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Max 2MB
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'instagram' => 'nullable|string',
             'linkedin' => 'nullable|string',
             'github' => 'nullable|string',
             'personal_link' => 'nullable|string',
+
+        ], [
+            'nim.unique' => 'NIM sudah digunakan.',
+            'photo.image' => 'File harus berupa gambar.',
+            'photo.max' => 'Ukuran gambar maksimal 2MB.',
         ]);
 
-        // 2. Update Tabel Users (Data Akun)
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
@@ -83,7 +90,6 @@ class ProfileController extends Controller
 
         // 4. Handle Upload Foto (Ke folder Public)
         if ($request->hasFile('photo')) {
-            // Hapus foto lama jika ada (dan bukan default/avatar url)
             if ($user->profile && $user->profile->photo && file_exists(public_path('uploads/profiles/' . $user->profile->photo))) {
                 File::delete(public_path('uploads/profiles/' . $user->profile->photo));
             }
@@ -96,7 +102,6 @@ class ProfileController extends Controller
             $profileData['photo'] = $filename;
         }
 
-        // 5. Simpan ke Tabel Profiles (Create jika belum ada, Update jika ada)
         $user->profile()->updateOrCreate(
             ['user_id' => $user->id],
             $profileData
