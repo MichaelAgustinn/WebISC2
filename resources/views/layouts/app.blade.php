@@ -246,9 +246,9 @@
                             {{-- TODO_REMOVE_ADMIN_PROD: Hapus 'admin' dari array di bawah saat production --}}
                             @if (in_array(Auth::user()->role, ['anggota', 'pengurus', 'admin']))
                                 <a href="{{ route('events.my') }}"
-                                    class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
-                                    <svg class="mr-3 h-5 w-5 text-gray-400 group-hover:text-indigo-500" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor">
+                                    class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs('events.my') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600' }} transition-colors">
+                                    <svg class="mr-3 h-5 w-5 {{ request()->routeIs('events.my') ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-500' }}"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M12 8v1m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
