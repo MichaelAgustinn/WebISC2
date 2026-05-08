@@ -419,12 +419,14 @@
         }
 
         @media (max-width: 1024px) {
-            .about-text p {
-                text-align: left
-            }
-
             .about-container {
                 grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .about-text p {
+                text-align: left
             }
         }
 
@@ -1377,7 +1379,6 @@
             }
 
             .about-container p {
-                text-align: justify;
                 hyphens: auto;
             }
 
