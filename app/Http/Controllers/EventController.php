@@ -117,4 +117,11 @@ class EventController extends Controller
 
         return view('events.registrants', compact('event', 'registrants'));
     }
+
+    public function myEvents()
+    {
+        $events = Auth::user()->registeredEvents()->orderBy('created_at', 'desc')->paginate(10);
+
+        return view('events.my-events', compact('events'));
+    }
 }

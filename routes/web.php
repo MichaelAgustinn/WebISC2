@@ -241,6 +241,7 @@ Route::middleware('auth')->group(function () {
     // ? event controller
     Route::resource('admin-events', EventController::class);
     Route::get('/admin/events/{id}/registrants', [EventController::class, 'registrants'])->name('admin-events.registrants');
+    Route::get('/my-events', [EventController::class, 'myEvents'])->name('events.my');
 });
 
 // ! route untuk anggota pengurus dan admin
