@@ -112,21 +112,39 @@
             position: relative;
             border-radius: 4px;
             padding: 2px 0;
-            color: #0d0640;
             display: flex;
         }
 
         /* STYLE HURUF */
         .char {
             position: relative;
-            transition: color 0.1s;
+            transition: color 0.1s, background-color 0.1s;
             border-bottom: 2px solid transparent;
+            color: #94a3b8;
+            font-weight: 500;
         }
 
         /* Huruf Aktif (Kursor & Underscore) */
-        .char.current {
-            color: var(--primary);
-            border-bottom: 3px solid var(--primary);
+        .char.current::before {
+            content: "";
+            position: absolute;
+            left: -1px;
+            top: 10%;
+            height: 80%;
+            width: 2px;
+            background-color: var(--primary);
+            animation: blink 1s infinite;
+        }
+
+        .char.current-right::after {
+            content: "";
+            position: absolute;
+            right: -2px;
+            top: 10%;
+            height: 80%;
+            width: 2px;
+            background-color: var(--primary);
+            animation: blink 1s infinite;
         }
 
         /* Kursor Caret */
@@ -151,6 +169,11 @@
             color: #22c55e;
         }
 
+        .char.extra {
+            color: #7f1d1d;
+            background-color: #fca5a5;
+        }
+
         .char.incorrect {
             color: #ef4444;
             background-color: #fee2e2;
@@ -159,7 +182,7 @@
 
         .word.error-word .char {
             text-decoration: underline;
-            text-decoration-color: red;
+            text-decoration-color: #ef4444;
             text-decoration-style: wavy;
         }
 
@@ -359,8 +382,8 @@
         }
 
         /* =========================================
-                                       RESPONSIVE DESIGN (TABLET & MOBILE)
-                                    ========================================= */
+                                                                                                                                       RESPONSIVE DESIGN (TABLET & MOBILE)
+                                                                                                                                    ========================================= */
         @media (max-width: 1024px) {
             .typing-wrapper {
                 grid-template-columns: 1fr;
@@ -617,6 +640,7 @@
             let correctKeystrokes = 0;
             let correctWordsCount = 0;
             let isTyping = false;
+            let previousTypedValue = "";
 
             const wordListFlutter = [
                 "flutter", "dart", "widget", "state", "stateless", "stateful", "build", "context",
@@ -732,6 +756,7 @@
                 timeLeft = maxTime;
                 wordIndex = mistakes = correctKeystrokes = correctWordsCount = 0;
                 isTyping = false;
+                previousTypedValue = "";
 
                 inpField.disabled = false;
                 timeTag.innerText = timeLeft + "s";
@@ -746,7 +771,7 @@
             function initTyping() {
                 let allWords = typingText.querySelectorAll(".word");
                 let currentWordDiv = allWords[wordIndex];
-                let currentWordChars = currentWordDiv.querySelectorAll(".char");
+                let originalChars = currentWordDiv.querySelectorAll(".char:not(.extra)");
 
                 let typedValue = inpField.value;
 
@@ -766,31 +791,30 @@
                     allWords = typingText.querySelectorAll(".word");
                 }
 
-                // --- SPASI (SUBMIT KATA) ---
+                if (typedValue === " ") {
+                    inpField.value = "";
+                    return;
+                }
+
                 if (typedValue.endsWith(" ")) {
                     let inputTrimmed = typedValue.trim();
-
-                    if (inputTrimmed.length === 0) {
-                        inpField.value = "";
-                        return;
-                    }
-
                     let targetWord = "";
-                    currentWordChars.forEach(char => targetWord += char.innerText);
+                    originalChars.forEach(char => targetWord += char.innerText);
 
                     if (inputTrimmed === targetWord) {
                         currentWordDiv.classList.add("correct");
                         correctWordsCount++;
-                        correctKeystrokes += targetWord.length + 1;
                     } else {
                         currentWordDiv.classList.add("error-word");
-                        mistakes++;
                     }
 
                     currentWordDiv.classList.remove("active");
-                    currentWordChars.forEach(c => c.classList.remove("current"));
+                    currentWordDiv.querySelectorAll(".char").forEach(c => c.classList.remove("current",
+                        "current-right"));
 
                     wordIndex++;
+                    previousTypedValue = "";
+                    inpField.value = "";
 
                     if (allWords[wordIndex]) {
                         allWords[wordIndex].classList.add("active");
@@ -802,28 +826,55 @@
                             block: 'center'
                         });
                     }
+                    updateStats();
+                    return;
+                }
 
-                    inpField.value = "";
+                if (typedValue.length > previousTypedValue.length) {
+                    let addedCharIndex = typedValue.length - 1;
+                    let expectedChar = originalChars[addedCharIndex] ? originalChars[addedCharIndex].innerText :
+                        null;
 
-                } else {
-                    // --- PER KARAKTER (VISUAL CHECK) ---
-                    currentWordChars.forEach((charSpan, index) => {
-                        let inputChar = typedValue[index];
-                        charSpan.classList.remove("correct", "incorrect", "current");
+                    if (typedValue[addedCharIndex] !== expectedChar) {
+                        mistakes++;
+                    } else {
+                        correctKeystrokes++;
+                    }
+                }
+                previousTypedValue = typedValue;
 
-                        if (inputChar) {
-                            if (inputChar === charSpan.innerText) {
-                                charSpan.classList.add("correct");
-                            } else {
-                                charSpan.classList.add("incorrect");
-                            }
+                currentWordDiv.querySelectorAll(".extra").forEach(el => el.remove());
+
+                originalChars.forEach((charSpan, index) => {
+                    let inputChar = typedValue[index];
+                    charSpan.classList.remove("correct", "incorrect", "current", "current-right");
+
+                    if (inputChar) {
+                        if (inputChar === charSpan.innerText) {
+                            charSpan.classList.add("correct");
+                        } else {
+                            charSpan.classList.add("incorrect");
                         }
-                    });
+                    }
+                });
 
-                    // Set Kursor (Underscore & Caret)
-                    let nextCharIndex = typedValue.length;
-                    if (currentWordChars[nextCharIndex]) {
-                        currentWordChars[nextCharIndex].classList.add("current");
+                if (typedValue.length > originalChars.length) {
+                    for (let i = originalChars.length; i < typedValue.length; i++) {
+                        let extraSpan = document.createElement("span");
+                        extraSpan.innerText = typedValue[i];
+                        extraSpan.classList.add("char", "incorrect", "extra");
+                        currentWordDiv.appendChild(extraSpan);
+                    }
+                }
+
+                let updatedAllChars = currentWordDiv.querySelectorAll(".char");
+                updatedAllChars.forEach(c => c.classList.remove("current", "current-right"));
+
+                if (typedValue.length < originalChars.length) {
+                    originalChars[typedValue.length].classList.add("current");
+                } else {
+                    if (updatedAllChars.length > 0) {
+                        updatedAllChars[updatedAllChars.length - 1].classList.add("current-right");
                     }
                 }
 
@@ -868,10 +919,19 @@
 
                 Swal.fire({
                     title: 'Waktu Habis! ⏱️',
-                    html: `Skor kecepatanmu: <b>${finalWpm} WPM</b><br>Akurasi ketikan: <b>${finalAcc}%</b>`,
+                    html: `
+                        Skor kecepatanmu: <b>${finalWpm} WPM</b><br>
+                        Salah Ketik (Typo): <b style="color:#ef4444;">${mistakes}x salah</b><br>
+                        Akurasi: <b>${finalAcc}%</b>
+                    `,
                     icon: finalWpm > 40 ? 'success' : 'info',
                     confirmButtonText: 'Tutup',
-                    allowOutsideClick: false
+                    showCloseButton: true,
+                    allowOutsideClick: false,
+                    timer: 5000,
+                    timerProgressBar: true
+                }).then((result) => {
+                    window.location.reload();
                 });
             }
 
@@ -889,7 +949,7 @@
                         },
                         body: JSON.stringify({
                             wpm: wpm,
-                            accuracy: accuracy, // <-- Koma sudah ditambahkan di sini
+                            accuracy: accuracy,
                             language: selectedLang
                         })
                     })
@@ -901,14 +961,11 @@
                     .then(data => {
                         btnRestart.innerHTML = `<i class="ri-check-double-line"></i> Skor Tersimpan!`;
                         btnRestart.style.background = "#22c55e";
-                        setTimeout(() => window.location.reload(), 1500);
                     })
                     .catch(err => {
                         console.error(err);
-                        alert("Gagal simpan skor: " + err.message);
                     });
             }
-
             // Events
             inpField.addEventListener("input", initTyping);
             if (btnRestart) btnRestart.addEventListener("click", resetGame);
