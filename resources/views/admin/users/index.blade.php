@@ -118,7 +118,7 @@
                             </td>
 
                             <td class="px-6 py-4 text-right">
-                                <form action="{{ route('users.destroy', $user->id) }}" method="POST"
+                                <form action="{{ route('users.destroy', $user->slug) }}" method="POST"
                                     onsubmit="return confirm('Yakin ingin menghapus user ini selamanya? Data profil juga akan hilang.')">
                                     @csrf
                                     @method('DELETE')
