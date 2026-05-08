@@ -30,7 +30,7 @@ class AuthController extends Controller
             $request->session()->regenerate();
 
             return redirect()
-                ->intended('dashboard')
+                ->intended(route('home'))
                 ->with('success', 'Selamat datang kembali!');
         }
 
