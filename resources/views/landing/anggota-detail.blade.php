@@ -330,13 +330,15 @@
                         $member->profile->personal_link))
                 <div class="social-links-inner">
                     @if ($member->profile->instagram)
-                        <a href="{{ $member->profile->instagram }}" target="_blank" class="social-icon-inner" title="Instagram">
+                        <a href="{{ $member->profile->instagram }}" target="_blank" class="social-icon-inner"
+                            title="Instagram">
                             <i class="ri-instagram-line"></i>
                         </a>
                     @endif
 
                     @if ($member->profile->linkedin)
-                        <a href="{{ $member->profile->linkedin }}" target="_blank" class="social-icon-inner" title="LinkedIn">
+                        <a href="{{ $member->profile->linkedin }}" target="_blank" class="social-icon-inner"
+                            title="LinkedIn">
                             <i class="ri-linkedin-fill"></i>
                         </a>
                     @endif
