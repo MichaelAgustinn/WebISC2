@@ -82,7 +82,7 @@
                             <div class="rp-info">
                                 <h5>
                                     <a
-                                        href="{{ route('landing.forms.show', $recent->id) }}">{{ Str::limit($recent->title, 30) }}</a>
+                                        href="{{ route('landing.forms.show', $recent->slug) }}">{{ Str::limit($recent->title, 30) }}</a>
                                 </h5>
                                 <span class="rp-divisi"><i class="ri-time-line"></i>
                                     {{ $recent->created_at->diffForHumans() }}</span>
