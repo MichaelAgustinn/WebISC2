@@ -36,10 +36,10 @@ use Illuminate\Support\Facades\Route;
 // ! guest area
 // ? landingpage
 Route::get('/', function () {
-    //? ambil data landingpage
+    // ? ambil data landingpage
     $data = LandingPage::pluck('value', 'key')->toArray();
 
-    //? Ambil Data FAQ
+    // ? Ambil Data FAQ
     $faqs = Faq::all();
 
     // ? ambil data pengurus
@@ -70,7 +70,7 @@ Route::get('/', function () {
 })->name('home');
 // ? landingpage end
 
-//? event area public
+// ? event area public
 Route::get('/events', [PublicEventController::class, 'index'])->name('events.public');
 
 Route::get('/events/{slug}', [PublicEventController::class, 'show'])->name('landing.events.show');
@@ -78,7 +78,7 @@ Route::get('/events/{slug}', [PublicEventController::class, 'show'])->name('land
 Route::post('/events/{event}/register', [PublicEventController::class, 'register'])
     ->middleware('auth')
     ->name('landing.events.register');
-//? event area public end
+// ? event area public end
 
 // ? halaman anggota area
 Route::get('/anggota', function (Request $request) {
@@ -111,16 +111,15 @@ Route::get('/anggota', function (Request $request) {
 
     // TAMBAHAN AJAX
     if ($request->ajax()) {
-
         return view('landing.anggota', [
             'members' => $members,
-            'data' => $landingData
+            'data' => $landingData,
         ])->render();
     }
 
     return view('landing.anggota', [
         'members' => $members,
-        'data' => $landingData
+        'data' => $landingData,
     ]);
 })->name('anggota');
 
@@ -137,14 +136,14 @@ Route::get('/anggota/{slug}', function ($slug) {
 
     return view('landing.anggota-detail', [
         'member' => $member,
-        'data' => $landingData
+        'data' => $landingData,
     ]);
 })->name('anggota.show');
 // ? halaman anggota area end
 
 // ? infromation area
 Route::get('/dosen', function () {
-    //? ambil data landingpage
+    // ? ambil data landingpage
     $data = LandingPage::pluck('value', 'key')->toArray();
     $advisors = Advisor::all();
 
@@ -152,11 +151,12 @@ Route::get('/dosen', function () {
 })->name('dosen');
 
 Route::get('/dokumen', function () {
-    //? ambil data landingpage
+    // ? ambil data landingpage
     $data = LandingPage::pluck('value', 'key')->toArray();
     $documents = Document::whereHas('user', function ($q) {
         $q->whereIn('role', ['admin', 'pengurus']);
     })->latest()->get();
+
     return view('landing.dokumen', compact('data', 'documents'));
 })->name('dokumen');
 
@@ -175,7 +175,7 @@ Route::get('/typing-test', [TypingController::class, 'index'])->name('typing.ind
 Route::get('/blog', [PostController::class, 'index'])->name('blog.index');
 Route::get('/blog/{slug}', [PostController::class, 'show'])->name('blog.show');
 
-//? Lupa Password
+// ? Lupa Password
 Route::get('/forgot-password', [PasswordResetController::class, 'showLinkRequestForm'])->name('password.request');
 Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLinkEmail'])->name('password.email');
 
@@ -213,7 +213,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
         $totalAnggota = User::where('role', 'anggota')->count();
         $totalPengurus = User::whereIn('role', ['pengurus', 'admin'])->count();
-        $totalAkun = User::where('email', '!=', 'isc@unsulbar.ac.id')->count()  + Regist::all()->count();
+        $totalAkun = User::where('email', '!=', 'isc@unsulbar.ac.id')->count() + Regist::all()->count();
 
         $totalProject = Project::count();
         $projectAktif = Project::where('status', true)->count();
@@ -248,7 +248,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'role:admin,pengurus,anggota'])->group(function () {
     // ? project area
     Route::get('/project-saya', [ProjectController::class, 'index'])->name('myproject.index');
-    //? project area end
+    // ? project area end
 
     Route::resource('projects', ProjectController::class);
 
@@ -258,7 +258,7 @@ Route::middleware(['auth', 'role:admin,pengurus,anggota'])->group(function () {
     // ? Hapus Komentar
     Route::delete('/comments/{comment}', [PostController::class, 'destroyComment'])->name('comments.destroy');
 
-    //? Tambah komentar
+    // ? Tambah komentar
     Route::post('/blog/{post}/comment', [PostController::class, 'storeComment'])->name('posts.comment');
 
     // ?  lihat project
@@ -279,7 +279,7 @@ Route::middleware(['auth', 'role:admin,pengurus'])->group(function () {
         ->name('admin.projects.unverify');
     // ? project verifikasi area end
 
-    // ? buat form 
+    // ? buat form
     Route::get('/forms/{form}/responses', [FormController::class, 'responses'])->name('forms.responses');
     Route::resource('forms', FormController::class);
     // ? buat form end
@@ -313,7 +313,7 @@ Route::middleware(['auth', 'role:admin,pengurus'])->group(function () {
     Route::resource('admin/teams', TeamController::class)->except(['create', 'show', 'edit']);
     // ? team area end
 
-    //? Route Manajemen User
+    // ? Route Manajemen User
     Route::get('/admin/verified', [AdminUserController::class, 'index'])->name('users.index');
     Route::get('/admin/unverified', [AdminUserController::class, 'unverified'])->name('users.unverified');
     Route::put('/admin/unverified/submit/{id}', [AdminUserController::class, 'verify'])->name('users.verify');
@@ -324,7 +324,6 @@ Route::middleware(['auth', 'role:admin,pengurus'])->group(function () {
     // ? document area
     Route::resource('documents', DocumentController::class)->except(['show', 'edit', 'update']);
 });
-
 
 // ! just for testing, remove in production
 Route::get('/test', function () {
