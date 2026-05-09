@@ -48,7 +48,7 @@
                                     {{ $project->title }}
 
                                     {{-- Munculkan titik kuning HANYA jika is_revised = true --}}
-                                    @if ($project->is_revised)
+                                    @if ($project->is_revised && $project->rejection_reason)
                                         <span class="relative flex h-2.5 w-2.5"
                                             title="Karya telah diperbarui oleh anggota. Cek apakah revisinya sudah sesuai.">
                                             <span
