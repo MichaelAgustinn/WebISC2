@@ -213,7 +213,7 @@
                                     {{ Str::limit($score->user->name, 20) }}
                                 </p>
                                 <p class="text-xs text-gray-500 truncate">
-                                    {{ $score->user->profile->department ?? '-' }}
+                                    {{ $score->user->profile->division ?? '-' }}
                                 </p>
                             </div>
 
