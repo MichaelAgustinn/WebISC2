@@ -37,14 +37,22 @@ class ProjectVerificationController extends Controller
     public function verify(Project $project)
     {
         $project->status = true;
+        $project->rejection_reason = null;
         $project->save();
 
         return back()->with('success', 'Project verified successfully.');
     }
 
-    public function unverify(Project $project)
+    public function unverify(Request $request, Project $project)
     {
+        $request->validate([
+            'rejection_reason' => 'required|string|max:1000',
+        ], [
+            'rejection_reason.required' => 'Alasan penolakan wajib diisi!',
+        ]);
+
         $project->status = false;
+        $project->rejection_reason = $request->rejection_reason;
         $project->save();
 
         return back()->with('success', 'Project unverified successfully.');
