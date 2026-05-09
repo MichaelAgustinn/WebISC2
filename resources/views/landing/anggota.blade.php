@@ -219,107 +219,149 @@
 @section('content')
     <header class="page-header">
         <h1>Anggota Kami</h1>
+
         <div style="width: 80px; height: 4px; background: var(--accent); margin: 0 auto 1.5rem auto; border-radius: 2px;">
         </div>
-        <p>Talenta-talenta muda yang berdedikasi membangun inovasi dan teknologi masa depan.</p>
+
+        <p>
+            Talenta-talenta muda yang berdedikasi membangun inovasi dan teknologi masa depan.
+        </p>
     </header>
 
-    <!-- 2. SEARCH BAR -->
+    <!-- SEARCH BAR -->
     <div class="member-search-container">
+
         <form action="{{ route('anggota') }}" method="GET" class="search-bar"
             style="width: 100%; max-width: 600px; display: flex;">
+
             <input type="text" name="search" id="searchInput" value="{{ request('search') }}"
                 placeholder="Cari nama, divisi, atau angkatan...">
-            <button type="submit"><i class="ri-search-line"></i></button>
+
+            <button type="submit">
+                <i class="ri-search-line"></i>
+            </button>
+
         </form>
+
     </div>
 
     <section class="member-section">
-        <div class="member-grid" id="memberGrid">
 
-            @forelse($members as $member)
-                <div class="member-card">
-                    <div class="member-img-wrapper">
-                        @if ($member->profile && $member->profile->photo)
-                            <img src="{{ asset('uploads/profiles/' . $member->profile->photo) }}" alt="{{ $member->name }}">
-                        @else
-                            <img src="https://ui-avatars.com/api/?name={{ urlencode($member->name) }}&background=0f204b&color=d4af37&size=500"
-                                alt="{{ $member->name }}">
-                        @endif
+        {{-- WRAPPER --}}
+        <div id="memberWrapper">
 
-                        {{-- ? ini untuk nanti jika ingin menambah table soscial untuk setiap anggota --}}
-                        @if (
-                            $member->profile &&
-                                ($member->profile->instagram ||
-                                    $member->profile->linkedin ||
-                                    $member->profile->github ||
-                                    $member->profile->personal_link))
-                            <div class="member-social">
+            <div class="member-grid" id="memberGrid">
 
-                                @if ($member->profile->github)
-                                    <a href="{{ $member->profile->github }}" target="_blank">
-                                        <i class="ri-github-line"></i>
-                                    </a>
-                                @endif
+                @forelse($members as $member)
 
-                                @if ($member->profile->linkedin)
-                                    <a href="{{ $member->profile->linkedin }}" target="_blank">
-                                        <i class="ri-linkedin-fill"></i>
-                                    </a>
-                                @endif
+                    <div class="member-card">
 
-                                @if ($member->profile->instagram)
-                                    <a href="{{ $member->profile->instagram }}" target="_blank">
-                                        <i class="ri-instagram-line"></i>
-                                    </a>
-                                @endif
+                        <div class="member-img-wrapper">
 
-                                @if ($member->profile->personal_link)
-                                    <a href="{{ $member->profile->personal_link }}" target="_blank">
-                                        <i class="ri-global-line"></i>
-                                    </a>
-                                @endif
+                            @if ($member->profile && $member->profile->photo)
+                                <img src="{{ asset('uploads/profiles/' . $member->profile->photo) }}"
+                                    alt="{{ $member->name }}">
+                            @else
+                                <img src="https://ui-avatars.com/api/?name={{ urlencode($member->name) }}&background=0f204b&color=d4af37&size=500"
+                                    alt="{{ $member->name }}">
+                            @endif
 
-                            </div>
-                        @endif
+                            @if (
+                                $member->profile &&
+                                    ($member->profile->instagram ||
+                                        $member->profile->linkedin ||
+                                        $member->profile->github ||
+                                        $member->profile->personal_link))
+                                <div class="member-social">
+
+                                    @if ($member->profile->github)
+                                        <a href="{{ $member->profile->github }}" target="_blank">
+                                            <i class="ri-github-line"></i>
+                                        </a>
+                                    @endif
+
+                                    @if ($member->profile->linkedin)
+                                        <a href="{{ $member->profile->linkedin }}" target="_blank">
+                                            <i class="ri-linkedin-fill"></i>
+                                        </a>
+                                    @endif
+
+                                    @if ($member->profile->instagram)
+                                        <a href="{{ $member->profile->instagram }}" target="_blank">
+                                            <i class="ri-instagram-line"></i>
+                                        </a>
+                                    @endif
+
+                                    @if ($member->profile->personal_link)
+                                        <a href="{{ $member->profile->personal_link }}" target="_blank">
+                                            <i class="ri-global-line"></i>
+                                        </a>
+                                    @endif
+
+                                </div>
+                            @endif
+
+                        </div>
+
+                        <div class="member-info">
+
+                            <h3 class="member-name">
+                                {{ $member->name }}
+                            </h3>
+
+                            <span class="member-divisi">
+                                {{ $member->profile->division ? ucwords(str_replace('_', ' ', $member->profile->division)) : 'Anggota Baru' }}
+                            </span>
+
+                            <span class="member-year">
+                                Angkatan {{ $member->profile->angkatan ?? '-' }}
+                            </span>
+
+                            <a href="{{ route('anggota.show', $member->slug) }}" class="btn-follow"
+                                style="text-decoration:none; display:inline-block;">
+
+                                Detail Profil
+
+                            </a>
+
+                        </div>
+
                     </div>
-                    <div class="member-info">
-                        <h3 class="member-name">{{ $member->name }}</h3>
 
-                        <span class="member-divisi">
-                            {{ $member->profile->division ? ucwords(str_replace('_', ' ', $member->profile->division)) : 'Anggota Baru' }}
-                        </span>
+                @empty
 
-                        <span class="member-year">
-                            Angkatan {{ $member->profile->angkatan ?? '-' }}
-                        </span>
+                    <div style="grid-column: 1 / -1; text-align: center; color: var(--text-light); padding: 2rem;">
 
-                        <a href="{{ route('anggota.show', $member->slug) }}" class="btn-follow"
-                            style="text-decoration:none; display:inline-block;">Detail Profil</a>
+                        <p>
+                            Belum ada data anggota yang terdaftar.
+                        </p>
+
                     </div>
+
+                @endforelse
+
+            </div>
+
+            {{-- PAGINATION --}}
+            @if ($members->hasPages())
+                <div style="margin-top: 3rem; display: flex; justify-content: center;">
+
+                    {{ $members->links('vendor.pagination.custom') }}
+
                 </div>
-            @empty
-                <div style="grid-column: 1 / -1; text-align: center; color: var(--text-light); padding: 2rem;">
-                    <p>Belum ada data anggota yang terdaftar.</p>
-                </div>
-            @endforelse
+            @endif
 
         </div>
-
-        @if ($members->hasPages())
-            <div style="margin-top: 3rem; display: flex; justify-content: center;">
-                {{ $members->links('vendor.pagination.custom') }}
-            </div>
-        @endif
 
     </section>
 
     <script>
         const searchInput = document.getElementById('searchInput');
-        const memberGrid = document.getElementById('memberGrid');
+        const memberWrapper = document.getElementById('memberWrapper');
 
         let debounceTimer;
 
+        // LIVE SEARCH
         searchInput.addEventListener('keyup', function() {
 
             clearTimeout(debounceTimer);
@@ -327,24 +369,63 @@
             debounceTimer = setTimeout(() => {
 
                 fetch(`/anggota?search=${encodeURIComponent(this.value)}`, {
+
                         headers: {
                             'X-Requested-With': 'XMLHttpRequest'
                         }
+
                     })
+
                     .then(response => response.text())
+
                     .then(html => {
 
                         const parser = new DOMParser();
                         const doc = parser.parseFromString(html, 'text/html');
 
-                        const newGrid = doc.getElementById('memberGrid');
+                        const newWrapper = doc.getElementById('memberWrapper');
 
-                        memberGrid.innerHTML = newGrid.innerHTML;
+                        memberWrapper.innerHTML = newWrapper.innerHTML;
 
                     });
 
             }, 300);
 
         });
+
+        // AJAX PAGINATION
+        document.addEventListener('click', function(e) {
+
+            const paginationLink = e.target.closest('.pagination a');
+
+            if (paginationLink) {
+
+                e.preventDefault();
+
+                fetch(paginationLink.href, {
+
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+
+                    })
+
+                    .then(response => response.text())
+
+                    .then(html => {
+
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, 'text/html');
+
+                        const newWrapper = doc.getElementById('memberWrapper');
+
+                        memberWrapper.innerHTML = newWrapper.innerHTML;
+
+                    });
+
+            }
+
+        });
     </script>
+
 @endsection

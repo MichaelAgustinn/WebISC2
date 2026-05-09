@@ -104,7 +104,7 @@ Route::get('/anggota', function (Request $request) {
         })
 
         ->orderBy('name', 'asc')
-        ->paginate(12)
+        ->paginate(1)
         ->withQueryString();
 
     $landingData = App\Models\LandingPage::pluck('value', 'key')->toArray();
