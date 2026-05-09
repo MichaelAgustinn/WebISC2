@@ -20,7 +20,7 @@ class ProfileController extends Controller
         ]);
 
         // 2. Cek apakah password lama yang diketik COCOK dengan yang ada di database
-        if (!Hash::check($request->current_password, auth()->user()->password)) {
+        if (! Hash::check($request->current_password, auth()->user()->password)) {
             throw ValidationException::withMessages([
                 'current_password' => 'Password saat ini salah.',
             ]);
@@ -34,9 +34,11 @@ class ProfileController extends Controller
         // 4. Kembali dengan pesan sukses
         return back()->with('success', 'Password berhasil diperbarui!');
     }
+
     public function edit()
     {
         $user = Auth::user()->load('profile');
+
         return view('profile.edit', compact('user'));
     }
 
@@ -50,7 +52,7 @@ class ProfileController extends Controller
             'email' => [
                 'required',
                 'email',
-                Rule::unique('users')->ignore($user->id)
+                Rule::unique('users')->ignore($user->id),
             ],
 
             'nim' => [

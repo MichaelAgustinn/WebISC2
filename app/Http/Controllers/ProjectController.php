@@ -6,9 +6,9 @@ use App\Models\Project;
 use App\Models\ProjectLike;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 class ProjectController extends Controller
 {
@@ -16,6 +16,7 @@ class ProjectController extends Controller
     {
         // Tampilkan project dimana user tersebut terlibat
         $projects = Auth::user()->ownedProjects()->latest()->paginate(9);
+
         return view('user.projects.index', compact('projects'));
     }
 
@@ -27,6 +28,7 @@ class ProjectController extends Controller
                 $query->where('email', '!=', 'isc@unsulbar.ac.id');
             })
             ->get();
+
         return view('user.projects.form', compact('users'));
     }
 
@@ -38,7 +40,7 @@ class ProjectController extends Controller
             'division' => 'required|in:mobile,iot,uiux,sistem_cerdas,website',
             'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
             'team_members' => 'array',
-            'link' => 'nullable'
+            'link' => 'nullable',
         ]);
 
         // 1. Upload Gambar
@@ -57,7 +59,7 @@ class ProjectController extends Controller
         ]);
 
         $team = $request->team_members ?? [];
-        if (!in_array(Auth::id(), $team)) {
+        if (! in_array(Auth::id(), $team)) {
             array_push($team, Auth::id());
         }
         $project->users()->attach($team);
@@ -120,7 +122,7 @@ class ProjectController extends Controller
         $project->update($data);
 
         $team = $request->team_members ?? [];
-        if (!in_array(Auth::id(), $team)) {
+        if (! in_array(Auth::id(), $team)) {
             array_push($team, Auth::id());
         }
         $project->users()->sync($team);
@@ -139,6 +141,7 @@ class ProjectController extends Controller
         }
 
         $project->delete();
+
         return back()->with('success', 'Project dihapus.');
     }
 
@@ -153,12 +156,14 @@ class ProjectController extends Controller
 
         if ($existingLike) {
             $existingLike->delete(); // Unlike
+
             return response()->json(['status' => 'unliked']);
         } else {
             ProjectLike::create([
                 'project_id' => $project->id,
-                'user_id' => $user->id
+                'user_id' => $user->id,
             ]); // Like
+
             return response()->json(['status' => 'liked']);
         }
     }

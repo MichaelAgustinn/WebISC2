@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Document;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File; // Ubah Storage menjadi File
+use Illuminate\Support\Facades\File;
 
 class DocumentController extends Controller
 {

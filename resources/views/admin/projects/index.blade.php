@@ -63,9 +63,9 @@
                                         @csrf
                                         @method('PUT')
                                         <button type="submit" onclick="return confirm('Verify this project?')"
-                                            class="inline-flex items-center gap-2 
-                       bg-green-600 hover:bg-green-700 
-                       text-white font-semibold 
+                                            class="inline-flex items-center gap-2
+                       bg-green-600 hover:bg-green-700
+                       text-white font-semibold
                        px-4 py-2 rounded-lg text-sm
                        shadow-sm transition duration-200
                        focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-1">
@@ -78,9 +78,9 @@
                                         @csrf
                                         @method('PUT')
                                         <button type="submit" onclick="return confirm('Unverify this project?')"
-                                            class="inline-flex items-center gap-2 
-                       bg-red-500 hover:bg-red-600 
-                       text-white font-semibold 
+                                            class="inline-flex items-center gap-2
+                       bg-red-500 hover:bg-red-600
+                       text-white font-semibold
                        px-4 py-2 rounded-lg text-sm
                        shadow-sm transition duration-200
                        focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-1">

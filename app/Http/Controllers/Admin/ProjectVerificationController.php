@@ -8,45 +8,45 @@ use Illuminate\Http\Request;
 
 class ProjectVerificationController extends Controller
 {
-  public function index(Request $request)
-  {
-    $query = Project::query();
+    public function index(Request $request)
+    {
+        $query = Project::query();
 
-    if ($search = $request->query('search')) {
-      $query->where('title', 'like', "%{$search}%");
+        if ($search = $request->query('search')) {
+            $query->where('title', 'like', "%{$search}%");
+        }
+
+        $projects = $query->latest()->paginate(15);
+
+        return view('admin.projects.index', compact('projects'));
     }
 
-    $projects = $query->latest()->paginate(15);
+    public function allProject(Request $request)
+    {
+        $query = Project::where('status', true);
 
-    return view('admin.projects.index', compact('projects'));
-  }
+        if ($search = $request->query('search')) {
+            $query->where('title', 'like', "%{$search}%");
+        }
 
-  public function allProject(Request $request)
-  {
-    $query = Project::where('status', true);
+        $projects = $query->latest()->paginate(15);
 
-    if ($search = $request->query('search')) {
-      $query->where('title', 'like', "%{$search}%");
+        return view('admin.projects.monitoring', compact('projects'));
     }
 
-    $projects = $query->latest()->paginate(15);
+    public function verify(Project $project)
+    {
+        $project->status = true;
+        $project->save();
 
-    return view('admin.projects.monitoring', compact('projects'));
-  }
+        return back()->with('success', 'Project verified successfully.');
+    }
 
-  public function verify(Project $project)
-  {
-    $project->status = true;
-    $project->save();
+    public function unverify(Project $project)
+    {
+        $project->status = false;
+        $project->save();
 
-    return back()->with('success', 'Project verified successfully.');
-  }
-
-  public function unverify(Project $project)
-  {
-    $project->status = false;
-    $project->save();
-
-    return back()->with('success', 'Project unverified successfully.');
-  }
+        return back()->with('success', 'Project unverified successfully.');
+    }
 }

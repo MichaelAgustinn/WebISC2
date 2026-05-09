@@ -11,6 +11,7 @@ class LandingPageController extends Controller
     public function index()
     {
         $contents = LandingPage::pluck('value', 'key')->toArray();
+
         return view('admin.landing.index', compact('contents'));
     }
 
@@ -35,19 +36,18 @@ class LandingPageController extends Controller
                         [
                             'value' => $filename,
                             'type' => 'image',
-                            'section' => explode('_', $key)[0]
+                            'section' => explode('_', $key)[0],
                         ]
                     );
                 }
-            }
-            else {
+            } else {
                 if ($value !== null) {
                     LandingPage::updateOrCreate(
                         ['key' => $key],
                         [
                             'value' => $value,
-                            'type' => 'text', 
-                            'section' => explode('_', $key)[0]
+                            'type' => 'text',
+                            'section' => explode('_', $key)[0],
                         ]
                     );
                 }

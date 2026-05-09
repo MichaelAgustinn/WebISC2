@@ -45,7 +45,6 @@ class AdminUserController extends Controller
         $regist = Regist::find($id);
 
         if (!$regist) {
-
             return redirect()
                 ->back()
                 ->with('error', 'Data user tidak ditemukan');
@@ -76,7 +75,7 @@ class AdminUserController extends Controller
     public function updateRole(Request $request, User $user)
     {
         $request->validate([
-            'role' => 'required|in:admin,pengurus,anggota,none'
+            'role' => 'required|in:admin,pengurus,anggota,none',
         ]);
 
         $currentUser = Auth::user();

@@ -26,7 +26,6 @@ class AuthController extends Controller
 
         //! Cek apakah user terdaftar dan berhasil login
         if (Auth::attempt($credentials)) {
-
             $request->session()->regenerate();
 
             return redirect()
@@ -41,7 +40,6 @@ class AuthController extends Controller
 
         // ! Jika email ditemukan di tabel pending
         if ($isWaiting) {
-
             //? Cek apakah password sesuai
             if (Hash::check($request->password, $isWaiting->password)) {
                 return view('auth.waiting-verification');

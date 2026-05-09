@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
-use App\Models\Post;
 use App\Models\Comment;
 use App\Models\LandingPage;
+use App\Models\Post;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
@@ -71,6 +71,7 @@ class PostController extends Controller
     public function manage()
     {
         $posts = Post::where('user_id', Auth::id())->with('categories')->latest()->paginate(10);
+
         return view('user.posts.index', compact('posts'));
     }
 
@@ -115,14 +116,19 @@ class PostController extends Controller
 
     public function edit(Post $post)
     {
-        if ($post->user_id != Auth::id()) abort(403);
+        if ($post->user_id != Auth::id()) {
+            abort(403);
+        }
         $post->load('categories');
+
         return view('user.posts.edit', compact('post'));
     }
 
     public function update(Request $request, Post $post)
     {
-        if ($post->user_id != Auth::id()) abort(403);
+        if ($post->user_id != Auth::id()) {
+            abort(403);
+        }
 
         $request->validate([
             'title' => 'required|max:255',
@@ -158,7 +164,9 @@ class PostController extends Controller
 
     public function destroy(Post $post)
     {
-        if ($post->user_id != Auth::id()) abort(403);
+        if ($post->user_id != Auth::id()) {
+            abort(403);
+        }
 
         if ($post->thumbnail && File::exists(public_path($post->thumbnail))) {
             File::delete(public_path($post->thumbnail));
@@ -173,8 +181,9 @@ class PostController extends Controller
     // --- HELPER FUNCTION ---
     private function syncCategories($post, $tagsString)
     {
-        if (!$tagsString) {
+        if (! $tagsString) {
             $post->categories()->detach();
+
             return;
         }
 
@@ -183,7 +192,9 @@ class PostController extends Controller
 
         foreach ($tags as $tagName) {
             $name = trim($tagName);
-            if (empty($name)) continue;
+            if (empty($name)) {
+                continue;
+            }
 
             $cat = Category::firstOrCreate(
                 ['name' => $name],
@@ -218,6 +229,7 @@ class PostController extends Controller
         }
 
         $comment->delete();
+
         return back()->with('success', 'Komentar berhasil dihapus.')->withFragment('comments');
     }
 
@@ -228,11 +240,11 @@ class PostController extends Controller
         }
 
         $request->validate([
-            'body' => 'required|string|max:1000'
+            'body' => 'required|string|max:1000',
         ]);
 
         $comment->update([
-            'body' => $request->body
+            'body' => $request->body,
         ]);
 
         return back()->with('success', 'Komentar berhasil diperbarui.')->withFragment('comments');

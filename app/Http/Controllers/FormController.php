@@ -14,6 +14,7 @@ class FormController extends Controller
     public function index()
     {
         $forms = Form::withCount('fields')->latest()->paginate(10);
+
         return view('user.forms.index', compact('forms'));
     }
 
@@ -72,7 +73,7 @@ class FormController extends Controller
                 'type' => $field['type'],
                 'is_required' => isset($field['is_required']) ? (bool) $field['is_required'] : false,
                 'order_index' => $index,
-                'options' => isset($field['options']) ? $field['options'] : null,
+                'options' => $field['options'] ?? null,
             ]);
         }
 
@@ -133,7 +134,6 @@ class FormController extends Controller
                 $existingField = FormField::find($fieldId);
 
                 if ($existingField && $existingField->form_id == $form->id) {
-
                     // Cek jika ada gambar pertanyaan baru yang diupload
                     if ($request->hasFile("fields.$index.image")) {
                         // Hapus gambar soal lama
@@ -207,6 +207,7 @@ class FormController extends Controller
         }
 
         $form->delete();
+
         return back()->with('success', 'Formulir berhasil dihapus!');
     }
 
@@ -220,7 +221,7 @@ class FormController extends Controller
                 $query->latest(); // Urutkan jawaban dari yang terbaru
             },
             'responses.user', // Ambil data user yang login
-            'responses.answers' // Ambil isi jawabannya
+            'responses.answers', // Ambil isi jawabannya
         ]);
 
         return view('user.forms.responses', compact('form'));
