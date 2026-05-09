@@ -59,9 +59,6 @@
 
     </div>
 
-    <!-- ========================================================= -->
-    <!-- SECTION KARYA DITOLAK / BUTUH REVISI (Hanya tampil jika ada) -->
-    <!-- ========================================================= -->
     @if (isset($pendingProjects) && count($pendingProjects) > 0)
         <div class="mb-8">
             <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">

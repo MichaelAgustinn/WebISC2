@@ -38,6 +38,7 @@ class ProjectVerificationController extends Controller
     {
         $project->status = true;
         $project->rejection_reason = null;
+        $project->is_revised = false;
         $project->save();
 
         return back()->with('success', 'Project verified successfully.');
@@ -53,6 +54,7 @@ class ProjectVerificationController extends Controller
 
         $project->status = false;
         $project->rejection_reason = $request->rejection_reason;
+        $project->is_revised = false;
         $project->save();
 
         return back()->with('success', 'Project unverified successfully.');
