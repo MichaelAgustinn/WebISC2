@@ -9,7 +9,7 @@ class Project extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['link', 'user_id', 'title', 'slug', 'description', 'image', 'division'];
+    protected $fillable = ['link', 'user_id', 'title', 'slug', 'description', 'image', 'division', 'status', 'rejection_reason'];
 
     // Relasi ke Anggota Tim (Many to Many)
     public function users()
@@ -27,6 +27,7 @@ class Project extends Model
     {
         return $this->likes()->where('user_id', $userId)->exists();
     }
+
     public function owner()
     {
         return $this->belongsTo(User::class, 'user_id');
