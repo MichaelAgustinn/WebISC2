@@ -75,6 +75,14 @@
             font-size: 2.5rem;
             color: var(--primary);
             font-weight: 700;
+            /* margin-bottom: 0.5rem; */
+        }
+
+        .profile-nim-lg {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.3rem;
+            color: var(--primary);
+            font-weight: 400;
             margin-bottom: 0.5rem;
         }
 
@@ -279,6 +287,10 @@
                 font-size: 1.8rem;
             }
 
+            .profile-nim-lg {
+                font-size: 0.5rem;
+            }
+
             .profile-stats {
                 flex-direction: column;
                 gap: 0.8rem;
@@ -317,6 +329,9 @@
 
         <div class="text-center-content">
             <h1 class="profile-name-lg">{{ $member->name }}</h1>
+            @if ($member->nim)
+                <p class="profile-nim-lg">({{ $member->profile->nim }})</p>
+            @endif
 
             <span class="profile-role-badge">
                 {{ $member->profile->division ? ucwords(str_replace('_', ' ', $member->profile->division)) : 'ANGGOTA' }}

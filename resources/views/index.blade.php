@@ -20,7 +20,7 @@
     @include('landing.typing-leaderboard')
 
     <div class="section-divider">
-        <i class="ri-base-station-line divider-icon"></i>
+        <i class="ri-github-line divider-icon"></i>
     </div>
 
     @include('landing.team')
