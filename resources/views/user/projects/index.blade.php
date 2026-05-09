@@ -98,13 +98,13 @@
                                     Edit
                                 </a>
 
+                                {{-- Form Hapus dengan Class khusus untuk Trigger SweetAlert --}}
                                 <form action="{{ route('projects.destroy', $project->id) }}" method="POST"
-                                    class="inline-block"
-                                    onsubmit="return confirm('Apakah Anda yakin ingin menghapus karya ini? Data tidak bisa dikembalikan.');">
+                                    class="inline-block form-delete">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit"
-                                        class="text-red-500 hover:text-red-700 font-medium text-sm transition">
+                                    <button type="button"
+                                        class="text-red-500 hover:text-red-700 font-medium text-sm transition btn-delete">
                                         Hapus
                                     </button>
                                 </form>
@@ -136,3 +136,40 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle Tombol Hapus
+            const deleteButtons = document.querySelectorAll('.btn-delete');
+
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    const form = this.closest('.form-delete');
+
+                    Swal.fire({
+                        title: 'Hapus Karya?',
+                        text: "Data yang dihapus tidak dapat dikembalikan!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#4f46e5', // indigo-600
+                        cancelButtonColor: '#ef4444', // red-500
+                        confirmButtonText: 'Ya, Hapus!',
+                        cancelButtonText: 'Batal',
+                        reverseButtons: true,
+                        customClass: {
+                            popup: 'rounded-xl',
+                            confirmButton: 'rounded-lg px-4 py-2',
+                            cancelButton: 'rounded-lg px-4 py-2'
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+@endpush
