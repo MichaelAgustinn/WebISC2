@@ -34,7 +34,15 @@
                 </thead>
                 <tbody class="divide-y divide-gray-100">
                     @forelse($projects as $project)
+                        @php
+                            // Deteksi 3 State Status Project
+                            $isVerified = $project->status == true;
+                            $isRejected = $project->status == false && !is_null($project->rejection_reason);
+                            $isPending = $project->status == false && is_null($project->rejection_reason);
+                        @endphp
+
                         <tr class="hover:bg-gray-50">
+                            <!-- KOLOM PROJECT -->
                             <td class="px-6 py-4">
                                 <div class="text-sm font-medium text-gray-900">
                                     {{ $project->title }}
@@ -44,50 +52,66 @@
                                 </div>
                             </td>
 
-                            <td class="px-6 py-4">
-                                @if ($project->status)
+                            <!-- KOLOM STATUS -->
+                            <td class="px-6 py-4 align-top">
+                                @if ($isVerified)
                                     <span class="px-3 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
                                         Verified
                                     </span>
+                                @elseif ($isRejected)
+                                    <span class="px-3 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">
+                                        Ditolak / Revisi
+                                    </span>
+                                    <div
+                                        class="mt-2 text-[11px] text-red-600 bg-red-50 p-2 rounded border border-red-100 max-w-xs">
+                                        <strong>Alasan:</strong> {{ $project->rejection_reason }}
+                                    </div>
                                 @else
-                                    <span class="px-3 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">
-                                        Not Verified
+                                    <span
+                                        class="px-3 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                        Pending
                                     </span>
                                 @endif
                             </td>
 
-                            <td class="px-6 py-4 text-right">
-                                @if (!$project->status)
+                            <!-- KOLOM ACTION -->
+                            <td class="px-6 py-4 text-right align-top">
+                                <div class="flex items-start justify-end gap-2">
+
+                                    <!-- TOMBOL VERIFY -->
                                     <form action="{{ route('admin.projects.verify', $project) }}" method="POST"
                                         class="inline-block">
                                         @csrf
                                         @method('PUT')
-                                        <button type="submit" onclick="return confirm('Verify this project?')"
-                                            class="inline-flex items-center gap-2
-                       bg-green-600 hover:bg-green-700
-                       text-white font-semibold
-                       px-4 py-2 rounded-lg text-sm
-                       shadow-sm transition duration-200
-                       focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-1">
-                                            ✓ Verify ?
+                                        <button type="submit" {{-- Matikan jika sudah Verified --}} {{ $isVerified ? 'disabled' : '' }}
+                                            {{-- Konfirmasi popup bawaan --}}
+                                            @if (!$isVerified) onclick="return confirm('Yakin ingin verifikasi project ini?')" @endif
+                                            class="inline-flex items-center gap-2 font-semibold px-4 py-2 rounded-lg text-sm shadow-sm transition duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1
+                                            {{ $isVerified
+                                                ? 'bg-gray-100 text-gray-400 cursor-not-allowed opacity-75'
+                                                : 'bg-green-600 hover:bg-green-700 text-white focus:ring-green-400 cursor-pointer' }}">
+                                            ✓ Verify
                                         </button>
                                     </form>
-                                @else
+
+                                    <!-- TOMBOL TOLAK/UNVERIFY -->
                                     <form action="{{ route('admin.projects.unverify', $project) }}" method="POST"
-                                        class="inline-block">
+                                        class="inline-block" onsubmit="return promptReason(event, this)">
                                         @csrf
                                         @method('PUT')
-                                        <button type="submit" onclick="return confirm('Unverify this project?')"
-                                            class="inline-flex items-center gap-2
-                       bg-red-500 hover:bg-red-600
-                       text-white font-semibold
-                       px-4 py-2 rounded-lg text-sm
-                       shadow-sm transition duration-200
-                       focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-1">
-                                            ✕ Unverify ?
+                                        <input type="hidden" name="rejection_reason" class="reason-input">
+
+                                        <button type="submit" {{-- Matikan jika SEDANG ditolak (sudah ada alasan penolakan).
+                                                 Tapi jika PENDING atau VERIFIED, tombol ini aktif! --}} {{ $isRejected ? 'disabled' : '' }}
+                                            class="inline-flex items-center gap-2 font-semibold px-4 py-2 rounded-lg text-sm shadow-sm transition duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1
+                                            {{ $isRejected
+                                                ? 'bg-gray-100 text-gray-400 cursor-not-allowed opacity-75'
+                                                : 'bg-red-500 hover:bg-red-600 text-white focus:ring-red-400 cursor-pointer' }}">
+                                            ✕ Tolak
                                         </button>
                                     </form>
-                                @endif
+
+                                </div>
                             </td>
 
                         </tr>
@@ -105,5 +129,51 @@
         <div class="px-6 py-4 border-t border-gray-100">
             {{ $projects->withQueryString()->links() }}
         </div>
-    </div>
-@endsection
+</div>@endsection
+
+@push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        function promptReason(event, form) {
+            event.preventDefault();
+
+            Swal.fire({
+                title: 'Batalkan Verifikasi?',
+                text: "Silakan masukkan alasan kenapa project ini ditolak:",
+                icon: 'warning',
+                input: 'textarea',
+                inputPlaceholder: 'Ketik alasan di sini...',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: '✕ Ya, Tolak Project',
+                cancelButtonText: 'Batal',
+                reverseButtons: true,
+
+                preConfirm: (reason) => {
+                    if (!reason || reason.trim() === "") {
+                        Swal.showValidationMessage('Alasan penolakan wajib diisi!');
+                        return false;
+                    }
+                    return reason;
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.querySelector('.reason-input').value = result.value;
+
+                    Swal.fire({
+                        title: 'Memproses...',
+                        text: 'Mohon tunggu sebentar.',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    form.submit();
+                }
+            });
+        }
+    </script>
+@endpush
