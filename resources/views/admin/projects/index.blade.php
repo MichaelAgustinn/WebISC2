@@ -60,7 +60,7 @@
                                 </div>
 
                                 {{-- Tampilkan pesan admin sebelumnya agar admin ingat --}}
-                                @if ($project->is_revised)
+                                @if ($project->is_revised && $project->rejection_reason)
                                     <div
                                         class="mt-2 text-[11px] text-yellow-700 bg-yellow-50 p-2 rounded border border-yellow-100 max-w-xs">
                                         <strong>Catatan Anda Sebelumnya:</strong><br>
