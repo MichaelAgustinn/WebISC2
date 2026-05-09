@@ -199,7 +199,7 @@ Route::middleware('guest')->group(function () {
 
 // ! route untuk sudah login
 Route::middleware('auth')->group(function () {
-    Route::put('/profile/password', [App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('password.update');
+    Route::put('/profile/password', [App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('password.update.profile');
     // ? form untuk user
     Route::get('/formulir', [PublicFormController::class, 'index'])->name('landing.forms.index');
     Route::get('/formulir/{slug}', [PublicFormController::class, 'show'])->name('landing.forms.show');

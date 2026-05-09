@@ -96,7 +96,7 @@
                         </div>
                     </div>
 
-                    <form action="{{ route('password.update') }}" method="POST"
+                    <form action="{{ route('password.update.profile') }}" method="POST"
                         class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                         @csrf
                         @method('PUT')
