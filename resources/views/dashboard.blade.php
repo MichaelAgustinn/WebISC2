@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+    <!-- SUMMARY CARDS -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-6">
 
         @if (Auth::user()->role == 'admin' || Auth::user()->role == 'pengurus')
@@ -58,8 +59,68 @@
 
     </div>
 
+    <!-- ========================================================= -->
+    <!-- SECTION KARYA DITOLAK / BUTUH REVISI (Hanya tampil jika ada) -->
+    <!-- ========================================================= -->
+    @if (isset($pendingProjects) && count($pendingProjects) > 0)
+        <div class="mb-8">
+            <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                <svg class="w-6 h-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                Perlu Perhatian: Karya Ditolak / Butuh Revisi
+            </h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                @foreach ($pendingProjects as $rejected)
+                    <div
+                        class="bg-white rounded-xl border-l-4 border-l-red-500 shadow-sm p-5 flex flex-col h-full relative overflow-hidden group">
+
+                        <!-- Background aksen merah samar -->
+                        <div class="relative z-10 flex justify-between items-start mb-2">
+                            <h4 class="font-bold text-gray-800 line-clamp-1 pr-2" title="{{ $rejected->title }}">
+                                {{ $rejected->title }}</h4>
+                            <span
+                                class="text-[10px] bg-red-100 text-red-700 px-2 py-1 rounded font-bold uppercase tracking-wider whitespace-nowrap">
+                                Revisi
+                            </span>
+                        </div>
+
+                        <p class="relative z-10 text-xs text-gray-500 mb-4 flex items-center gap-1">
+                            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            Disubmit: {{ $rejected->created_at->format('d M Y') }}
+                        </p>
+
+                        <div class="relative z-10 bg-red-50 rounded-lg p-3 flex-grow mb-4 border border-red-100">
+                            <p class="text-xs font-semibold text-red-800 mb-1 flex items-center gap-1">
+                                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                                </svg>
+                                Pesan dari Admin:
+                            </p>
+                            <p class="text-sm text-red-600 italic">"{{ $rejected->rejection_reason }}"</p>
+                        </div>
+
+                        <!-- Ganti myproject.edit dengan route form edit karya Anda -->
+                        <a href="{{ route('projects.edit', $rejected->id ?? 1) }}"
+                            class="relative z-10 block w-full text-center bg-white border border-red-500 text-red-600 hover:bg-red-50 text-sm font-bold py-2 rounded-lg transition-colors">
+                            Perbaiki Karya
+                        </a>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    @endif
+    <!-- ========================================================= -->
+
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- TABEL KARYA TERBARU -->
         @if (Auth::user()->role == 'admin' || Auth::user()->role == 'pengurus')
             <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden h-fit">
                 <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
@@ -79,17 +140,18 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">
-                            {{-- @dd($recentProjects->owner) --}}
                             @foreach ($recentProjects as $recentProject)
                                 <tr>
-                                    {{-- @dd($recentProject) --}}
                                     <td class="px-6 py-4 font-medium text-gray-900">{{ $recentProject->title ?? '' }}</td>
                                     <td class="px-6 py-4"><span
                                             class="px-2 py-1 bg-purple-50 text-purple-600 rounded text-xs font-semibold">{{ $recentProject->division ?? '' }}</span>
                                     </td>
                                     <td class="px-6 py-4">{{ $recentProject->owner->name ?? '' }}</td>
-                                    <td class="px-6 py-4"><span
-                                            class="{{ $recentProject->status == true ? 'text-green-600' : 'text-grey-600' }} text-sm font-bold">{{ $recentProject->status == true ? 'verify' : 'unverify' }}</span>
+                                    <td class="px-6 py-4">
+                                        <span
+                                            class="{{ $recentProject->status == true ? 'text-green-600' : 'text-gray-500' }} text-sm font-bold">
+                                            {{ $recentProject->status == true ? 'Verified' : 'Unverified' }}
+                                        </span>
                                     </td>
                                 </tr>
                             @endforeach
@@ -99,6 +161,7 @@
             </div>
         @endif
 
+        <!-- TOP TYPIST -->
         <div class="lg:col-span-1">
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                 <div class="bg-indigo-600 px-6 py-4 border-b border-indigo-700 flex justify-between items-center">
@@ -119,7 +182,7 @@
 
                             <div class="flex-shrink-0 w-8 text-center">
                                 <span
-                                    class="text-{{ $loop->iteration <= 3 ? '2xl' : 'sm' }} font-bold 
+                                    class="text-{{ $loop->iteration <= 3 ? '2xl' : 'sm' }} font-bold
                     {{ $loop->iteration == 1 ? 'text-yellow-500' : ($loop->iteration == 2 ? 'text-gray-400' : ($loop->iteration == 3 ? 'text-orange-700/70' : 'text-gray-400')) }} italic">
                                     {{ $loop->iteration }}
                                 </span>

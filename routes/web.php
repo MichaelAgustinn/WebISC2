@@ -218,6 +218,8 @@ Route::middleware('auth')->group(function () {
         $totalProject = Project::count();
         $projectAktif = Project::where('status', true)->count();
 
+        $pendingProjects = Auth::user()->ownedProjects()->whereNotNull('rejection_reason')->latest()->get();
+
         $recentProjects = Project::with('users')->latest()->take(7)->get();
 
         $weeklyTop = TypingScore::with('user.profile')
@@ -227,7 +229,7 @@ Route::middleware('auth')->group(function () {
             ->unique('user_id')
             ->take(5);
 
-        return view('dashboard', compact('totalAnggota', 'totalAkun', 'totalPengurus', 'totalProject', 'projectAktif', 'recentProjects', 'weeklyTop'));
+        return view('dashboard', compact('totalAnggota', 'totalAkun', 'totalPengurus', 'totalProject', 'projectAktif', 'recentProjects', 'weeklyTop', 'pendingProjects'));
     })->name('dashboard');
 
     // ? profile area
