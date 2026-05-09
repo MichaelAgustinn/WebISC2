@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Form;
-use App\Models\FormResponse;
 use App\Models\FormAnswer;
+use App\Models\FormResponse;
 use App\Models\LandingPage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -40,6 +40,7 @@ class PublicFormController extends Controller
             ->exists();
 
         $data = LandingPage::pluck('value', 'key')->toArray();
+
         // Kirim variabel $hasSubmitted ke view
         return view('landing.forms.show', compact('form', 'hasSubmitted', 'data'));
     }
@@ -94,7 +95,9 @@ class PublicFormController extends Controller
         if ($request->has('answers')) {
             foreach ($request->answers as $fieldId => $answer) {
                 $field = $form->fields->find($fieldId);
-                if (!$field) continue;
+                if (! $field) {
+                    continue;
+                }
 
                 $answerText = null;
                 $answerFile = null;
