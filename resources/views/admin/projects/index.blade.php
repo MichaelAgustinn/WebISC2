@@ -44,14 +44,30 @@
                         <tr class="hover:bg-gray-50">
                             <!-- KOLOM PROJECT -->
                             <td class="px-6 py-4">
-                                <div class="text-sm font-medium text-gray-900">
+                                <div class="text-sm font-medium text-gray-900 flex items-center gap-2">
                                     {{ $project->title }}
-                                </div>
-                                <div class="text-xs text-gray-400">
-                                    {{ $project->created_at->format('d M Y') }}
-                                </div>
-                            </td>
 
+                                    {{-- Munculkan titik kuning HANYA jika is_revised = true --}}
+                                    @if ($project->is_revised)
+                                        <span class="relative flex h-2.5 w-2.5"
+                                            title="Karya telah diperbarui oleh anggota. Cek apakah revisinya sudah sesuai.">
+                                            <span
+                                                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
+                                            <span
+                                                class="relative inline-flex rounded-full h-2.5 w-2.5 bg-yellow-500"></span>
+                                        </span>
+                                    @endif
+                                </div>
+
+                                {{-- Tampilkan pesan admin sebelumnya agar admin ingat --}}
+                                @if ($project->is_revised)
+                                    <div
+                                        class="mt-2 text-[11px] text-yellow-700 bg-yellow-50 p-2 rounded border border-yellow-100 max-w-xs">
+                                        <strong>Catatan Anda Sebelumnya:</strong><br>
+                                        "{{ $project->rejection_reason }}"
+                                    </div>
+                                @endif
+                            </td>
                             <!-- KOLOM STATUS -->
                             <td class="px-6 py-4 align-top">
                                 @if ($isVerified)
@@ -62,10 +78,12 @@
                                     <span class="px-3 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">
                                         Ditolak / Revisi
                                     </span>
-                                    <div
-                                        class="mt-2 text-[11px] text-red-600 bg-red-50 p-2 rounded border border-red-100 max-w-xs">
-                                        <strong>Alasan:</strong> {{ $project->rejection_reason }}
-                                    </div>
+                                    @if (!$project->is_revised)
+                                        <div
+                                            class="mt-2 text-[11px] text-red-600 bg-red-50 p-2 rounded border border-red-100 max-w-xs">
+                                            <strong>Alasan:</strong> {{ $project->rejection_reason }}
+                                        </div>
+                                    @endif
                                 @else
                                     <span
                                         class="px-3 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">
@@ -83,8 +101,7 @@
                                         class="inline-block">
                                         @csrf
                                         @method('PUT')
-                                        <button type="submit" {{-- Matikan jika sudah Verified --}} {{ $isVerified ? 'disabled' : '' }}
-                                            {{-- Konfirmasi popup bawaan --}}
+                                        <button type="submit" {{ $isVerified ? 'disabled' : '' }}
                                             @if (!$isVerified) onclick="return confirm('Yakin ingin verifikasi project ini?')" @endif
                                             class="inline-flex items-center gap-2 font-semibold px-4 py-2 rounded-lg text-sm shadow-sm transition duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1
                                             {{ $isVerified
@@ -101,8 +118,7 @@
                                         @method('PUT')
                                         <input type="hidden" name="rejection_reason" class="reason-input">
 
-                                        <button type="submit" {{-- Matikan jika SEDANG ditolak (sudah ada alasan penolakan).
-                                                 Tapi jika PENDING atau VERIFIED, tombol ini aktif! --}} {{ $isRejected ? 'disabled' : '' }}
+                                        <button type="submit" {{ $isRejected ? 'disabled' : '' }}
                                             class="inline-flex items-center gap-2 font-semibold px-4 py-2 rounded-lg text-sm shadow-sm transition duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1
                                             {{ $isRejected
                                                 ? 'bg-gray-100 text-gray-400 cursor-not-allowed opacity-75'

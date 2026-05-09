@@ -9,7 +9,7 @@ class Project extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['link', 'user_id', 'title', 'slug', 'description', 'image', 'division', 'status', 'rejection_reason'];
+    protected $fillable = ['link', 'user_id', 'title', 'slug', 'description', 'image', 'division', 'status', 'rejection_reason', 'is_revised'];
 
     // Relasi ke Anggota Tim (Many to Many)
     public function users()

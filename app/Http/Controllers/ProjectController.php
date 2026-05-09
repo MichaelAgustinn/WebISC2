@@ -118,6 +118,9 @@ class ProjectController extends Controller
             $request->image->move(public_path('uploads/projects'), $imageName);
             $data['image'] = $imageName;
         }
+        if ($project->rejection_reason != null) {
+            $project->is_revised = true;
+        }
 
         $project->update($data);
 

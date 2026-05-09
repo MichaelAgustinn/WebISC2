@@ -218,7 +218,7 @@ Route::middleware('auth')->group(function () {
         $totalProject = Project::count();
         $projectAktif = Project::where('status', true)->count();
 
-        $pendingProjects = Auth::user()->ownedProjects()->whereNotNull('rejection_reason')->latest()->get();
+        $pendingProjects = Auth::user()->ownedProjects()->whereNotNull('rejection_reason')->where('is_revised', false)->latest()->get();
 
         $recentProjects = Project::with('users')->latest()->take(7)->get();
 
