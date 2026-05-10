@@ -31,6 +31,7 @@ use App\Models\TypingScore;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
@@ -249,23 +250,24 @@ Route::middleware('auth')->group(function () {
 
         $recentProjects = Project::with('users')->latest()->take(7)->get();
 
+        $startOfWeek = Carbon::now()->startOfWeek();
+
+        // 1. Buat subquery untuk mencari WPM tertinggi per user
+        $subQuery = DB::table('typing_scores')
+            ->select('typing_scores.user_id', DB::raw('MAX(typing_scores.wpm) as max_wpm'))
+            ->join('users', 'typing_scores.user_id', '=', 'users.id')
+            ->where('users.role', '!=', 'none') // Filter role dari tabel users
+            ->where('typing_scores.created_at', '>=', $startOfWeek)
+            ->groupBy('typing_scores.user_id');
+
+        // 2. Query utama untuk mengambil data lengkap score
         $weeklyTop = TypingScore::with('user.profile')
+            ->joinSub($subQuery, 'best_scores', function ($join) {
+                $join->on('typing_scores.user_id', '=', 'best_scores.user_id')
+                    ->on('typing_scores.wpm', '=', 'best_scores.max_wpm');
+            })
+            ->where('typing_scores.created_at', '>=', $startOfWeek)
             ->select('typing_scores.*')
-            ->join(
-                DB::raw('
-            (
-                SELECT user_id, MAX(wpm) as max_wpm
-                FROM typing_scores
-                WHERE created_at >= "' . Carbon::now()->startOfWeek() . '"
-                AND role != "none"
-                GROUP BY user_id
-            ) as best_scores
-        '),
-                function ($join) {
-                    $join->on('typing_scores.user_id', '=', 'best_scores.user_id')
-                        ->on('typing_scores.wpm', '=', 'best_scores.max_wpm');
-                }
-            )
             ->orderByDesc('typing_scores.wpm')
             ->take(5)
             ->get();
