@@ -15,24 +15,13 @@ class TypingController extends Controller
     {
         // Helper function untuk mengambil top score unik per user
         $getLeaderboard = function ($query) {
-            $bestScores = (clone $query)
-                ->join('users', 'users.id', '=', 'typing_scores.user_id')
-                ->where('users.role', '!=', 'none')
-                ->select(
-                    'typing_scores.user_id',
-                    DB::raw('MAX(typing_scores.wpm) as max_wpm')
-                )
-                ->groupBy('typing_scores.user_id');
-
-            return TypingScore::with('user.profile')
-                ->joinSub($bestScores, 'best_scores', function ($join) {
-                    $join->on('typing_scores.user_id', '=', 'best_scores.user_id')
-                        ->on('typing_scores.wpm', '=', 'best_scores.max_wpm');
-                })
-                ->select('typing_scores.*')
-                ->orderByDesc('typing_scores.wpm')
-                ->take(10)
-                ->get();
+            return $query->with('user.profile') // Eager load relasi
+                ->where('role', '!=', 'none')
+                ->orderBy('wpm', 'desc') // Urutkan WPM tertinggi
+                ->get()
+                ->unique('user_id') // Ambil hanya satu record terbaik per user
+                ->values() // Reset index array
+                ->take(10); // Ambil top 10
         };
 
         // Daftar value bahasa sesuai dengan yang ada di <select> HTML kamu
