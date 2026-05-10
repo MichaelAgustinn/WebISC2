@@ -223,7 +223,7 @@
                 <div class="bg-gray-50 px-6 py-3 border-t border-gray-100 text-center">
                     <a href="{{ route('typing.index') }}"
                         class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition">
-                        {{ Auth::user()->role == 'admin' || Auth::user()->role == 'pengurus' ? 'Lihat Seluruh Peringkat &rarr;' : 'Mulai Test Mengetik &rarr;' }}
+                        {{ Auth::user()->role == 'admin' || Auth::user()->role == 'pengurus' ? 'Lihat Seluruh Peringkat' : 'Mulai Test Mengetik' }}
                     </a>
                 </div>
             </div>
