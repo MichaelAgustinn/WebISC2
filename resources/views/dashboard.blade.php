@@ -147,7 +147,7 @@
                                         </div>
                                     </td>
                                     <td class="px-6 py-4"><span
-                                            class="px-2 py-1 bg-purple-50 text-purple-600 rounded text-xs font-semibold">{{ $recentProject->division ?? '' }}</span>
+                                            class="px-2 py-1 bg-purple-50 text-purple-600 rounded text-xs font-semibold">{{ ucwords(str_replace('_', ' ', $score->user->profile->division)) ?? '' }}</span>
                                     </td>
                                     <td class="px-6 py-4">{{ $recentProject->owner->name ?? '' }}</td>
                                     <td class="px-6 py-4">
@@ -207,7 +207,8 @@
                             <div class="flex-1 min-w-0">
                                 <p class="text-sm font-bold text-gray-900 truncate">
                                     {{ Str::limit($score->user->name, 20) }}</p>
-                                <p class="text-xs text-gray-500 truncate">{{ $score->user->profile->division ?? '-' }}</p>
+                                <p class="text-xs text-gray-500 truncate">
+                                    {{ ucwords(str_replace('_', ' ', $score->user->profile->division)) ?? '-' }}</p>
                             </div>
                             <div class="text-right">
                                 <span class="block text-lg font-bold text-gray-800">{{ $score->wpm }}</span>
