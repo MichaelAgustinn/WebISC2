@@ -147,7 +147,7 @@
                                         </div>
                                     </td>
                                     <td class="px-6 py-4"><span
-                                            class="px-2 py-1 bg-purple-50 text-purple-600 rounded text-xs font-semibold">{{ ucwords(str_replace('_', ' ', $score->user->profile->division)) ?? '' }}</span>
+                                            class="px-2 py-1 bg-purple-50 text-purple-600 rounded text-xs font-semibold">{{ ucwords(str_replace('_', ' ', $recentProject->division)) ?? '' }}</span>
                                     </td>
                                     <td class="px-6 py-4">{{ $recentProject->owner->name ?? '' }}</td>
                                     <td class="px-6 py-4">
