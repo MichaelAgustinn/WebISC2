@@ -15,16 +15,12 @@ class TypingController extends Controller
     {
         // Helper function untuk mengambil top score unik per user
         $getLeaderboard = function ($query) {
-            $bestScores = (clone $query)
-                ->join('users', 'users.id', '=', 'typing_scores.user_id')
-                ->where('users.role', '!=', 'none')
-                ->select(
-                    'typing_scores.user_id',
-                    DB::raw('MAX(typing_scores.wpm) as max_wpm')
-                )
-                ->groupBy('typing_scores.user_id');
-            return TypingScore::with('user.profile')
-                ->joinSub($bestScores, 'best_scores', function ($join) {
+            $subQuery = DB::table('typing_scores')
+                ->select('user_id', DB::raw('MAX(wpm) as max_wpm'))
+                ->groupBy('user_id');
+
+            return $query->with('user.profile')
+                ->joinSub($subQuery, 'best_scores', function ($join) {
                     $join->on('typing_scores.user_id', '=', 'best_scores.user_id')
                         ->on('typing_scores.wpm', '=', 'best_scores.max_wpm');
                 })
