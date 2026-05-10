@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Verifikasi Anggota')
+@section('title', 'Manajemen Pengguna')
 
 @section('content')
     <div class="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -9,14 +9,13 @@
             <p class="text-gray-500 text-sm">Verifikasi anggota baru dan atur hak akses pengguna.</p>
         </div>
 
-        <form method="GET" action="{{ route('users.index') }}" class="relative w-full md:w-64">
-            <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama atau email..."
-                class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 text-sm">
-            <svg class="w-5 h-5 text-gray-400 absolute left-3 top-2.5" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
+        <form method="GET" action="{{ route('users.index') }}" class="relative w-full md:w-64"></form>
+        <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama atau email..."
+            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+        <svg class="w-5 h-5 text-gray-400 absolute left-3 top-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
         </form>
     </div>
 
@@ -57,38 +56,58 @@
                                 </div>
                             </td>
 
-                            <td class="px-6 py-4">
-                                @if ($user->role == 'admin')
-                                    <span
-                                        class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                                        Admin
-                                    </span>
-                                @elseif($user->role == 'pengurus')
-                                    <span
-                                        class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-indigo-100 text-indigo-800">
-                                        Pengurus
-                                    </span>
-                                @elseif($user->role == 'anggota')
-                                    <span
-                                        class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                        Anggota Aktif
-                                    </span>
-                                @else
-                                    <span
-                                        class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
-                                        None (Belum Verif)
-                                    </span>
+                            <td class="px-6 py-4 align-top">
+                                <div>
+                                    @if ($user->role == 'admin')
+                                        <span
+                                            class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                            Admin
+                                        </span>
+                                    @elseif($user->role == 'pengurus')
+                                        <span
+                                            class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-indigo-100 text-indigo-800">
+                                            Pengurus
+                                        </span>
+                                    @elseif($user->role == 'anggota')
+                                        <span
+                                            class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                            Anggota Aktif
+                                        </span>
+                                    @else
+                                        <span
+                                            class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                                            None (Belum Verif / Kick)
+                                        </span>
+                                    @endif
+                                </div>
+
+                                {{-- CATATAN ALASAN REJECT/KICK --}}
+                                @if ($user->reject_reason)
+                                    <div
+                                        class="mt-2 text-[11px] leading-relaxed text-red-600 bg-red-50 p-2 rounded-lg border border-red-100 inline-block w-full max-w-[200px] break-words">
+                                        <span class="font-bold flex items-center gap-1 mb-0.5">
+                                            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                            </svg>
+                                            Alasan Kick/Tolak:
+                                        </span>
+                                        <span class="italic text-red-500">"{{ $user->reject_reason }}"</span>
+                                    </div>
                                 @endif
                             </td>
 
-                            <td class="px-6 py-4">
+                            <td class="px-6 py-4 align-top">
                                 <form action="{{ route('users.update-role', $user->id) }}" method="POST"
-                                    class="flex items-center gap-2">
+                                    class="flex items-center gap-2 role-form" data-name="{{ $user->name }}">
                                     @csrf
                                     @method('PUT')
 
+                                    {{-- Hidden input untuk alasan penolakan/kick --}}
+                                    <input type="hidden" name="reject_reason" class="reason-input" value="">
+
                                     <select name="role"
-                                        class="text-sm border-gray-300 rounded-lg shadow-sm focus:border-indigo-500 focus:ring-indigo-500 py-1.5 pl-2 pr-8">
+                                        class="role-select text-sm border-gray-300 rounded-lg shadow-sm focus:border-indigo-500 focus:ring-indigo-500 py-1.5 pl-2 pr-8">
 
                                         @if (Auth::user()->role == 'admin')
                                             <option value="none" {{ $user->role == 'none' ? 'selected' : '' }}>None
@@ -106,8 +125,9 @@
                                         @endif
                                     </select>
 
-                                    <button type="submit"
-                                        class="bg-indigo-50 text-indigo-600 hover:bg-indigo-100 p-1.5 rounded-md transition"
+                                    {{-- Ganti type jadi button agar dicegat JS dulu --}}
+                                    <button type="button"
+                                        class="btn-save-role bg-indigo-50 text-indigo-600 hover:bg-indigo-100 p-1.5 rounded-md transition"
                                         title="Simpan Role">
                                         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -117,12 +137,12 @@
                                 </form>
                             </td>
 
-                            <td class="px-6 py-4 text-right">
-                                <form action="{{ route('users.destroy', $user) }}" method="POST"
-                                    onsubmit="return confirm('Yakin ingin menghapus user ini selamanya? Data profil juga akan hilang.')">
+                            <td class="px-6 py-4 text-right align-top">
+                                <form action="{{ route('users.destroy', $user) }}" method="POST" class="delete-form">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="text-red-500 hover:text-red-700 text-sm font-medium">
+                                    <button type="button"
+                                        class="btn-delete text-gray-400 hover:text-red-600 text-sm font-medium p-1 transition-colors">
                                         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -147,3 +167,106 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    {{-- SWEET ALERT --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            // 1. Logic untuk tombol Simpan Role
+            document.querySelectorAll('.btn-save-role').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault(); // Mencegah reload halaman secara otomatis
+
+                    const form = this.closest('.role-form');
+                    const selectElement = form.querySelector('.role-select');
+                    const selectedRole = selectElement.value;
+                    const userName = form.dataset.name;
+
+                    // Jika opsi yang dipilih adalah "none" (Nonaktifkan/Kick)
+                    if (selectedRole === 'none') {
+                        Swal.fire({
+                            title: 'Nonaktifkan Akun?',
+                            text: `Silakan masukkan alasan kenapa akun ${userName} dinonaktifkan (dikick):`,
+                            icon: 'warning',
+                            input: 'textarea',
+                            inputPlaceholder: 'Ketik alasan di sini (Wajib)...',
+                            showCancelButton: true,
+                            confirmButtonColor: '#ef4444',
+                            cancelButtonColor: '#6b7280',
+                            confirmButtonText: 'Ya, Nonaktifkan',
+                            cancelButtonText: 'Batal',
+                            borderRadius: '18px',
+                            reverseButtons: true,
+
+                            // Validasi: tidak bisa klik OK jika kosong
+                            preConfirm: (reason) => {
+                                if (!reason || reason.trim() === "") {
+                                    Swal.showValidationMessage(
+                                        'Alasan penonaktifan wajib diisi!');
+                                    return false;
+                                }
+                                return reason;
+                            }
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // Masukkan isi reason ke input hidden lalu submit
+                                form.querySelector('.reason-input').value = result.value;
+                                form.submit();
+                            }
+                        });
+                    }
+                    // Jika opsi yang dipilih BUKAN "none" (Ubah Role Biasa/Aktivasi)
+                    else {
+                        Swal.fire({
+                            title: 'Ubah Role?',
+                            html: `Ubah hak akses <b>${userName}</b> menjadi <b style="text-transform: uppercase;">${selectedRole}</b>?`,
+                            icon: 'question',
+                            showCancelButton: true,
+                            confirmButtonColor: '#4f46e5', // indigo
+                            cancelButtonColor: '#6b7280',
+                            confirmButtonText: 'Ya, Simpan',
+                            cancelButtonText: 'Batal',
+                            borderRadius: '18px',
+                            reverseButtons: true
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // Pastikan reason kosong (null) karena bukan "none"
+                                form.querySelector('.reason-input').value = '';
+                                form.submit();
+                            }
+                        });
+                    }
+                });
+            });
+
+            // 2. Logic untuk tombol Hapus Permanen
+            document.querySelectorAll('.btn-delete').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault(); // Mencegah reload halaman secara otomatis
+                    const form = this.closest('.delete-form');
+
+                    Swal.fire({
+                        title: 'Hapus User Permanen?',
+                        text: "Yakin ingin menghapus user ini selamanya? Data profil juga akan hilang.",
+                        icon: 'error',
+                        showCancelButton: true,
+                        confirmButtonColor: '#ef4444',
+                        cancelButtonColor: '#6b7280',
+                        confirmButtonText: 'Ya, Hapus',
+                        cancelButtonText: 'Batal',
+                        borderRadius: '18px',
+                        reverseButtons: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
+            });
+
+        });
+    </script>
+@endpush

@@ -78,8 +78,15 @@ class AdminUserController extends Controller
             'role' => 'required|in:admin,pengurus,anggota,none',
         ]);
 
+        $user->role = $request->role;
         $currentUser = Auth::user();
         $newRole = $request->role;
+
+        if ($request->role === 'none') {
+            $user->reject_reason = $request->reject_reason;
+        } else {
+            $user->reject_reason = null;
+        }
 
         if ($currentUser->role == 'pengurus') {
             if ($user->role == 'admin' || $user->role == 'pengurus') {
@@ -90,7 +97,6 @@ class AdminUserController extends Controller
                 return back()->with('error', 'Pengurus hanya bisa mengubah role ke Anggota atau None.');
             }
         }
-
 
         $user->update(['role' => $newRole]);
 

@@ -1,64 +1,74 @@
 @extends('layouts.app')
 
 @section('content')
+    <!-- SECTION 1: STATUS AKUN (Jika Dinonaktifkan) -->
+    @if (Auth::user()->reject_reason)
+        <div class="bg-white rounded-xl border-2 border-red-500 shadow-md p-6 flex flex-col relative overflow-hidden mb-6">
+            <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-red-50 rounded-full z-0 opacity-50"></div>
+
+            <div class="relative z-10 flex items-center gap-4 mb-4">
+                <div class="p-3 bg-red-100 rounded-full text-red-600">
+                    <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                </div>
+                <div>
+                    <h4 class="font-black text-red-700 text-lg uppercase tracking-tight">Akun Dinonaktifkan</h4>
+                    <p class="text-xs text-red-500">Akses fitur Anda telah dibatasi oleh admin.</p>
+                </div>
+            </div>
+
+            <div class="relative z-10 bg-red-50 rounded-xl p-4 border border-red-200">
+                <p class="text-xs font-bold text-red-800 mb-2 flex items-center gap-1.5">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                    </svg>
+                    Alasan Penonaktifan:
+                </p>
+                <p class="text-sm text-red-700 leading-relaxed font-medium italic">
+                    "{{ Auth::user()->reject_reason }}"
+                </p>
+            </div>
+        </div>
+    @endif
+
     <!-- SUMMARY CARDS -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-6">
-
         @if (Auth::user()->role == 'admin' || Auth::user()->role == 'pengurus')
-            {{-- Anggota Aktif --}}
             <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
                 <p class="text-gray-500 text-sm font-medium">Akun Terdaftar</p>
                 <h3 class="text-2xl font-bold text-green-600">{{ $totalAkun ?? '0' }}</h3>
             </div>
         @endif
 
-        {{-- Anggota Tidak Aktif --}}
         <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-            @if (Auth::user()->role == 'admin' || Auth::user()->role == 'pengurus')
-                <p class="text-gray-500 text-sm font-medium">Anggota Aktif</p>
-            @else
-                <p class="text-gray-500 text-sm font-medium">Semua anggota</p>
-            @endif
+            <p class="text-gray-500 text-sm font-medium">
+                {{ Auth::user()->role == 'admin' || Auth::user()->role == 'pengurus' ? 'Anggota Aktif' : 'Semua Anggota' }}
+            </p>
             <h3 class="text-2xl font-bold text-red-600">{{ $totalAnggota + $totalPengurus ?? '0' }}</h3>
         </div>
 
-        {{-- Pengurus --}}
         <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
             <p class="text-gray-500 text-sm font-medium">Total Pengurus</p>
             <h3 class="text-2xl font-bold text-indigo-600">{{ $totalPengurus ?? '0' }}</h3>
         </div>
 
         @if (Auth::user()->role == 'admin' || Auth::user()->role == 'pengurus')
-            {{-- Karya Aktif --}}
             <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
                 <p class="text-gray-500 text-sm font-medium">Semua Karya</p>
                 <h3 class="text-2xl font-bold text-blue-600">{{ $totalProject ?? '0' }}</h3>
             </div>
         @endif
 
-        {{-- Karya Tidak Aktif --}}
         <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
             <p class="text-gray-500 text-sm font-medium">Karya Tervalidasi</p>
             <h3 class="text-2xl font-bold text-yellow-600">{{ $projectAktif ?? '0' }}</h3>
         </div>
-
-        @if (Auth::user()->role == 'admin' || Auth::user()->role == 'pengurus')
-            <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                <p class="text-gray-500 text-sm font-medium">Total Artikel</p>
-                <h3 class="text-2xl font-bold text-blue-600">{{ $totalBlog ?? '0' }}</h3>
-            </div>
-            <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                <p class="text-gray-500 text-sm font-medium">Total Dokumen</p>
-                <h3 class="text-2xl font-bold text-yellow-600">{{ $totalBlog ?? '0' }}</h3>
-            </div>
-            <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                <p class="text-gray-500 text-sm font-medium">Total Surat</p>
-                <h3 class="text-2xl font-bold text-green-600">{{ $totalBlog ?? '0' }}</h3>
-            </div>
-        @endif
-
     </div>
 
+    <!-- SECTION 2: KARYA BUTUH REVISI (Hanya untuk Pemilik Karya) -->
     @if (isset($pendingProjects) && count($pendingProjects) > 0)
         <div class="mb-8">
             <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
@@ -73,38 +83,20 @@
                 @foreach ($pendingProjects as $rejected)
                     <div
                         class="bg-white rounded-xl border-l-4 border-l-red-500 shadow-sm p-5 flex flex-col h-full relative overflow-hidden group">
-
-                        <!-- Background aksen merah samar -->
                         <div class="relative z-10 flex justify-between items-start mb-2">
                             <h4 class="font-bold text-gray-800 line-clamp-1 pr-2" title="{{ $rejected->title }}">
                                 {{ $rejected->title }}</h4>
                             <span
-                                class="text-[10px] bg-red-100 text-red-700 px-2 py-1 rounded font-bold uppercase tracking-wider whitespace-nowrap">
-                                Revisi
-                            </span>
+                                class="text-[10px] bg-red-100 text-red-700 px-2 py-1 rounded font-bold uppercase tracking-wider whitespace-nowrap">Revisi</span>
                         </div>
-
-                        <p class="relative z-10 text-xs text-gray-500 mb-4 flex items-center gap-1">
-                            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
+                        <p class="relative z-10 text-xs text-gray-500 mb-4 flex items-center gap-1 font-medium">
                             Disubmit: {{ $rejected->created_at->format('d M Y') }}
                         </p>
-
                         <div class="relative z-10 bg-red-50 rounded-lg p-3 flex-grow mb-4 border border-red-100">
-                            <p class="text-xs font-semibold text-red-800 mb-1 flex items-center gap-1">
-                                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-                                </svg>
-                                Pesan dari Admin:
-                            </p>
+                            <p class="text-xs font-semibold text-red-800 mb-1 flex items-center gap-1">Pesan Admin:</p>
                             <p class="text-sm text-red-600 italic">"{{ $rejected->rejection_reason }}"</p>
                         </div>
-
-                        <!-- Ganti myproject.edit dengan route form edit karya Anda -->
-                        <a href="{{ route('projects.edit', $rejected->id ?? 1) }}"
+                        <a href="{{ route('projects.edit', $rejected->id) }}"
                             class="relative z-10 block w-full text-center bg-white border border-red-500 text-red-600 hover:bg-red-50 text-sm font-bold py-2 rounded-lg transition-colors">
                             Perbaiki Karya
                         </a>
@@ -113,18 +105,15 @@
             </div>
         </div>
     @endif
-    <!-- ========================================================= -->
 
-
+    <!-- SECTION 3: TABEL & TOP TYPIST -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <!-- TABEL KARYA TERBARU -->
         @if (Auth::user()->role == 'admin' || Auth::user()->role == 'pengurus')
             <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden h-fit">
                 <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
                     <h3 class="font-semibold text-gray-800">Karya Terbaru</h3>
                     <a href="{{ route('admin.projects.all') }}"
-                        class="text-indigo-600 text-sm font-medium hover:underline">Lihat
-                        Semua</a>
+                        class="text-indigo-600 text-sm font-medium hover:underline">Lihat Semua</a>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-sm text-gray-600">
@@ -138,8 +127,25 @@
                         </thead>
                         <tbody class="divide-y divide-gray-100">
                             @foreach ($recentProjects as $recentProject)
+                                @php
+                                    // Logika titik kuning untuk Admin
+                                    $isRevised = $recentProject->is_revised == true;
+                                    $isPending = $recentProject->status == false;
+                                @endphp
                                 <tr>
-                                    <td class="px-6 py-4 font-medium text-gray-900">{{ $recentProject->title ?? '' }}</td>
+                                    <td class="px-6 py-4 font-medium text-gray-900">
+                                        <div class="flex items-center gap-2">
+                                            {{ $recentProject->title }}
+                                            @if ($isPending && $isRevised)
+                                                <span class="relative flex h-2 w-2" title="User sudah memperbaiki karya">
+                                                    <span
+                                                        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
+                                                    <span
+                                                        class="relative inline-flex rounded-full h-2 w-2 bg-yellow-500"></span>
+                                                </span>
+                                            @endif
+                                        </div>
+                                    </td>
                                     <td class="px-6 py-4"><span
                                             class="px-2 py-1 bg-purple-50 text-purple-600 rounded text-xs font-semibold">{{ $recentProject->division ?? '' }}</span>
                                     </td>
@@ -158,8 +164,9 @@
             </div>
         @endif
 
-        <!-- TOP TYPIST -->
-        <div class="lg:col-span-1">
+        <!-- TOP TYPIST (Weekly) -->
+        <div
+            class="{{ Auth::user()->role == 'admin' || Auth::user()->role == 'pengurus' ? 'lg:col-span-1' : 'lg:col-span-3' }}">
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                 <div class="bg-indigo-600 px-6 py-4 border-b border-indigo-700 flex justify-between items-center">
                     <h3 class="text-white font-semibold flex items-center gap-2">
@@ -176,26 +183,16 @@
                     @forelse($weeklyTop as $score)
                         <div
                             class="flex items-center px-5 py-4 {{ $loop->iteration == 1 ? 'bg-yellow-50/50 hover:bg-yellow-50' : 'hover:bg-gray-50' }} transition duration-150">
-
                             <div class="flex-shrink-0 w-8 text-center">
                                 <span
-                                    class="text-{{ $loop->iteration <= 3 ? '2xl' : 'sm' }} font-bold
-                    {{ $loop->iteration == 1 ? 'text-yellow-500' : ($loop->iteration == 2 ? 'text-gray-400' : ($loop->iteration == 3 ? 'text-orange-700/70' : 'text-gray-400')) }} italic">
+                                    class="text-{{ $loop->iteration <= 3 ? '2xl' : 'sm' }} font-bold {{ $loop->iteration == 1 ? 'text-yellow-500' : ($loop->iteration == 2 ? 'text-gray-400' : ($loop->iteration == 3 ? 'text-orange-700/70' : 'text-gray-400')) }} italic">
                                     {{ $loop->iteration }}
                                 </span>
                             </div>
-
                             <div class="flex-shrink-0 mx-3 relative">
-                                @if ($score->user->profile && $score->user->profile->photo)
-                                    <img class="h-10 w-10 rounded-full border-2 {{ $loop->iteration == 1 ? 'border-yellow-300' : 'border-gray-200' }} object-cover"
-                                        src="{{ asset('uploads/profiles/' . $score->user->profile->photo) }}"
-                                        alt="">
-                                @else
-                                    <img class="h-10 w-10 rounded-full border-2 {{ $loop->iteration == 1 ? 'border-yellow-300' : 'border-gray-200' }} object-cover"
-                                        src="https://ui-avatars.com/api/?name={{ urlencode($score->user->name) }}&background=0f204b&color=fff"
-                                        alt="">
-                                @endif
-
+                                <img class="h-10 w-10 rounded-full border-2 {{ $loop->iteration == 1 ? 'border-yellow-300' : 'border-gray-200' }} object-cover"
+                                    src="{{ $score->user->profile && $score->user->profile->photo ? asset('uploads/profiles/' . $score->user->profile->photo) : 'https://ui-avatars.com/api/?name=' . urlencode($score->user->name) . '&background=0f204b&color=fff' }}"
+                                    alt="">
                                 @if ($loop->iteration == 1)
                                     <div
                                         class="absolute -top-2 -right-1 text-yellow-500 bg-white rounded-full shadow-sm p-0.5">
@@ -207,50 +204,28 @@
                                     </div>
                                 @endif
                             </div>
-
                             <div class="flex-1 min-w-0">
                                 <p class="text-sm font-bold text-gray-900 truncate">
-                                    {{ Str::limit($score->user->name, 20) }}
-                                </p>
-                                <p class="text-xs text-gray-500 truncate">
-                                    {{ $score->user->profile->division ?? '-' }}
-                                </p>
+                                    {{ Str::limit($score->user->name, 20) }}</p>
+                                <p class="text-xs text-gray-500 truncate">{{ $score->user->profile->division ?? '-' }}</p>
                             </div>
-
                             <div class="text-right">
-                                <span class="block text-lg font-bold text-gray-800">
-                                    {{ $score->wpm }}
-                                </span>
-                                <span class="text-[10px] text-gray-400 font-semibold uppercase">
-                                    WPM
-                                </span>
+                                <span class="block text-lg font-bold text-gray-800">{{ $score->wpm }}</span>
+                                <span class="text-[10px] text-gray-400 font-semibold uppercase">WPM</span>
                             </div>
-
                         </div>
                     @empty
-                        <div class="flex items-center justify-center px-5 py-6 text-gray-400 text-sm">
-                            Belum ada skor minggu ini.
-                        </div>
+                        <div class="flex items-center justify-center px-5 py-6 text-gray-400 text-sm">Belum ada skor minggu
+                            ini.</div>
                     @endforelse
                 </div>
-
-                @if (Auth::user()->role == 'admin' || Auth::user()->role == 'pengurus')
-                    <div class="bg-gray-50 px-6 py-3 border-t border-gray-100 text-center">
-                        <a href="{{ route('typing.index') }}"
-                            class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition">
-                            Lihat Seluruh Peringkat &rarr;
-                        </a>
-                    </div>
-                @else
-                    <div class="bg-gray-50 px-6 py-3 border-t border-gray-100 text-center">
-                        <a href="{{ route('typing.index') }}"
-                            class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition">
-                            Mulai Test Mengetik &rarr;
-                        </a>
-                    </div>
-                @endif
+                <div class="bg-gray-50 px-6 py-3 border-t border-gray-100 text-center">
+                    <a href="{{ route('typing.index') }}"
+                        class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition">
+                        {{ Auth::user()->role == 'admin' || Auth::user()->role == 'pengurus' ? 'Lihat Seluruh Peringkat &rarr;' : 'Mulai Test Mengetik &rarr;' }}
+                    </a>
+                </div>
             </div>
         </div>
-
     </div>
 @endsection
