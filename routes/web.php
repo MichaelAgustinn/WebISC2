@@ -52,6 +52,7 @@ Route::get('/', function () {
     // 1. DATA MINGGUAN
     $weeklyTop = TypingScore::with('user.profile')
         ->where('created_at', '>=', Carbon::now()->startOfWeek())
+        ->where('role', '!=', 'none')
         ->orderBy('wpm', 'desc')
         ->get()
         ->unique('user_id')
@@ -224,6 +225,7 @@ Route::middleware('auth')->group(function () {
 
         $weeklyTop = TypingScore::with('user.profile')
             ->where('created_at', '>=', Carbon::now()->startOfWeek())
+            ->where('role', '!=', 'none')
             ->orderBy('wpm', 'desc')
             ->get()
             ->unique('user_id')

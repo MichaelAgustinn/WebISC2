@@ -15,6 +15,7 @@ class TypingController extends Controller
         // Helper function untuk mengambil top score unik per user
         $getLeaderboard = function ($query) {
             return $query->with('user.profile') // Eager load relasi
+                ->where('role', '!=', 'none')
                 ->orderBy('wpm', 'desc') // Urutkan WPM tertinggi
                 ->get()
                 ->unique('user_id') // Ambil hanya satu record terbaik per user
