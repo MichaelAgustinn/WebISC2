@@ -18,12 +18,13 @@ class TypingController extends Controller
             $subQuery = DB::table('typing_scores')
                 ->select('user_id', DB::raw('MAX(wpm) as max_wpm'))
                 ->groupBy('user_id');
-
             return $query->with('user.profile')
                 ->joinSub($subQuery, 'best_scores', function ($join) {
                     $join->on('typing_scores.user_id', '=', 'best_scores.user_id')
                         ->on('typing_scores.wpm', '=', 'best_scores.max_wpm');
                 })
+                ->join('users', 'typing_scores.user_id', '=', 'users.id')
+                ->where('users.role', '!=', 'none')
                 ->select('typing_scores.*')
                 ->orderByDesc('typing_scores.wpm')
                 ->take(10)
