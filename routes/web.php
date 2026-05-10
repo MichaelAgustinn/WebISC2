@@ -31,6 +31,7 @@ use App\Models\TypingScore;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 // ! guest area
@@ -49,21 +50,46 @@ Route::get('/', function () {
     $recentProjects = Project::where('status', true)->latest()->take(6)->get();
 
     // ? ambil data tpying score
+    $startOfWeek = Carbon::now()->startOfWeek();
     // 1. DATA MINGGUAN
+    $weeklyBestSubquery = DB::table('typing_scores')
+        ->select('user_id', DB::raw('MAX(wpm) as max_wpm'))
+        ->where('created_at', '>=', $startOfWeek)
+        ->groupBy('user_id');
+
     $weeklyTop = TypingScore::with('user.profile')
-        ->where('created_at', '>=', Carbon::now()->startOfWeek())
-        ->where('role', '!=', 'none')
-        ->orderBy('wpm', 'desc')
+        ->joinSub($weeklyBestSubquery, 'best_scores', function ($join) {
+            $join->on('typing_scores.user_id', '=', 'best_scores.user_id')
+                ->on('typing_scores.wpm', '=', 'best_scores.max_wpm');
+        })
+        ->join('users', 'typing_scores.user_id', '=', 'users.id')
+        ->where('users.role', '!=', 'none')
+        ->where('typing_scores.created_at', '>=', $startOfWeek)
+        ->select('typing_scores.*')
+        ->orderByDesc('typing_scores.wpm')
+        ->take(5)
         ->get()
         ->unique('user_id')
-        ->take(5);
+        ->values();
 
     // 2. DATA ALL TIME (Tambahan)
+    $allTimeBestSubquery = DB::table('typing_scores')
+        ->select('user_id', DB::raw('MAX(wpm) as max_wpm'))
+        ->groupBy('user_id');
+
     $allTimeTop = TypingScore::with('user.profile')
-        ->orderBy('wpm', 'desc')
+        ->joinSub($allTimeBestSubquery, 'best_scores', function ($join) {
+            $join->on('typing_scores.user_id', '=', 'best_scores.user_id')
+                ->on('typing_scores.wpm', '=', 'best_scores.max_wpm');
+        })
+        ->join('users', 'typing_scores.user_id', '=', 'users.id')
+        ->where('users.role', '!=', 'none')
+        ->select('typing_scores.*')
+        ->orderByDesc('typing_scores.wpm')
+        ->take(5)
         ->get()
         ->unique('user_id')
-        ->take(5);
+        ->values();
 
     $posts = Post::latest()->take(3)->get();
 
@@ -224,12 +250,25 @@ Route::middleware('auth')->group(function () {
         $recentProjects = Project::with('users')->latest()->take(7)->get();
 
         $weeklyTop = TypingScore::with('user.profile')
-            ->where('created_at', '>=', Carbon::now()->startOfWeek())
-            ->where('role', '!=', 'none')
-            ->orderBy('wpm', 'desc')
-            ->get()
-            ->unique('user_id')
-            ->take(5);
+            ->select('typing_scores.*')
+            ->join(
+                DB::raw('
+            (
+                SELECT user_id, MAX(wpm) as max_wpm
+                FROM typing_scores
+                WHERE created_at >= "' . Carbon::now()->startOfWeek() . '"
+                AND role != "none"
+                GROUP BY user_id
+            ) as best_scores
+        '),
+                function ($join) {
+                    $join->on('typing_scores.user_id', '=', 'best_scores.user_id')
+                        ->on('typing_scores.wpm', '=', 'best_scores.max_wpm');
+                }
+            )
+            ->orderByDesc('typing_scores.wpm')
+            ->take(5)
+            ->get();
 
         return view('dashboard', compact('totalAnggota', 'totalAkun', 'totalPengurus', 'totalProject', 'projectAktif', 'recentProjects', 'weeklyTop', 'pendingProjects'));
     })->name('dashboard');
