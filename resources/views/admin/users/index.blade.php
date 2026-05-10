@@ -48,13 +48,16 @@
                                     </div>
                                     <div class="ml-4">
                                         <div class="text-sm font-medium text-gray-900">{{ $user->name }}
-                                            ({{ $user->profile->nim }})</div>
+                                            ({{ $user->profile->nim }})
+                                        </div>
                                         <div class="text-sm text-gray-500">{{ $user->email }}</div>
                                         <div class="text-xs text-gray-400 mt-1">
                                             angkatan {{ $user->profile->angkatan }}
                                         </div>
+                                        <div class="text-xs text-gray-400 mt-1">
+                                            divisi {{ $user->profile->division }}
+                                        </div </div>
                                     </div>
-                                </div>
                             </td>
 
                             <td class="px-6 py-4 align-top">
