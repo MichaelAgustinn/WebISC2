@@ -6,7 +6,7 @@
         <div class="bg-white rounded-xl border-2 border-red-500 shadow-md p-6 flex flex-col relative overflow-hidden mb-6">
             <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-red-50 rounded-full z-0 opacity-50"></div>
 
-            <div class="relative z-10 flex items-center gap-4 mb-4">
+            <div class="relative z-8 flex items-center gap-4 mb-4">
                 <div class="p-3 bg-red-100 rounded-full text-red-600">
                     <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -19,7 +19,7 @@
                 </div>
             </div>
 
-            <div class="relative z-10 bg-red-50 rounded-xl p-4 border border-red-200">
+            <div class="relative z-8 bg-red-50 rounded-xl p-4 border border-red-200">
                 <p class="text-xs font-bold text-red-800 mb-2 flex items-center gap-1.5">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -89,15 +89,15 @@
                             <span
                                 class="text-[10px] bg-red-100 text-red-700 px-2 py-1 rounded font-bold uppercase tracking-wider whitespace-nowrap">Revisi</span>
                         </div>
-                        <p class="relative z-10 text-xs text-gray-500 mb-4 flex items-center gap-1 font-medium">
+                        <p class="relative z-8 text-xs text-gray-500 mb-4 flex items-center gap-1 font-medium">
                             Disubmit: {{ $rejected->created_at->format('d M Y') }}
                         </p>
-                        <div class="relative z-10 bg-red-50 rounded-lg p-3 flex-grow mb-4 border border-red-100">
+                        <div class="relative z-8 bg-red-50 rounded-lg p-3 flex-grow mb-4 border border-red-100">
                             <p class="text-xs font-semibold text-red-800 mb-1 flex items-center gap-1">Pesan Admin:</p>
                             <p class="text-sm text-red-600 italic">"{{ $rejected->rejection_reason }}"</p>
                         </div>
                         <a href="{{ route('projects.edit', $rejected->id) }}"
-                            class="relative z-10 block w-full text-center bg-white border border-red-500 text-red-600 hover:bg-red-50 text-sm font-bold py-2 rounded-lg transition-colors">
+                            class="relative z-8 block w-full text-center bg-white border border-red-500 text-red-600 hover:bg-red-50 text-sm font-bold py-2 rounded-lg transition-colors">
                             Perbaiki Karya
                         </a>
                     </div>
