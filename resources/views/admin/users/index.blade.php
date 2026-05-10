@@ -47,10 +47,11 @@
                                         @endif
                                     </div>
                                     <div class="ml-4">
-                                        <div class="text-sm font-medium text-gray-900">{{ $user->name }}</div>
+                                        <div class="text-sm font-medium text-gray-900">{{ $user->name }}
+                                            ({{ $user->profile->nim }})</div>
                                         <div class="text-sm text-gray-500">{{ $user->email }}</div>
                                         <div class="text-xs text-gray-400 mt-1">
-                                            {{ $user->created_at->format('d M Y') }}
+                                            angkatan {{ $user->profile->angkatan }}
                                         </div>
                                     </div>
                                 </div>
