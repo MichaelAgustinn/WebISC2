@@ -262,13 +262,21 @@ Route::middleware('auth')->group(function () {
 
         // 2. Query utama untuk mengambil data lengkap score
         $weeklyTop = TypingScore::with('user.profile')
-            ->joinSub($subQuery, 'best_scores', function ($join) {
-                $join->on('typing_scores.user_id', '=', 'best_scores.user_id')
-                    ->on('typing_scores.wpm', '=', 'best_scores.max_wpm');
+            ->whereIn('id', function ($query) use ($startOfWeek) {
+                $query->select(DB::raw('MAX(t1.id)'))
+                    ->from('typing_scores as t1')
+                    ->join('users', 't1.user_id', '=', 'users.id')
+                    ->where('users.role', '!=', 'none')
+                    ->where('t1.created_at', '>=', $startOfWeek)
+                    ->whereRaw('t1.wpm = (
+                SELECT MAX(t2.wpm)
+                FROM typing_scores as t2
+                WHERE t2.user_id = t1.user_id
+                AND t2.created_at >= ?
+            )', [$startOfWeek->format('Y-m-d H:i:s')])
+                    ->groupBy('t1.user_id');
             })
-            ->where('typing_scores.created_at', '>=', $startOfWeek)
-            ->select('typing_scores.*')
-            ->orderByDesc('typing_scores.wpm')
+            ->orderByDesc('wpm')
             ->take(5)
             ->get();
 
