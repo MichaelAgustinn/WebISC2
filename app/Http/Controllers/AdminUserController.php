@@ -14,18 +14,25 @@ class AdminUserController extends Controller
     public function index(Request $request)
     {
         $currentUser = Auth::user();
+
         $query = User::query();
 
-        if ($currentUser->role != 'admin' && $currentUser->profile) {
-            $divisionTarget = $currentUser->profile->division;
-            $validDivisions = ['mobile', 'website', 'uiux', 'sistem_cerdas', 'iot'];
+        if ($currentUser->role != 'admin') {
 
-            if (in_array($divisionTarget, $validDivisions)) {
-                $query->with('profile')
-                    ->where('id', '!=', $currentUser->id)
-                    ->whereHas('profile', function ($q) use ($divisionTarget) {
-                        $q->where('division', $divisionTarget);
-                    });
+            $query->where('id', '!=', $currentUser->id);
+
+            $query->where('role', '!=', 'pengurus');
+
+            if ($currentUser->profile) {
+                $divisionTarget = $currentUser->profile->division;
+                $validDivisions = ['mobile', 'website', 'uiux', 'sistem_cerdas', 'iot'];
+
+                if (in_array($divisionTarget, $validDivisions)) {
+                    $query->with('profile')
+                        ->whereHas('profile', function ($q) use ($divisionTarget) {
+                            $q->where('division', $divisionTarget);
+                        });
+                }
             }
         }
 
