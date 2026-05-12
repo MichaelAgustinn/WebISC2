@@ -14,29 +14,23 @@ class AdminUserController extends Controller
     public function index(Request $request)
     {
         $currentUser = Auth::user();
+        $query = User::query()->with('profile');
 
-        $query = User::query();
-
+        // 1. Logika Filter Khusus Role (Selain Admin)
         if ($currentUser->role !== 'admin') {
-
             $query->where('id', '!=', $currentUser->id);
-
             $query->whereNotIn('role', ['admin', 'pengurus']);
 
-            if ($currentUser->profile) {
+            if ($currentUser->profile && $currentUser->profile->division) {
                 $divisionTarget = $currentUser->profile->division;
-                $validDivisions = ['mobile', 'website', 'uiux', 'sistem_cerdas', 'iot'];
-
-                if (in_array($divisionTarget, $validDivisions)) {
-                    $query->with('profile')
-                        ->whereHas('profile', function ($q) use ($divisionTarget) {
-                            $q->where('division', $divisionTarget);
-                        });
-                }
+                $query->whereHas('profile', function ($q) use ($divisionTarget) {
+                    $q->where('division', $divisionTarget);
+                });
             }
         }
 
-        if ($request->has('search') && $request->search != '') {
+        // 2. Logika Pencarian (Search text)
+        if ($request->filled('search')) {
             $searchTerm = $request->search;
             $query->where(function ($q) use ($searchTerm) {
                 $q->where('name', 'like', '%' . $searchTerm . '%')
@@ -44,12 +38,34 @@ class AdminUserController extends Controller
             });
         }
 
-        $users = $query->paginate(10);
+        // 3. Logika Filter Angkatan
+        if ($request->filled('angkatan')) {
+            $query->whereHas('profile', function ($q) use ($request) {
+                $q->where('angkatan', $request->angkatan);
+            });
+        }
 
+        // 4. Logika Filter Divisi
+        if ($request->filled('divisi')) {
+            $query->whereHas('profile', function ($q) use ($request) {
+                $q->where('division', $request->divisi);
+            });
+        }
+
+        $users = $query->paginate(10);
         $users->appends($request->all());
 
-        return view('admin.users.index', compact('users'));
+        $angkatans = Profile::select('angkatan')
+            ->distinct()
+            ->whereNotNull('angkatan')
+            ->orderBy('angkatan', 'desc')
+            ->pluck('angkatan');
+
+        $divisis = ['mobile', 'website', 'uiux', 'sistem_cerdas', 'iot'];
+
+        return view('admin.users.index', compact('users', 'angkatans', 'divisis'));
     }
+
     public function unverified(Request $request)
     {
         $query = Regist::query();

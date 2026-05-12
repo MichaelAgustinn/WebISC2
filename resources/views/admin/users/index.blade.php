@@ -3,19 +3,52 @@
 @section('title', 'Manajemen Pengguna')
 
 @section('content')
-    <div class="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+    <div class="mb-6 flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
         <div>
             <h1 class="text-2xl font-bold text-gray-800">Manajemen Pengguna</h1>
             <p class="text-gray-500 text-sm">Verifikasi anggota baru dan atur hak akses pengguna.</p>
         </div>
 
-        <form method="GET" action="{{ route('users.index') }}" class="relative w-full md:w-64"></form>
-        <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama atau email..."
-            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 text-sm">
-        <svg class="w-5 h-5 text-gray-400 absolute left-3 top-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-        </svg>
+        {{-- PERBAIKAN FORM: Semua filter digabung dalam 1 form --}}
+        <form method="GET" action="{{ route('users.index') }}" class="flex flex-col sm:flex-row gap-3 w-full xl:w-auto">
+
+            {{-- Dropdown Filter Divisi (Disembunyikan jika yang login bukan admin, karena pengurus cuma bisa lihat divisinya sendiri) --}}
+            @if (Auth::user()->role == 'admin')
+                <select name="divisi" onchange="this.form.submit()"
+                    class="w-full sm:w-auto px-3 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 text-sm bg-white cursor-pointer">
+                    <option value="">Semua Divisi</option>
+                    @foreach ($divisis as $divisi)
+                        <option value="{{ $divisi }}" {{ request('divisi') == $divisi ? 'selected' : '' }}>
+                            {{ ucwords(str_replace('_', ' ', $divisi)) }}
+                        </option>
+                    @endforeach
+                </select>
+            @endif
+
+            {{-- Dropdown Filter Angkatan --}}
+            <select name="angkatan" onchange="this.form.submit()"
+                class="w-full sm:w-auto px-3 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 text-sm bg-white cursor-pointer">
+                <option value="">Semua Angkatan</option>
+                @foreach ($angkatans as $angkatan)
+                    <option value="{{ $angkatan }}" {{ request('angkatan') == $angkatan ? 'selected' : '' }}>
+                        Angkatan {{ $angkatan }}
+                    </option>
+                @endforeach
+            </select>
+
+            {{-- Input Search --}}
+            <div class="relative w-full sm:w-64">
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama atau email..."
+                    class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                <svg class="w-5 h-5 text-gray-400 absolute left-3 top-2.5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+            </div>
+
+            {{-- Tombol submit disembunyikan, form akan submit otomatis saat enter / select berubah --}}
+            <button type="submit" class="hidden"></button>
         </form>
     </div>
 
