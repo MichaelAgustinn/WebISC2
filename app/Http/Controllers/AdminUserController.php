@@ -17,11 +17,11 @@ class AdminUserController extends Controller
 
         $query = User::query();
 
-        if ($currentUser->role != 'admin') {
+        if ($currentUser->role !== 'admin') {
 
             $query->where('id', '!=', $currentUser->id);
 
-            $query->where('role', '!=', 'pengurus');
+            $query->whereNotIn('role', ['admin', 'pengurus']);
 
             if ($currentUser->profile) {
                 $divisionTarget = $currentUser->profile->division;
