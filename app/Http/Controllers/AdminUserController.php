@@ -20,18 +20,12 @@ class AdminUserController extends Controller
         if ($currentUser->role !== 'admin') {
             $query->where('id', '!=', $currentUser->id);
             $query->whereNotIn('role', ['admin', 'pengurus']);
-
-            if ($currentUser->profile && $currentUser->profile->division) {
-                $divisionTarget = $currentUser->profile->division;
-                $query->whereHas('profile', function ($q) use ($divisionTarget) {
-                    $q->where('division', $divisionTarget);
-                });
-            }
         }
 
         // 2. Logika Pencarian (Search text)
         if ($request->filled('search')) {
             $searchTerm = $request->search;
+
             $query->where(function ($q) use ($searchTerm) {
                 $q->where('name', 'like', '%' . $searchTerm . '%')
                     ->orWhere('email', 'like', '%' . $searchTerm . '%');
