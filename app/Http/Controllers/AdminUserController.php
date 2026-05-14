@@ -46,7 +46,7 @@ class AdminUserController extends Controller
             });
         }
 
-        $users = $query->paginate(10);
+        $users = $query->latest()->paginate(10);
         $users->appends($request->all());
 
         $angkatans = Profile::select('angkatan')
