@@ -983,7 +983,7 @@
     "sebelum", "sebuah", "sedang", "sedikit", "segera", "sehingga", "sejak", "sekali", "sekarang", "sekitar",
     "selalu", "selama", "selesai", "seluruh", "semacam", "sementara", "semua", "sendiri", "seperti", "sering",
     "serta", "sesuatu", "setelah", "setiap", "siapa", "sini", "suatu", "sudah", "tahu", "tahun",
-    "tak", "tampa", "tampak", "tangan", "tanpa", "tapi", "telah", "tempat", "tengah", "tentang",
+    "tak", "tampak", "tangan", "tanpa", "tapi", "telah", "tempat", "tengah", "tentang",
     "tentu", "terjadi", "terlalu", "tersebut", "terus", "tetapi", "tiap", "tidak", "tiga", "tinggi",
     "tubuh", "tujuan", "turun", "uang", "umum", "untuk", "waktu", "walau", "yang", "yaitu"
 ];
