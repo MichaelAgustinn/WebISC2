@@ -959,19 +959,34 @@
             ];
 
             const wordList = [
-                "aku", "anda", "anak", "akan", "ada", "air", "akibat", "antara", "apa", "bagian",
-                "bagus", "baik", "bahwa", "banyak", "baru", "besar", "biasa", "bisa", "boleh",
-                "bukan", "cara", "cepat", "cukup", "dan", "dapat", "dari", "datang", "dengan", "dia",
-                "di", "diri", "hal", "hari", "harga", "harus", "hidup", "hati", "ia", "ingin", "ini", "itu",
-                "jadi", "jalan", "jangan", "jelas", "juga", "jumlah", "kali", "kalau", "kami", "kamu",
-                "karena", "ke", "kecil", "kembali", "kepada", "kepala", "kerja", "ketika", "kita", "kurang",
-                "lagi", "lain", "langsung", "lalu", "luar", "maka", "makan", "malam", "mana", "masalah",
-                "masuk", "mata", "mau", "melalui", "melakukan", "membuat", "memberi", "memiliki", "mencari",
-                "menjadi",
-                "mengatakan", "mereka", "mudah", "mungkin", "mulai", "naik", "nama", "namun", "orang",
-                "pada", "paling", "perlu", "pernah", "punya", "saat", "salah", "sama", "sampai", "sangat",
-                "saya"
-            ];
+    "ada", "adalah", "adanya", "agar", "air", "akan", "akibat", "aku", "anak", "anda",
+    "antara", "apa", "apabila", "apakah", "arah", "atas", "atau", "baca", "bagi", "bagian",
+    "bagaimana", "bagus", "bahwa", "baik", "banyak", "barang", "baru", "bawah", "beberapa", "belum",
+    "benar", "bentuk", "berada", "berarti", "berat", "berbagai", "berbicara", "berbuat", "berdasarkan", "berhenti",
+    "berjalan", "bermain", "bersama", "bertanya", "besar", "besok", "biar", "biasa", "bila", "bisa",
+    "boleh", "buah", "bukan", "bulan", "bumi", "buruk", "cara", "cepat", "coba", "cukup",
+    "dalam", "dan", "dapat", "dari", "daripada", "datang", "dengan", "depan", "di", "dia",
+    "dilakukan", "diri", "dua", "dulu", "empat", "engkau", "guna", "habis", "hal", "hampir",
+    "hanya", "harap", "hari", "harus", "hati", "hebat", "hidup", "hingga", "hubungan", "ia",
+    "ibu", "ikut", "ingin", "ini", "itu", "jadi", "jalan", "jangan", "jauh", "jelas",
+    "jika", "juga", "jumlah", "juta", "kabar", "kadar", "kala", "kalian", "kami", "kamu",
+    "kapan", "karena", "kasih", "kata", "ke", "kecil", "kedua", "keluar", "kembali", "kemudian",
+    "kepada", "kepala", "kerja", "ketika", "khusus", "kini", "kita", "kota", "kuat", "kurang",
+    "lagi", "lain", "lama", "langsung", "lanjut", "lalu", "laut", "lebih", "lewat", "lima",
+    "luar", "macam", "maka", "makan", "malam", "mampu", "mana", "manusia", "masa", "masalah",
+    "masih", "masuk", "mata", "mau", "maupun", "melakukan", "melalui", "melihat", "membuat", "memberi",
+    "memiliki", "menjadi", "menurut", "menyatakan", "merasa", "mereka", "merupakan", "meskipun", "minta", "minum",
+    "mulai", "mungkin", "naik", "nama", "namun", "nanti", "negara", "nilai", "orang", "pada",
+    "padahal", "pagi", "paling", "panjang", "pasti", "penting", "perlu", "pernah", "pertama", "pikir",
+    "pulang", "pun", "punya", "pusat", "putih", "rasa", "ribu", "saat", "saja", "salah",
+    "sama", "sambil", "sampai", "sana", "sangat", "satu", "saya", "sebab", "sebagai", "sebagian",
+    "sebelum", "sebuah", "sedang", "sedikit", "segera", "sehingga", "sejak", "sekali", "sekarang", "sekitar",
+    "selalu", "selama", "selesai", "seluruh", "semacam", "sementara", "semua", "sendiri", "seperti", "sering",
+    "serta", "sesuatu", "setelah", "setiap", "siapa", "sini", "suatu", "sudah", "tahu", "tahun",
+    "tak", "tampa", "tampak", "tangan", "tanpa", "tapi", "telah", "tempat", "tengah", "tentang",
+    "tentu", "terjadi", "terlalu", "tersebut", "terus", "tetapi", "tiap", "tidak", "tiga", "tinggi",
+    "tubuh", "tujuan", "turun", "uang", "umum", "untuk", "waktu", "walau", "yang", "yaitu"
+];
             let activeWordList = wordList;
 
             function addWords(count) {
