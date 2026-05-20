@@ -361,7 +361,6 @@
             margin-bottom: 1.5rem;
             position: relative;
             z-index: 1001;
-            /* Fix klik dropdown */
         }
 
         .language-selector select {
@@ -634,359 +633,105 @@
             let timer;
             let maxTime = 60;
             let timeLeft = maxTime;
+
+            // Variabel Statik
             let wordIndex = 0;
-            let mistakes = 0;
             let correctKeystrokes = 0;
+            let wrongKeystrokes = 0;
             let correctWordsCount = 0;
+            let wrongWordsCount = 0;
+
             let isTyping = false;
             let previousTypedValue = "";
 
             const wordListFlutter = [
-                "Flutter",
-                "Dart",
-                "Widget",
-                "State",
-                "StatelessWidget",
-                "StatefulWidget",
-                "Build",
-                "Context",
-                "MaterialApp",
-                "Scaffold",
-                "AppBar",
-                "Container",
-                "Column",
-                "Row",
-                "Stack",
-                "Expanded",
-                "Padding",
-                "Center",
-                "Text",
-                "Icon",
-                "Image",
-                "Button",
-                "ElevatedButton",
-                "TextButton",
-                "IconButton",
-                "FloatingActionButton",
-                "ListView",
-                "GridView",
-                "Builder",
-                "Navigator",
-                "Route",
-                "Page",
-                "Screen",
-                "Drawer",
-                "BottomNavigationBar",
-                "TabBar",
-                "TextField",
-                "Form",
-                "Validator",
-                "Controller",
-                "setState",
-                "Future",
-                "async",
-                "await",
-                "Stream",
-                "Snapshot",
-                "FutureBuilder",
-                "StreamBuilder",
-                "Provider",
-                "BLoC",
-                "Riverpod",
-                "GetX",
-                "Model",
-                "Service",
-                "Repository",
-                "JSON",
-                "HTTP",
-                "API",
-                "Dio",
-                "SharedPreferences",
-                "Sqflite",
-                "Firebase",
-                "Authentication",
-                "Firestore",
-                "Storage",
-                "Animation",
-                "Hero",
-                "Theme",
-                "DarkMode",
-                "LightMode",
-                "Responsive",
-                "GestureDetector",
-                "InkWell",
-                "ListTile",
-                "Card",
-                "Dialog",
-                "SnackBar",
-                "BottomSheet",
-                "SafeArea",
-                "ScrollView",
-                "SingleChildScrollView",
-                "CustomScrollView",
-                "SliverAppBar",
-                "ClipRRect",
-                "Opacity",
-                "Transform",
-                "dispose",
-                "initState",
-                "HotReload",
-                "pubspec",
-                "Package",
-                "Plugin",
-                "Dependency",
-                "Debug",
-                "Release",
-                "Emulator",
-                "Android",
-                "iOS",
-                "Mobile",
-                "Layout",
-                "Navigation",
-                "Component",
+                "Flutter", "Dart", "Widget", "State", "StatelessWidget", "StatefulWidget",
+                "Build", "Context", "MaterialApp", "Scaffold", "AppBar", "Container",
+                "Column", "Row", "Stack", "Expanded", "Padding", "Center", "Text",
+                "Icon", "Image", "Button", "ElevatedButton", "TextButton", "IconButton",
+                "FloatingActionButton", "ListView", "GridView", "Builder", "Navigator",
+                "Route", "Page", "Screen", "Drawer", "BottomNavigationBar", "TabBar",
+                "TextField", "Form", "Validator", "Controller", "setState", "Future",
+                "async", "await", "Stream", "Snapshot", "FutureBuilder", "StreamBuilder",
+                "Provider", "BLoC", "Riverpod", "GetX", "Model", "Service", "Repository",
+                "JSON", "HTTP", "API", "Dio", "SharedPreferences", "Sqflite", "Firebase",
+                "Authentication", "Firestore", "Storage", "Animation", "Hero", "Theme",
+                "DarkMode", "LightMode", "Responsive", "GestureDetector", "InkWell",
+                "ListTile", "Card", "Dialog", "SnackBar", "BottomSheet", "SafeArea",
+                "ScrollView", "SingleChildScrollView", "CustomScrollView", "SliverAppBar",
+                "ClipRRect", "Opacity", "Transform", "dispose", "initState", "HotReload",
+                "pubspec", "Package", "Plugin", "Dependency", "Debug", "Release",
+                "Emulator", "Android", "iOS", "Mobile", "Layout", "Navigation", "Component"
             ];
 
             const wordListPhp = [
-                "PHP",
-                "echo",
-                "print",
-                "variable",
-                "string",
-                "integer",
-                "float",
-                "boolean",
-                "array",
-                "object",
-                "function",
-                "class",
-                "interface",
-                "trait",
-                "namespace",
-                "include",
-                "require",
-                "include_once",
-                "require_once",
-                "if",
-                "else",
-                "elseif",
-                "switch",
-                "case",
-                "for",
-                "foreach",
-                "while",
-                "do",
-                "break",
-                "continue",
-                "return",
-                "public",
-                "private",
-                "protected",
-                "static",
-                "final",
-                "abstract",
-                "extends",
-                "implements",
-                "new",
-                "$this",
-                "parent",
-                "self",
-                "const",
-                "define",
-                "isset",
-                "empty",
-                "unset",
-                "null",
-                "true",
-                "false",
-                "try",
-                "catch",
-                "finally",
-                "throw",
-                "Exception",
-                "MySQLi",
-                "PDO",
-                "query",
-                "database",
-                "SELECT",
-                "INSERT",
-                "UPDATE",
-                "DELETE",
-                "fetch",
-                "session",
-                "cookie",
-                "header",
-                "JSON",
-                "json_encode",
-                "json_decode",
-                "HTML",
-                "form",
-                "POST",
-                "GET",
-                "request",
-                "response",
-                "server",
-                "client",
-                "upload",
-                "download",
-                "file",
-                "directory",
-                "path",
-                "URL",
-                "router",
-                "middleware",
-                "controller",
-                "model",
-                "view",
-                "template",
-                "Blade",
-                "Composer",
-                "autoload",
-                "Artisan",
-                "Laravel",
-                "Symfony",
-                "CodeIgniter",
-                "API",
-                "token",
-                "authentication",
-                "authorization",
-                "validation"
+                "PHP", "echo", "print", "variable", "string", "integer", "float",
+                "boolean", "array", "object", "function", "class", "interface",
+                "trait", "namespace", "include", "require", "include_once", "require_once",
+                "if", "else", "elseif", "switch", "case", "for", "foreach", "while",
+                "do", "break", "continue", "return", "public", "private", "protected",
+                "static", "final", "abstract", "extends", "implements", "new", "$this",
+                "parent", "self", "const", "define", "isset", "empty", "unset", "null",
+                "true", "false", "try", "catch", "finally", "throw", "Exception", "MySQLi",
+                "PDO", "query", "database", "SELECT", "INSERT", "UPDATE", "DELETE",
+                "fetch", "session", "cookie", "header", "JSON", "json_encode", "json_decode",
+                "HTML", "form", "POST", "GET", "request", "response", "server", "client",
+                "upload", "download", "file", "directory", "path", "URL", "router",
+                "middleware", "controller", "model", "view", "template", "Blade",
+                "Composer", "autoload", "Artisan", "Laravel", "Symfony", "CodeIgniter",
+                "API", "token", "authentication", "authorization", "validation"
             ];
 
             const wordListJava = [
-                "Java",
-                "class",
-                "object",
-                "method",
-                "variable",
-                "String",
-                "int",
-                "double",
-                "float",
-                "boolean",
-                "char",
-                "array",
-                "loop",
-                "for",
-                "while",
-                "if",
-                "else",
-                "switch",
-                "case",
-                "break",
-                "continue",
-                "return",
-                "public",
-                "private",
-                "protected",
-                "static",
-                "final",
-                "void",
-                "new",
-                "this",
-                "super",
-                "extends",
-                "implements",
-                "interface",
-                "abstract",
-                "package",
-                "import",
-                "Scanner",
-                "System",
-                "println",
-                "print",
-                "input",
-                "output",
-                "constructor",
-                "getter",
-                "setter",
-                "instance",
-                "inheritance",
-                "polymorphism",
-                "encapsulation",
-                "abstraction",
-                "Exception",
-                "try",
-                "catch",
-                "finally",
-                "throw",
-                "throws",
-                "Thread",
-                "Runnable",
-                "lambda",
-                "Stream",
-                "List",
-                "ArrayList",
-                "LinkedList",
-                "Map",
-                "HashMap",
-                "Set",
-                "HashSet",
-                "Iterator",
-                "Collection",
-                "Collections",
-                "Comparable",
-                "Comparator",
-                "Random",
-                "Math",
-                "File",
-                "Reader",
-                "Writer",
-                "Buffer",
-                "InputStream",
-                "OutputStream",
-                "BufferedReader",
-                "BufferedWriter",
-                "serialization",
-                "generic",
-                "annotation",
-                "reflection",
-                "enum",
-                "record",
-                "module",
-                "JVM",
-                "JDK",
-                "JRE",
-                "bytecode",
-                "compile",
-                "runtime",
-                "debug",
-                "syntax",
-                "parameter",
-                "argument",
-                "function",
-                "statement",
-                "expression"
+                "Java", "class", "object", "method", "variable", "String", "int",
+                "double", "float", "boolean", "char", "array", "loop", "for", "while",
+                "if", "else", "switch", "case", "break", "continue", "return", "public",
+                "private", "protected", "static", "final", "void", "new", "this", "super",
+                "extends", "implements", "interface", "abstract", "package", "import",
+                "Scanner", "System", "println", "print", "input", "output", "constructor",
+                "getter", "setter", "instance", "inheritance", "polymorphism", "encapsulation",
+                "abstraction", "Exception", "try", "catch", "finally", "throw", "throws",
+                "Thread", "Runnable", "lambda", "Stream", "List", "ArrayList", "LinkedList",
+                "Map", "HashMap", "Set", "HashSet", "Iterator", "Collection", "Collections",
+                "Comparable", "Comparator", "Random", "Math", "File", "Reader", "Writer",
+                "Buffer", "InputStream", "OutputStream", "BufferedReader", "BufferedWriter",
+                "serialization", "generic", "annotation", "reflection", "enum", "record",
+                "module", "JVM", "JDK", "JRE", "bytecode", "compile", "runtime", "debug",
+                "syntax", "parameter", "argument", "function", "statement", "expression"
             ];
 
             const wordList = [
-    "ada", "adalah", "adanya", "agar", "air", "akan", "akibat", "aku", "anak", "anda",
-    "antara", "apa", "apabila", "apakah", "arah", "atas", "atau", "baca", "bagi", "bagian",
-    "bagaimana", "bagus", "bahwa", "baik", "banyak", "barang", "baru", "bawah", "beberapa", "belum",
-    "benar", "bentuk", "berada", "berarti", "berat", "berbagai", "berbicara", "berbuat", "berdasarkan", "berhenti",
-    "berjalan", "bermain", "bersama", "bertanya", "besar", "besok", "biar", "biasa", "bila", "bisa",
-    "boleh", "buah", "bukan", "bulan", "bumi", "buruk", "cara", "cepat", "coba", "cukup",
-    "dalam", "dan", "dapat", "dari", "daripada", "datang", "dengan", "depan", "di", "dia",
-    "dilakukan", "diri", "dua", "dulu", "empat", "engkau", "guna", "habis", "hal", "hampir",
-    "hanya", "harap", "hari", "harus", "hati", "hebat", "hidup", "hingga", "hubungan", "ia",
-    "ibu", "ikut", "ingin", "ini", "itu", "jadi", "jalan", "jangan", "jauh", "jelas",
-    "jika", "juga", "jumlah", "juta", "kabar", "kadar", "kala", "kalian", "kami", "kamu",
-    "kapan", "karena", "kasih", "kata", "ke", "kecil", "kedua", "keluar", "kembali", "kemudian",
-    "kepada", "kepala", "kerja", "ketika", "khusus", "kini", "kita", "kota", "kuat", "kurang",
-    "lagi", "lain", "lama", "langsung", "lanjut", "lalu", "laut", "lebih", "lewat", "lima",
-    "luar", "macam", "maka", "makan", "malam", "mampu", "mana", "manusia", "masa", "masalah",
-    "masih", "masuk", "mata", "mau", "maupun", "melakukan", "melalui", "melihat", "membuat", "memberi",
-    "memiliki", "menjadi", "menurut", "menyatakan", "merasa", "mereka", "merupakan", "meskipun", "minta", "minum",
-    "mulai", "mungkin", "naik", "nama", "namun", "nanti", "negara", "nilai", "orang", "pada",
-    "padahal", "pagi", "paling", "panjang", "pasti", "penting", "perlu", "pernah", "pertama", "pikir",
-    "pulang", "pun", "punya", "pusat", "putih", "rasa", "ribu", "saat", "saja", "salah",
-    "sama", "sambil", "sampai", "sana", "sangat", "satu", "saya", "sebab", "sebagai", "sebagian",
-    "sebelum", "sebuah", "sedang", "sedikit", "segera", "sehingga", "sejak", "sekali", "sekarang", "sekitar",
-    "selalu", "selama", "selesai", "seluruh", "semacam", "sementara", "semua", "sendiri", "seperti", "sering",
-    "serta", "sesuatu", "setelah", "setiap", "siapa", "sini", "suatu", "sudah", "tahu", "tahun",
-    "tak", "tampak", "tangan", "tanpa", "tapi", "telah", "tempat", "tengah", "tentang",
-    "tentu", "terjadi", "terlalu", "tersebut", "terus", "tetapi", "tiap", "tidak", "tiga", "tinggi",
-    "tubuh", "tujuan", "turun", "uang", "umum", "untuk", "waktu", "walau", "yang", "yaitu"
-];
+                "ada", "adalah", "adanya", "agar", "air", "akan", "akibat", "aku", "anak", "anda",
+                "antara", "apa", "apabila", "apakah", "arah", "atas", "atau", "baca", "bagi", "bagian",
+                "bagaimana", "bagus", "bahwa", "baik", "banyak", "barang", "baru", "bawah", "beberapa", "belum",
+                "benar", "bentuk", "berada", "berarti", "berat", "berbagai", "berbicara", "berbuat",
+                "berdasarkan", "berhenti", "berjalan", "bermain", "bersama", "bertanya", "besar", "besok",
+                "biar", "biasa", "bila", "bisa", "boleh", "buah", "bukan", "bulan", "bumi", "buruk",
+                "cara", "cepat", "coba", "cukup", "dalam", "dan", "dapat", "dari", "daripada", "datang",
+                "dengan", "depan", "di", "dia", "dilakukan", "diri", "dua", "dulu", "empat", "engkau",
+                "guna", "habis", "hal", "hampir", "hanya", "harap", "hari", "harus", "hati", "hebat",
+                "hidup", "hingga", "hubungan", "ia", "ibu", "ikut", "ingin", "ini", "itu", "jadi",
+                "jalan", "jangan", "jauh", "jelas", "jika", "juga", "jumlah", "juta", "kabar", "kadar",
+                "kala", "kalian", "kami", "kamu", "kapan", "karena", "kasih", "kata", "ke", "kecil",
+                "kedua", "keluar", "kembali", "kemudian", "kepada", "kepala", "kerja", "ketika",
+                "khusus", "kini", "kita", "kota", "kuat", "kurang", "lagi", "lain", "lama", "langsung",
+                "lanjut", "lalu", "laut", "lebih", "lewat", "lima", "luar", "macam", "maka", "makan",
+                "malam", "mampu", "mana", "manusia", "masa", "masalah", "masih", "masuk", "mata", "mau",
+                "maupun", "melakukan", "melalui", "melihat", "membuat", "memberi", "memiliki", "menjadi",
+                "menurut", "menyatakan", "merasa", "mereka", "merupakan", "meskipun", "minta", "minum",
+                "mulai", "mungkin", "naik", "nama", "namun", "nanti", "negara", "nilai", "orang", "pada",
+                "padahal", "pagi", "paling", "panjang", "pasti", "penting", "perlu", "pernah", "pertama",
+                "pikir", "pulang", "pun", "punya", "pusat", "putih", "rasa", "ribu", "saat", "saja",
+                "salah", "sama", "sambil", "sampai", "sana", "sangat", "satu", "saya", "sebab",
+                "sebagai", "sebagian", "sebelum", "sebuah", "sedang", "sedikit", "segera", "sehingga",
+                "sejak", "sekali", "sekarang", "sekitar", "selalu", "selama", "selesai", "seluruh",
+                "semacam", "sementara", "semua", "sendiri", "seperti", "sering", "serta", "sesuatu",
+                "setelah", "setiap", "siapa", "sini", "suatu", "sudah", "tahu", "tahun", "tak", "tampak",
+                "tangan", "tanpa", "tapi", "telah", "tempat", "tengah", "tentang", "tentu", "terjadi",
+                "terlalu", "tersebut", "terus", "tetapi", "tiap", "tidak", "tiga", "tinggi", "tubuh",
+                "tujuan", "turun", "uang", "umum", "untuk", "waktu", "walau", "yang", "yaitu"
+            ];
+
             let activeWordList = wordList;
 
             function addWords(count) {
@@ -1023,7 +768,7 @@
             function resetGame() {
                 clearInterval(timer);
                 timeLeft = maxTime;
-                wordIndex = mistakes = correctKeystrokes = correctWordsCount = 0;
+                wordIndex = correctKeystrokes = wrongKeystrokes = correctWordsCount = wrongWordsCount = 0;
                 isTyping = false;
                 previousTypedValue = "";
 
@@ -1037,6 +782,7 @@
                 typingBox.classList.add("active");
             }
 
+            // Fungsi Inti Algoritma 10fastfingers
             function initTyping() {
                 let allWords = typingText.querySelectorAll(".word");
                 let currentWordDiv = allWords[wordIndex];
@@ -1070,12 +816,15 @@
                     let targetWord = "";
                     originalChars.forEach(char => targetWord += char.innerText);
 
+                    // LOGIKA PENILAIAN PER KATA
                     if (inputTrimmed === targetWord) {
                         currentWordDiv.classList.add("correct");
                         correctWordsCount++;
+                        correctKeystrokes += (targetWord.length + 1);
                     } else {
                         currentWordDiv.classList.add("error-word");
-                        mistakes++;
+                        wrongWordsCount++;
+                        wrongKeystrokes += (inputTrimmed.length + 1);
                     }
 
                     currentWordDiv.classList.remove("active");
@@ -1100,15 +849,6 @@
                     return;
                 }
 
-                if (typedValue.length > previousTypedValue.length) {
-                    let addedCharIndex = typedValue.length - 1;
-                    let expectedChar = originalChars[addedCharIndex] ? originalChars[addedCharIndex].innerText :
-                        null;
-
-                    if (typedValue[addedCharIndex] !== expectedChar) {} else {
-                        correctKeystrokes++;
-                    }
-                }
                 previousTypedValue = typedValue;
 
                 currentWordDiv.querySelectorAll(".extra").forEach(el => el.remove());
@@ -1145,8 +885,6 @@
                         updatedAllChars[updatedAllChars.length - 1].classList.add("current-right");
                     }
                 }
-
-                updateStats();
             }
 
             function updateStats() {
@@ -1157,10 +895,11 @@
                 wpm = wpm < 0 || !wpm ? 0 : wpm;
 
                 wpmTag.innerText = wpm;
-                mistakeTag.innerText = mistakes;
+                mistakeTag.innerText = wrongWordsCount;
 
-                let totalAttempt = wordIndex;
-                let accuracy = (totalAttempt > 0) ? Math.round((correctWordsCount / totalAttempt) * 100) : 100;
+                let totalKeystrokes = correctKeystrokes + wrongKeystrokes;
+                let accuracy = (totalKeystrokes > 0) ? Math.round((correctKeystrokes / totalKeystrokes) * 100) :
+                100;
                 accuracyTag.innerText = accuracy + "%";
             }
 
@@ -1183,29 +922,38 @@
                 const finalAccText = accuracyTag.innerText.replace('%', '');
                 const finalAcc = parseInt(finalAccText) || 0;
 
-                // Simpan skor
                 saveScore(finalWpm, finalAcc);
 
-                // Tambahkan ID "scorecard-export" pada div pembungkus utama
-                // Kita juga menambahkan sedikit watermark "ISC Typing Test" di bawahnya
                 const customHtml = `
-                    <div id="scorecard-export" style="background: #f8fafc; border-radius: 15px; padding: 30px 20px; margin-bottom: 15px; border: 1px solid #e2e8f0; position: relative; overflow: hidden;">
-                        <div style="font-size: 4rem; font-weight: 900; color: var(--accent, #f59e0b); line-height: 1; text-shadow: 2px 2px 0px rgba(0,0,0,0.1);">${finalWpm}</div>
-                        <div style="font-size: 1.2rem; color: var(--primary, #081226); font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 25px;">WPM</div>
+                    <div id="scorecard-export" style="background: #f8fafc; border-radius: 15px; padding: 25px 20px; margin-bottom: 15px; border: 1px solid #e2e8f0; position: relative; overflow: hidden; text-align: left;">
                         
-                        <div style="display: flex; justify-content: space-around; font-size: 0.95rem; background: white; padding: 15px; border-radius: 12px; border: 1px solid #cbd5e1; box-shadow: 0 4px 6px rgba(0,0,0,0.02);">
-                            <div style="display: flex; flex-direction: column; gap: 5px;">
-                                <span style="font-size: 0.8rem; color: #64748b; text-transform: uppercase; font-weight: 600;">Kata Typo</span>
-                                <div><span style="color: #ef4444; font-weight: 900; font-size: 1.3rem;">${mistakes}</span></div>
-                            </div>
-                            <div style="width: 2px; background: #e2e8f0; border-radius: 5px;"></div>
-                            <div style="display: flex; flex-direction: column; gap: 5px;">
-                                <span style="font-size: 0.8rem; color: #64748b; text-transform: uppercase; font-weight: 600;">Akurasi</span>
-                                <div><span style="color: #22c55e; font-weight: 900; font-size: 1.3rem;">${finalAcc}%</span></div>
-                            </div>
+                        <div style="text-align: center; margin-bottom: 20px;">
+                            <div style="font-size: 4rem; font-weight: 900; color: #22c55e; line-height: 1;">${finalWpm}</div>
+                            <div style="font-size: 1.2rem; color: var(--primary, #081226); font-weight: 800; text-transform: uppercase;">WPM</div>
                         </div>
                         
-                        <div style="margin-top: 20px; font-size: 0.75rem; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">
+                        <table style="width: 100%; font-size: 0.95rem; border-collapse: collapse;">
+                            <tr style="border-bottom: 1px solid #cbd5e1;">
+                                <td style="padding: 10px 0; color: #64748b; font-weight: 600;">Keystrokes</td>
+                                <td style="padding: 10px 0; text-align: right; font-weight: 700;">
+                                    (<span style="color:#22c55e;">${correctKeystrokes}</span> | <span style="color:#ef4444;">${wrongKeystrokes}</span>) ${correctKeystrokes + wrongKeystrokes}
+                                </td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #cbd5e1;">
+                                <td style="padding: 10px 0; color: #64748b; font-weight: 600;">Accuracy</td>
+                                <td style="padding: 10px 0; text-align: right; font-weight: 700; color: var(--primary);">${finalAcc}%</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #cbd5e1;">
+                                <td style="padding: 10px 0; color: #64748b; font-weight: 600;">Correct words</td>
+                                <td style="padding: 10px 0; text-align: right; font-weight: 700; color: #22c55e;">${correctWordsCount}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px 0; color: #64748b; font-weight: 600;">Wrong words</td>
+                                <td style="padding: 10px 0; text-align: right; font-weight: 700; color: #ef4444;">${wrongWordsCount}</td>
+                            </tr>
+                        </table>
+                        
+                        <div style="text-align: center; margin-top: 20px; font-size: 0.75rem; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">
                             <i class="ri-keyboard-line"></i> ISC Typing Test
                         </div>
                     </div>
@@ -1254,8 +1002,6 @@
                                         `ISC_Score_${finalWpm}WPM.png`, {
                                             type: 'image/png'
                                         });
-                                    const shareText =
-                                        `Kalahkan Skorku ${finalWpm} WPM dan Akurasi ${finalAcc}%. \n\nCoba tesnya di sini: ${window.location.href}`;
                                     const shareData = {
                                         title: 'Skor Kecepatan Ketik ISC',
                                         text: `Kalahkan Skorku ${finalWpm} WPM dan Akurasi ${finalAcc}%. Coba tesnya di sini: ${window.location.href}`,
@@ -1314,7 +1060,6 @@
                             btn.disabled = false;
                         }
 
-                        // Efek Hover
                         btnShare.addEventListener("mouseenter", () => btnShare.style.transform =
                             "translateY(-3px)");
                         btnShare.addEventListener("mouseleave", () => btnShare.style.transform =
@@ -1356,6 +1101,7 @@
                         console.error(err);
                     });
             }
+
             // Events
             inpField.addEventListener("input", initTyping);
             if (btnRestart) btnRestart.addEventListener("click", resetGame);
@@ -1383,7 +1129,6 @@
             inpField.addEventListener("blur", () => typingBox.classList.remove("active"));
 
             document.addEventListener("keydown", (e) => {
-
                 if (timeLeft <= 0) return;
 
                 if (e.key === "Tab") {
@@ -1391,7 +1136,6 @@
                     e.preventDefault();
                     return;
                 }
-
 
                 if (e.key === "Enter" && isTabPressed) {
                     e.preventDefault();
