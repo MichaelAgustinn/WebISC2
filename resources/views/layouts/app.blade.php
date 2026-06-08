@@ -217,7 +217,7 @@
                 @endif
 
                 <!-- 5. KEGIATAN & ACARA -->
-                @if (in_array(Auth::user()->role, ['pengurus', 'admin', 'anggota']))
+                {{-- @if (in_array(Auth::user()->role, ['pengurus', 'admin', 'anggota']))
                     <div>
                         <p class="px-3 text-xs font-bold uppercase text-gray-400 mb-2 tracking-wider">Kegiatan & Acara
                         </p>
@@ -244,7 +244,7 @@
                                 </a>
                             @endif
 
-                            {{-- TODO_REMOVE_ADMIN_PROD: Hapus 'admin' dari array di bawah saat production --}}
+                            TODO_REMOVE_ADMIN_PROD: Hapus 'admin' dari array di bawah saat production
                             @if (in_array(Auth::user()->role, ['anggota', 'pengurus', 'admin']))
                                 <a href="{{ route('events.my') }}"
                                     class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs('events.my') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600' }} transition-colors">
@@ -258,7 +258,7 @@
                             @endif
                         </div>
                     </div>
-                @endif
+                @endif --}}
 
                 <!-- 6. LAINNYA -->
                 @if (in_array(Auth::user()->role, ['admin', 'pengurus']))
