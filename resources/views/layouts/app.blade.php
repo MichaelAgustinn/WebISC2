@@ -161,7 +161,7 @@
                             @endif
 
                             {{-- TODO_REMOVE_ADMIN_PROD: Hapus 'admin' dari array di bawah saat production --}}
-                            @if (in_array(Auth::user()->role, ['pengurus']))
+                            @if (in_array(Auth::user()->role, ['pengurus', 'admin']))
                                 <a href="{{ route('users.index') }}"
                                     class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs('users.index') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600' }} transition-colors">
                                     <svg class="mr-3 h-5 w-5 {{ request()->routeIs('users.index') ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-500' }}"
@@ -171,7 +171,8 @@
                                     </svg>
                                     Daftar Anggota
                                 </a>
-
+                            @endif
+                            @if (in_array(Auth::user()->role, ['pengurus']))
                                 <a href="{{ route('users.unverified') }}"
                                     class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs('users.unverified') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600' }} transition-colors">
                                     <svg class="mr-3 h-5 w-5 {{ request()->routeIs('users.unverified') ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-500' }}"
