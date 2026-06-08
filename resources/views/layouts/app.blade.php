@@ -70,7 +70,7 @@
 
                 <!-- 1. UTAMA -->
                 {{-- TODO_REMOVE_ADMIN_PROD: Hapus 'admin' dari array di bawah saat production --}}
-                @if (in_array(Auth::user()->role, ['anggota', 'pengurus', 'admin']))
+                @if (in_array(Auth::user()->role, ['anggota', 'pengurus']))
                     <div>
                         <p class="px-3 text-xs font-bold uppercase text-gray-400 mb-2 tracking-wider">Utama</p>
                         <div class="space-y-1">
@@ -118,7 +118,7 @@
                             @endif
 
                             {{-- TODO_REMOVE_ADMIN_PROD: Hapus 'admin' dari array di bawah saat production --}}
-                            @if (in_array(Auth::user()->role, ['pengurus', 'anggota', 'admin']))
+                            @if (in_array(Auth::user()->role, ['pengurus', 'anggota']))
                                 <a href="{{ route('myproject.index') }}"
                                     class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs('myproject.*') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600' }} transition-colors">
                                     <svg class="mr-3 h-5 w-5 {{ request()->routeIs('myproject.*') ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-500' }}"
@@ -161,7 +161,7 @@
                             @endif
 
                             {{-- TODO_REMOVE_ADMIN_PROD: Hapus 'admin' dari array di bawah saat production --}}
-                            @if (in_array(Auth::user()->role, ['pengurus', 'admin']))
+                            @if (in_array(Auth::user()->role, ['pengurus']))
                                 <a href="{{ route('users.index') }}"
                                     class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs('users.index') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600' }} transition-colors">
                                     <svg class="mr-3 h-5 w-5 {{ request()->routeIs('users.index') ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-500' }}"
@@ -172,7 +172,6 @@
                                     Daftar Anggota
                                 </a>
 
-                                {{-- TODO_REMOVE_ADMIN_PROD: Hapus 'admin' dari array di bawah saat production --}}
                                 <a href="{{ route('users.unverified') }}"
                                     class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs('users.unverified') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600' }} transition-colors">
                                     <svg class="mr-3 h-5 w-5 {{ request()->routeIs('users.unverified') ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-500' }}"
